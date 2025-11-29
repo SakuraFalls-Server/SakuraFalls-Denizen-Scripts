@@ -1,0 +1,13 @@
+messages:
+  time&at2025&fs07&fs28_21&co23&co36&co0745_Z:
+    origin: receiver
+    value: Hello
+  time&at2025&fs07&fs28_21&co23&co51&co0045_Z:
+    origin: receiver
+    value: How are you
+  time&at2025&fs07&fs28_21&co57&co26&co0745_Z:
+    origin: receiver
+    value: pupici
+  time&at2025&fs07&fs28_21&co58&co02&co0645_Z:
+    origin: sender
+    value: pupicei

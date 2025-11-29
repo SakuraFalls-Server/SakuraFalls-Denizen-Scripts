@@ -1,0 +1,130 @@
+templatetools_command_templatetools:
+    debug: false
+    type: command
+    name: templatetools
+    description: TemplateTools info.
+    usage: /templatetools
+    aliases:
+    - tt
+    permission: templatetools.command.tt
+    tab completions:
+        1: <list[]>
+    script:
+    - narrate format:templatetools_formats_main "TemplateTools (Denizen impl.) v1.0.0.0"
+    - narrate format:templatetools_formats_main "Author: unsafemalloc"
+
+templatetools_command_ttpack:
+    debug: false
+    type: command
+    name: ttpack
+    description: Changes pack for Template Tool usage.
+    usage: /ttpack (pack)
+    permission: templatetools.command.ttpack
+    tab completions:
+        1: <proc[templatetools_available_packs].context[<player>]>
+    script:
+    - if <context.source_type> != player:
+        - narrate "<&c>Please run this command as a player."
+        - stop
+    - if <context.args.size> != 1:
+        - narrate "<&c>Invalid use. Please try /<context.alias> (pack)."
+        - stop
+    - if !<proc[templatetools_available_packs].contains[<context.args.get[1]>]>:
+        - narrate "<&c>There is no such pack: <context.args.get[1]>"
+        - stop
+    - flag <player> templatetools_pack:<context.args.get[1]>
+    - flag <player> templatetools_pack_index:1
+    - ~run templatetools_schematic_set_index def.player:<player>
+    - run templatetools_preview_queue def.player:<player> def.schematic:<player.flag[templatetools_schematic]>
+    - narrate format:templatetools_formats_main "Set TemplateTools pack to <context.args.get[1]> (use /ttschematic to select a schematic)"
+
+templatetools_command_ttschematic:
+    debug: false
+    type: command
+    name: ttschematic
+    description: Changes schematic for Template Tool usage.
+    usage: /ttschematic (schematic)
+    permission: templatetools.command.ttschematic
+    tab completions:
+        1: <proc[templatetools_available_schematics].context[<player>]>
+    script:
+    - if <context.source_type> != player:
+        - narrate "<&c>Please run this command as a player."
+        - stop
+    - if <context.args.size> != 1:
+        - narrate "<&c>Invalid use. Please try /<context.alias> (schematic)."
+        - stop
+    - if !<player.has_flag[templatetools_pack]>:
+        - narrate "<&c>Please select a template pack first using /ttpack."
+        - stop
+    - if !<proc[templatetools_available_schematics].context[<player>].contains[<context.args.get[1]>]>:
+        - narrate "<&c>There is no such schematic: <context.args.get[1]>"
+        - stop
+    - if <schematic.list.contains[templatetools_<player.uuid>]>:
+        - ~schematic unload name:templatetools_<player.uuid>
+    - schematic load name:templatetools_<player.uuid> filename:<player.flag[templatetools_pack]>/<context.args.get[1]>
+    - flag <player> templatetools_schematic:templatetools_<player.uuid>
+    - narrate format:templatetools_formats_main "Set TemplateTools schematic to <context.args.get[1]> (you can preview it using a Spider Eye)"
+
+templatetools_command_ttundo:
+    debug: false
+    type: command
+    name: ttundo
+    description: Undoes last operation.
+    usage: /ttundo
+    permission: templatetools.command.ttundo
+    tab completions:
+        1: <list[]>
+    script:
+    - if <context.source_type> != player:
+        - narrate "<&c>Please run this command as a player."
+        - stop
+    - if <player.flag[templatetools_undo].if_null[<list[]>].is_empty>:
+        - narrate format:templatetools_formats_main "Nothing left to undo."
+        - stop
+    - run templatetools_pop_undo def.player:<player>
+    - narrate format:templatetools_formats_main "Undid previous operation."
+
+templatetools_command_ttsetcursor:
+    debug: false
+    type: command
+    name: ttsetcursor
+    aliases:
+    - ttsc
+    description: Sets blocks in WorldEdit selection using the material you're looking at.
+    usage: /ttsetcursor
+    permission: templatetools.command.ttsetcursor
+    tab completions:
+        1: <list[]>
+    script:
+    - if <context.source_type> != player:
+        - narrate "<&c>Please run this command as a player."
+        - stop
+    - define material <player.cursor_on.material.if_null[null]>
+    - if <[material]> == null:
+    	- narrate "<&c>Invalid material. Please look at a material to set first!"
+    	- stop
+    - define we_selection <player.we_selection.if_null[null]>
+    - if <[we_selection]> == null:
+    	- narrate "<&c>You must first make a WorldEdit selection."
+    	- stop
+    - ~modifyblock <[we_selection]> <[material]> no_physics
+    - narrate format:templatetools_formats_main "Set cursor blocks (<[we_selection].volume.if_null[?]>)."
+
+templatetools_command_that:
+    debug: false
+    type: command
+    name: that
+    description: TemplateTools info.
+    usage: /that
+    permission: templatetools.command.that
+    tab completions:
+        1: <list[]>
+    script:
+    - define material <player.cursor_on.material.if_null[null]>
+    - if <[material]> == null:
+        - narrate "<&c>Nothing to copy."
+    - define item <item[<[material].name>].if_null[null]>:
+		- narrate "<&c>Nothing to copy."
+    - inventory set slot:hand origin:<[item]>
+    - narrate format:templatetools_formats_main "Copied <[material].name>."
