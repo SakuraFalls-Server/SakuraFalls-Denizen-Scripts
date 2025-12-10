@@ -61,15 +61,15 @@ textbox_write:
                 - playsound sound:textbox.text <[player]> custom pitch:<util.random.decimal[0.98].to[1]>
             - wait 1t
             - if <[line].substring[<[value].add[1]>,<[value].add[1]>].trim.length.if_null[1]> == 0:
-                - if <[line].substring[<[value]>,<[value]>]> == ".":
+                - if <[line].substring[<[value]>,<[value]>]> == .:
                     - wait 2t
-                - if <[line].substring[<[value]>,<[value]>]> == "!":
+                - if <[line].substring[<[value]>,<[value]>]> == !:
                     - wait 2t
-                - if <[line].substring[<[value]>,<[value]>]> == "?":
+                - if <[line].substring[<[value]>,<[value]>]> == ?:
                     - wait 2t
-                - if <[line].substring[<[value]>,<[value]>]> == "-":
+                - if <[line].substring[<[value]>,<[value]>]> == -:
                     - wait 2t
-                - if <[line].substring[<[value]>,<[value]>]> == ",":
+                - if <[line].substring[<[value]>,<[value]>]> == ,:
                     - wait 2t
         - wait <duration[1t]>
     - if <[player].flag[textbox_state].if_null[null]> != writing:

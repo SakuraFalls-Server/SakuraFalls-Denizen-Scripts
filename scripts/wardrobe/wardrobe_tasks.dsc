@@ -106,7 +106,7 @@ wardrobe_menu:
         - define position <[position].add[1]>
         - define i <[i].add[1]>
         - if <[i].mod[3]> == 0:
-        	- define position <[position].add[6]>
+            - define position <[position].add[6]>
     - repeat <element[<[max]>].sub[<[i]>]>:
         - define unusedskin <item[wither_skeleton_skull]>
         - adjust def:unusedskin "display:<&7>Unused Skin Slot"
@@ -115,7 +115,7 @@ wardrobe_menu:
         - define position <[position].add[1]>
         - define i <[i].add[1]>
         - if <[i].mod[3]> == 0:
-        	- define position <[position].add[6]>
+            - define position <[position].add[6]>
     #
     - define clearitem <item[warped_trapdoor]>
     - adjust def:clearitem "display:<&f>Clear Skin"

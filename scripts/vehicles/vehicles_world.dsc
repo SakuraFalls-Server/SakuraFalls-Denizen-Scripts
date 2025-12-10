@@ -90,18 +90,18 @@ vehicle_world_parallel_loop:
     - define forward <[vehicles_player_input].get[forward].if_null[0]>
     - define sideways <[vehicles_player_input].get[sideways].if_null[0]>
     - if <[forward]> != 0:
-    	- define speed <[vehicle].flag[vehicles_speed].if_null[0]>
+        - define speed <[vehicle].flag[vehicles_speed].if_null[0]>
         - define speed <[speed].add[<[vehicle].flag[vehicles_data].get[acceleration].mul[<[forward]>]>]>
         - define max <[vehicle].flag[vehicles_data].get[max_speed]>
         - if <[speed]> < <[max].mul[-1].div[3]>:
-        	- define speed <[max].mul[-1].div[3]>
+            - define speed <[max].mul[-1].div[3]>
         - if <[speed]> > <[max]>:
-        	- define speed <[max]>
+            - define speed <[max]>
         - flag <[vehicle]> vehicles_speed:<[speed]>
     - if <[sideways]> != 0:
-    	- define speed <[vehicle].flag[vehicles_speed].if_null[0]>
+        - define speed <[vehicle].flag[vehicles_speed].if_null[0]>
         - if <[speed].abs> > 0.1:
-        	- define max_speed <[vehicle].flag[vehicles_data].get[max_speed]>
+            - define max_speed <[vehicle].flag[vehicles_data].get[max_speed]>
             - define speed_turn_coefficient <[speed].div[<[max_speed]>].mul[0.25].add[0.85]>
             - define turn_speed <[vehicle].flag[vehicles_data].get[turn_speed_percentage].mul[360].mul[<[speed_turn_coefficient]>]>
             - define turn_speed <[turn_speed].mul[<[sideways]>].mul[-1].mul[<tern[<[speed].is_less_than[0]>].pass[-1].fail[1]>]>

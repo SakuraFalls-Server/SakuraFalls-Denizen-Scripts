@@ -109,3 +109,17 @@ apartments_end_edit:
         - inventory set origin:<[item]> slot:<[slot]> player:<[player]>
     - adjust <[player]> gamemode:survival
     - flag <[player]> apartments_edit:!
+
+apartments_all_with_access:
+    debug: false
+    type: procedure
+    definitions: player
+    script:
+    - define location <player.location>
+    - define apartment <proc[apartments_at].context[<[location]>]>
+    - if <[apartment]> == null:
+        - determine <list[]>
+    - define owner <proc[apartments_owner].context[<[apartment]>]>
+    - if <[owner]> != <[player]>:
+        - determine <list[]>
+    - determine <[owner].flag[apartments_access].get[<[apartment]>].if_null[<list[]>].keys>

@@ -31,4 +31,4 @@ payto_command_payto:
     - clickable usages:1 until:1m save:pay:
         - execute as_player "pay <[target].name> <[amount]>"
     - narrate format:formats_prefix "<&7>Would you like to pay <&6><[amount].as_money><&7> to <&6><proc[character_get_name].context[<[target]>]>"
-    - narrate "<element[<&a><&l>[CLICK HERE]].on_click[<entry[pay].command>]>"
+    - narrate <element[<&a><&l>[CLICK HERE]].on_click[<entry[pay].command>]>

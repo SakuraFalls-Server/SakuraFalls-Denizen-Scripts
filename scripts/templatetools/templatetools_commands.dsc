@@ -102,12 +102,12 @@ templatetools_command_ttsetcursor:
         - stop
     - define material <player.cursor_on.material.if_null[null]>
     - if <[material]> == null:
-    	- narrate "<&c>Invalid material. Please look at a material to set first!"
-    	- stop
+        - narrate "<&c>Invalid material. Please look at a material to set first!"
+        - stop
     - define we_selection <player.we_selection.if_null[null]>
     - if <[we_selection]> == null:
-    	- narrate "<&c>You must first make a WorldEdit selection."
-    	- stop
+        - narrate "<&c>You must first make a WorldEdit selection."
+        - stop
     - ~modifyblock <[we_selection]> <[material]> no_physics
     - narrate format:templatetools_formats_main "Set cursor blocks (<[we_selection].volume.if_null[?]>)."
 
@@ -125,6 +125,6 @@ templatetools_command_that:
     - if <[material]> == null:
         - narrate "<&c>Nothing to copy."
     - define item <item[<[material].name>].if_null[null]>:
-		- narrate "<&c>Nothing to copy."
+        - narrate "<&c>Nothing to copy."
     - inventory set slot:hand origin:<[item]>
     - narrate format:templatetools_formats_main "Copied <[material].name>."

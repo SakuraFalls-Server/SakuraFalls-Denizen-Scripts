@@ -217,7 +217,7 @@ storyboard_npc_internal_auto_memory_management:
         after player joins:
         - define npcs <player.flag[storyboard_state].get[npcs].if_null[<map[]>]>
         - foreach <[npcs]> key:name as:data:
-            - if <[data].get[allocated]> == reallocate:
+            - if <[data].get[allocated].if_null[null]> == reallocate:
                 - define name <[data].get[name]>
                 - define type <[data].get[type]>
                 - define at <[data].get[at]>

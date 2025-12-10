@@ -93,18 +93,18 @@ phones_gui_home:
     type: task
     definitions: player
     script:
-    - define inventory "<inventory[generic[size=54;title=<&f>邑邑邑邑鄀<&0>邒]]>"
+    - define inventory <inventory[generic[size=54;title=<&f>邑邑邑邑鄀<&0>邒]]>
     # settings
     - define settings <item[name_tag]>
-    - adjust def:settings "display:<&6>Settings"
+    - adjust def:settings display:<&6>Settings
     - inventory set destination:<[inventory]> slot:13 origin:<[settings]>
     # contacts
     - define contacts <item[book]>
-    - adjust def:contacts "display:<&6>Contacts"
+    - adjust def:contacts display:<&6>Contacts
     - inventory set destination:<[inventory]> slot:14 origin:<[contacts]>
     # texts
     - define texts <item[writable_book]>
-    - adjust def:texts "display:<&6>Messages"
+    - adjust def:texts display:<&6>Messages
     - define notifications_textmessages <[player].flag[phones_notifications].get[textmessages].values.size.if_null[null]>
     - if <[notifications_textmessages]> != null && <[notifications_textmessages]> != 0:
         - if <[notifications_textmessages]> > 99:
@@ -161,11 +161,11 @@ phones_contacts_print:
     - if <[page]> > 0:
         - clickable usages:1 until:60s save:prev:
             - execute as_player "phonecontacts <[page]>"
-        - define prevpage "<element[<&a><&lt>--].on_click[<entry[prev].command>]>"
+        - define prevpage <element[<&a><&lt>--].on_click[<entry[prev].command>]>
     - if <[contacts].size> > <[page].add[1].mul[6]>:
         - clickable usages:1 until:60s save:next:
             - execute as_player "phonecontacts <[page].add[2]>"
-        - define nextpage "<element[<&a>--<&gt>].on_click[<entry[next].command>]>"
+        - define nextpage <element[<&a>--<&gt>].on_click[<entry[next].command>]>
     - narrate targets:<[player]> "<&nl><[prevpage]> <&6>Page <[page].add[1]>/<[contacts].size.sub[1].div[6].round_down.add[1]> <[nextpage]>"
 
 # ---
@@ -177,7 +177,7 @@ phones_texts_store:
     type: task
     definitions: player|target|contents
     script:
-    - narrate targets:<[player]> format:formats_prefix "Sending..."
+    - narrate targets:<[player]> format:formats_prefix Sending...
     #
     - define playertexts phones_texts_<[player].uuid>_<[target].uuid>
     - if <util.has_file[data/phones/texts/<[player].uuid>_<[target].uuid>.yml]>:
@@ -218,7 +218,7 @@ phones_texts_print:
     type: task
     definitions: player|target|page
     script:
-    - narrate targets:<[player]> format:formats_prefix "Loading..."
+    - narrate targets:<[player]> format:formats_prefix Loading...
     #
     - define playertexts phones_texts_<[player].uuid>_<[target].uuid>
     - ~yaml id:<[playertexts]> load:data/phones/texts/<[player].uuid>_<[target].uuid>.yml
@@ -243,11 +243,11 @@ phones_texts_print:
     - if <[page]> > 0:
         - clickable usages:1 until:60s save:prev:
             - run phones_texts_print def.player:<[player]> def.target:<[target]> def.page:<[page].sub[1]>
-        - define prevpage "<element[<&a><&lt>--].on_click[<entry[prev].command>]>"
+        - define prevpage <element[<&a><&lt>--].on_click[<entry[prev].command>]>
     - if <[messages_size]> > <[page].add[1].mul[5]>:
         - clickable usages:1 until:60s save:next:
             - run phones_texts_print def.player:<[player]> def.target:<[target]> def.page:<[page].add[1]>
-        - define nextpage "<element[<&a>--<&gt>].on_click[<entry[next].command>]>"
+        - define nextpage <element[<&a>--<&gt>].on_click[<entry[next].command>]>
     - narrate targets:<[player]> "<&nl><[prevpage]> <&6>Page <[page].add[1]>/<[messages_size].sub[1].div[5].round_down.add[1]> <[nextpage]>"
     # clear notifications?
     - if <[player].flag[phones_notifications].get[textmessages].get[<[target]>].if_null[0]> > 0:
@@ -262,20 +262,20 @@ phones_gui_texts:
     type: task
     definitions: player|page
     script:
-    - define inventory "<inventory[generic[size=54;title=<&f>邑邑邑邑鄀<&1>邒]]>"
+    - define inventory <inventory[generic[size=54;title=<&f>邑邑邑邑鄀<&1>邒]]>
     - define textslist <util.list_files[data/phones/texts].filter[starts_with[<player.uuid>]].parse[split[_].get[2].split[.].get[1]].parse_tag[<player[<[parse_value]>]>].get[<[page].mul[16].add[1]>].to[<[page].add[1].mul[16]>].if_null[<list[]>]>
     # show contacts/numbers
     - foreach <[textslist]> as:target:
         - define receiver <proc[phones_relative_name].context[<[player]>|<[target]>]>
         - define textsender <item[player_head]>
         - adjust def:textsender display:<&e><[receiver]>
-        - adjust def:textsender "lore:<list[<&7>Click to view your conversation.]>"
+        - adjust def:textsender lore:<list[<&7>Click to view your conversation.]>
         # notifications
         - define notifications_text <[player].flag[phones_notifications].get[textmessages].get[<[target]>].if_null[null]>
         - if <[notifications_text]> != null:
             - if <[notifications_text]> > 99:
                 - define notifications_text 99+
-            - adjust def:textsender "lore:<[textsender].lore.include[|<&7>You have <&6><[notifications_text]> <&7>unread messages.]>"
+            - adjust def:textsender lore:<[textsender].lore.include[|<&7>You have <&6><[notifications_text]> <&7>unread messages.]>
         #
         - flag <[textsender]> phones:<[target]>
         - flag <[textsender]> phones_target_skull_uuid:<[target].uuid>
@@ -309,7 +309,7 @@ phones_target_skulls_update:
             - if <[inventory].viewers.if_null[<list[]>].is_empty>:
                 - stop
             - define uuid <[item].flag[phones_target_skull_uuid]>
-    		- inventory adjust slot:<[slot]> skull_skin:<[uuid]>|<player[<[uuid]>].skin_blob.if_null[0000]>|<player[<[uuid]>].name> destination:<[inventory]>
+            - inventory adjust slot:<[slot]> skull_skin:<[uuid]>|<player[<[uuid]>].skin_blob.if_null[0000]>|<player[<[uuid]>].name> destination:<[inventory]>
 
 ####
 ## NOTIFICATIONS
@@ -363,9 +363,9 @@ phones_gui_music:
     # ringtone selection mode?
     - define ringtone <[ringtone].if_null[false]>
     # make inventory
-    - define inventory "<inventory[generic[size=54;title=<&f>邑邑邑邑鄀<&2>邒]]>"
+    - define inventory <inventory[generic[size=54;title=<&f>邑邑邑邑鄀<&2>邒]]>
     - if <[ringtone]>:
-        - define inventory "<inventory[generic[size=54;title=<&f>邑邑邑邑鄀<&4>邒]]>"
+        - define inventory <inventory[generic[size=54;title=<&f>邑邑邑邑鄀<&4>邒]]>
     - define songsize <util.list_files[data/phones/songs].size>
     - define songsonpage <tern[<[ringtone]>].pass[15].fail[14]>
     - define songlist <util.list_files[data/phones/songs].parse[split[.].get[1]].filter[length.is_more_than[0]].get[<[page].mul[<[songsonpage]>].add[1]>].to[<[page].add[1].mul[<[songsonpage]>]>].if_null[<list[]>]>
@@ -373,7 +373,7 @@ phones_gui_music:
     - foreach <[songlist]> as:songname:
         - define song <item[jukebox]>
         - adjust def:song display:<&e><[songname]>
-        - adjust def:song "lore:<list[<&7>Click to start playing.]>"
+        - adjust def:song lore:<list[<&7>Click to start playing.]>
         - flag <[song]> phones:<[songname]>
         - inventory set destination:<[inventory]> slot:<[loop_index].sub[1].div[3].round_down.mul[9].add[4].add[<[loop_index].sub[1].mod[3]>]> origin:<[song]>
     # stop
@@ -405,7 +405,7 @@ phones_gui_settings:
     type: task
     definitions: player
     script:
-    - define inventory "<inventory[generic[size=54;title=<&f>邑邑邑邑鄀<&3>邒]]>"
+    - define inventory <inventory[generic[size=54;title=<&f>邑邑邑邑鄀<&3>邒]]>
     # ringtone
     - define ringtone <item[note_block]>
     - adjust def:ringtone display:<&6>Ringtone
@@ -427,7 +427,7 @@ phones_gui_settings_blocked:
     type: task
     definitions: player|page
     script:
-    - define inventory "<inventory[generic[size=54;title=<&f>邑邑邑邑鄀<&5>邒]]>"
+    - define inventory <inventory[generic[size=54;title=<&f>邑邑邑邑鄀<&5>邒]]>
     - define blockedlist <[player].flag[phones].get[blocked].get[<[page].mul[16].add[1]>].to[<[page].add[1].mul[16]>].if_null[<list[]>]>
     # show blocked numbers
     - foreach <[blockedlist]> as:target:

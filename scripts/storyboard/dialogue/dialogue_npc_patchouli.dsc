@@ -15,7 +15,7 @@ dialogue_npc_patchouli:
             click trigger:
                 script:
                 - if <player.flag[textbox_state].if_null[null]> != null:
-                	- stop
+                    - stop
                 - engage player
                 - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:. . ."
                 - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:. . ."

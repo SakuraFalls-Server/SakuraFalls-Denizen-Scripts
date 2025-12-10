@@ -23,7 +23,7 @@ timebar_format:
     - define location <script[timebar_worlds].data_key[<player.location.world.name>]>
     - define regions <player.location.regions.filter_tag[<[filter_value].id.starts_with[zone_]>]>
     - if <[regions].size> > 0:
-    	- define location <[regions].get[1].id.replace[zone_].with[].split[_].parse[to_sentence_case].space_separated>
+        - define location <[regions].get[1].id.replace[zone_].with[].split[_].parse[to_sentence_case].space_separated>
     - define result "<[result]> <&c>📌 <&f><[location]>"
     # result
     - determine <[result]>

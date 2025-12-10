@@ -1,5 +1,5 @@
 requestsearch_command_requestsearch:
-	debug: false
+    debug: false
     type: command
     name: requestsearch
     description: Command to search someone's inventory.
@@ -9,7 +9,7 @@ requestsearch_command_requestsearch:
     - patdown
     permission: invreq.patdown
     tab completions:
-        1: <empyy>
+        1: <empty>
     script:
     - if <context.source_type> != player:
         - narrate "<&c>Please run this command as a player."

@@ -57,7 +57,7 @@ gui_restore_world:
         - if <context.inventory.title.starts_with[<script[gui_restore_config].data_key[special_chars].parsed>]>:
             - run gui_restore_save def.player:<player>
         - if <context.inventory.inventory_type> == anvil:
-        	- run gui_restore_save def.player:<player>
+            - run gui_restore_save def.player:<player>
         on player closes inventory bukkit_priority:lowest:
         - if <player.has_flag[gui_restore]>:
             - run gui_restore_load def.player:<player>

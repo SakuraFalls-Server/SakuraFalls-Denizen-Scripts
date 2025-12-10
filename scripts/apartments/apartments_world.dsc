@@ -12,7 +12,7 @@ apartments_world:
         ## invalid access
         on player right clicks block:
         - if <player.is_op>:
-        	- stop
+            - stop
         - if <context.location.if_null[null]> == null:
             - stop
         - if !<proc[apartments_access].context[<player>|<context.location>]>:

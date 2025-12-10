@@ -12,7 +12,7 @@ compatibility_check_compare_versions:
         - if <[v1splitpart]> < <[v2splitpart]>:
             - determine -1
     - if <[v2split].size> > <[v1split].size>:
-    	- determine -1
+        - determine -1
     - determine 0
 
 compatibility_check_world:
@@ -26,13 +26,13 @@ compatibility_check_world:
             - wait 5s
             - if !<player.is_online>:
                 - stop
-            - narrate ""
+            - narrate <&f>
             - narrate "<&c><&l>[<&4><&l>!<&c><&l>] <&c>You are using an outdated Minecraft version!"
             - narrate "<&6>Your version: <&f><[player_version]>"
             - narrate "<&6>Server version: <&f><[server_version]>"
-            - narrate ""
+            - narrate <&f>
             - narrate "<&f>You can still play, however we strongly encourage you to consider <&e>updating your game<&f>."
             - narrate "<&f>We will not offer bug support if you are using an outdated version!"
-            - narrate ""
+            - narrate <&f>
             - narrate "<&7>(Your ViaVersion protocol: <player.viaversion_protocol>)"
-            - narrate ""
+            - narrate <&f>
