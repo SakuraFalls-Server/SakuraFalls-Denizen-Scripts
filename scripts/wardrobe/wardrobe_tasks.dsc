@@ -28,6 +28,13 @@ wardrobe_skull_texture_update_single:
 
 ##
 
+wardrobe_skin_texture_base64:
+    debug: false
+    type: procedure
+    definitions: player
+    script:
+    - determine <[player].flag[wardrobe_current].split[;].get[1].if_null[<[player].flag[wardrobe_latest].split[;].get[1].if_null[null]>]>
+
 wardrobe_max_skins:
     debug: false
     type: procedure

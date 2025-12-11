@@ -58,11 +58,32 @@ vehicles_world:
             - adjust <context.entity> passenger:<player>
         # vehicle control
         on player steers armor_stand:
+        - if <player.viaversion_protocol> >= 767:
+            # >=1.21 uses player input event instead
+            - stop
         - if <context.entity.flag[vehicles].if_null[null]> != driver:
             - stop
         - define vehicle <context.entity.flag[vehicles_data]>
         - flag <[vehicle]> vehicles_player_input:<map[].with[forward].as[<context.forward>].with[sideways].as[<context.sideways>]>
         # place vehicle down
+        on player input:
+        - if <player.viaversion_protocol> < 767:
+            # <1.21 uses player steers event instead
+            - stop
+        - if <player.vehicle.flag[vehicles].if_null[null]> != driver:
+            - stop
+        - define forward_backward 0
+        - if <context.forward>:
+            - define forward_backward 1
+        - if <context.backward>:
+            - define forward_backward -1
+        - define left_right 0
+        - if <context.left>:
+            - define left_right 1
+        - if <context.right>:
+            - define left_right -1
+        - define vehicle <player.vehicle.flag[vehicles_data]>
+        - flag <[vehicle]> vehicles_player_input:<map[].with[forward].as[<[forward_backward]>].with[sideways].as[<[left_right]>]>
         on player right clicks block:
         - if <player.item_in_hand.has_flag[vehicles]>:
             - determine cancelled passively

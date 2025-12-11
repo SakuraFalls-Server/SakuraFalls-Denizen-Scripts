@@ -120,11 +120,10 @@ phones_gui_home:
     - define number <item[player_head]>
     - adjust def:number "display:<&6>Your Number"
     - adjust def:number lore:<list[<&e><proc[phones_nicer_format].context[<[player].flag[phones].get[number]>]>||<&7>You may also view your number|<&7>using /phonenumber.]>
-    - flag <[number]> phones_target_skull_uuid:<[player].uuid>
     - inventory set destination:<[inventory]> slot:41 origin:<[number]>
+    - inventory adjust destination:<[inventory]> slot:41 skull_skin:<[player].uuid>|<proc[wardrobe_skin_texture_base64].context[<[player]>]>|<[player].name>
     #
     - inventory open player:<[player]> destination:<[inventory]>
-    - run phones_target_skulls_update def.player:<[player]>
 
 # ---
 # --- contacts related
@@ -278,8 +277,9 @@ phones_gui_texts:
             - adjust def:textsender lore:<[textsender].lore.include[|<&7>You have <&6><[notifications_text]> <&7>unread messages.]>
         #
         - flag <[textsender]> phones:<[target]>
-        - flag <[textsender]> phones_target_skull_uuid:<[target].uuid>
-        - inventory set destination:<[inventory]> slot:<[loop_index].sub[1].div[3].round_down.mul[9].add[4].add[<[loop_index].sub[1].mod[3]>]> origin:<[textsender]>
+        - define slot <[loop_index].sub[1].div[3].round_down.mul[9].add[4].add[<[loop_index].sub[1].mod[3]>]>
+        - inventory set destination:<[inventory]> slot:<[slot]> origin:<[textsender]>
+        - inventory adjust destination:<[inventory]> slot:<[slot]> skull_skin:<[target].uuid>|<proc[wardrobe_skin_texture_base64].context[<[target]>]>|<[target].name>
     # back
     - define back <item[oak_door]>
     - adjust def:back display:<&7>Back
@@ -295,21 +295,6 @@ phones_gui_texts:
         - inventory set destination:<[inventory]> slot:51 origin:<[nextpage]>
     #
     - inventory open player:<[player]> destination:<[inventory]>
-    - run phones_target_skulls_update def.player:<[player]>
-
-# each skull you want to change has to be flagged with phones_target_skull_uuid:<[target].uuid>
-phones_target_skulls_update:
-    debug: false
-    type: task
-    definitions: player
-    script:
-    - define inventory <[player].open_inventory>
-    - foreach <[inventory].map_slots> key:slot as:item:
-        - if <[item].has_flag[phones_target_skull_uuid]>:
-            - if <[inventory].viewers.if_null[<list[]>].is_empty>:
-                - stop
-            - define uuid <[item].flag[phones_target_skull_uuid]>
-            - inventory adjust slot:<[slot]> skull_skin:<[uuid]>|<player[<[uuid]>].skin_blob.if_null[0000]>|<player[<[uuid]>].name> destination:<[inventory]>
 
 ####
 ## NOTIFICATIONS
@@ -435,7 +420,7 @@ phones_gui_settings_blocked:
         - define blocked <item[player_head]>
         - adjust def:blocked display:<&e><[blockednumber]>
         - adjust def:blocked lore:<list[<&7>You may use /phoneunblock to unblock this number.]>
-        - flag <[blocked]> phones_target_skull_uuid:<[target].uuid>
+        - adjust def:blocked skull_skin:<[target].uuid>|<proc[wardrobe_skin_texture_base64].context[<[target]>]>|<[target].name>
         - inventory set destination:<[inventory]> slot:<[loop_index].sub[1].div[3].round_down.mul[9].add[4].add[<[loop_index].sub[1].mod[3]>]> origin:<[blocked]>
     # back
     - define back <item[oak_door]>
@@ -452,4 +437,3 @@ phones_gui_settings_blocked:
         - inventory set destination:<[inventory]> slot:51 origin:<[nextpage]>
     #
     - inventory open player:<[player]> destination:<[inventory]>
-    - run phones_target_skulls_update def.player:<[player]>
