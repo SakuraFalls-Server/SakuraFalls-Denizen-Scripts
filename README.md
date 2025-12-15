@@ -5,4 +5,4 @@ DenizenScript scripts (and data) folders of SakuraFalls.
 You should just be able to drag & drop this into your 
 DenizenScript folder on your server.
 
-Enjoy!
+Enjoy! 
