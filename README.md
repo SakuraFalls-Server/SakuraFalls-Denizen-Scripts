@@ -19,7 +19,7 @@ You may use them on your server, but only under the license presented above.
 A summary can be found here: https://www.tldrlegal.com/license/gnu-general-public-license-v3-gpl-3
 
 ## How to use
-You should just be able to drag & drop this into your `plugins/DenizenScript` folder on your server.  
+You should just be able to drag & drop this into your `plugins/Denizen` folder on your server.  
 Server software: **PaperMC 1.21.10-117**  
 *Denizen* version: **1.3.1-SNAPSHOT (build 7235-DEV)**.  
 
