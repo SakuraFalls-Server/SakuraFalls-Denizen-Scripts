@@ -12,6 +12,12 @@ use the scripts that our server uses! We believe that gatekeeping roleplaying se
 only leads to less variety and creativity. We hope that the code here, although just given as 
 is without further instructions, will lead to a new generation of awesome roleplaying servers.
 
+## License
+
+All files are licensed under **GNU GPL 3.0**.  
+You may use them on your server, but only under the license presented above.  
+A summary can be found here: https://www.tldrlegal.com/license/gnu-general-public-license-v3-gpl-3
+
 ## How to use
 You should just be able to drag & drop this into your `plugins/DenizenScript` folder on your server.  
 Server software: **PaperMC 1.21.10-117**  
