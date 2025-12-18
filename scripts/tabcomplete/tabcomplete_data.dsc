@@ -76,3 +76,4 @@ tabcomplete_config:
             - chatcolor
             - spawn
             - profiles
+            - settings

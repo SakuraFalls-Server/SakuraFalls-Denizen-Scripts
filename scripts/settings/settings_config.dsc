@@ -37,7 +37,7 @@ settings_config:
             type: text
             default: text
             max-length: 64
-            regex: [a-z]
+            regex: "[a-z]+"
         example5_key:
             tab: Miscellaneous
             name: example5 setting key
@@ -45,7 +45,7 @@ settings_config:
             type: text
             default: text
             max-length: 64
-            regex: [a-z]
+            regex: "[a-z]+"
         example6_key:
             tab: Miscellaneous
             name: example6 setting key
@@ -53,7 +53,7 @@ settings_config:
             type: text
             default: text
             max-length: 64
-            regex: [a-z]
+            regex: "[a-z]+"
         example7_key:
             tab: Miscellaneous
             name: example7 setting key
@@ -61,4 +61,4 @@ settings_config:
             type: text
             default: text
             max-length: 64
-            regex: [a-z]
+            regex: "[a-z]+"
