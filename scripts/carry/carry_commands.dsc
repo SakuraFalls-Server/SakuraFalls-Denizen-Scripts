@@ -45,7 +45,7 @@ carry_command_carry:
     - narrate format:formats_prefix "Sent a carry request to <&e><proc[character_get_name].context[<[target]>]>"
     #
     - narrate format:formats_prefix targets:<[target]> "<&e><proc[character_get_name].context[<player>]> <&7> would like to carry you."
-    - narrate targets:<[target]> "<element[<&a><&l>[ACCEPT]].on_click[<entry[carry].command>]>"
+    - narrate targets:<[target]> <element[<&a><&l>[ACCEPT]].on_click[<entry[carry].command>]>
 
 carry_command_uncarry:
     debug: false

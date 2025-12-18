@@ -82,8 +82,7 @@ apartments_command_apartmentremoveaccess:
     - aptrm
     permission: apartments.command.apartmentremoveaccess
     tab completions:
-        # TODO: use the procedural tab-complete to handle this correctly!
-        1: <server.online_players.parse[name]>
+        1: <proc[apartments_all_with_access].context[<player>].parse[name]>
     script:
     - if <context.source_type> != player:
         - narrate "<&c>Please run this command as a player."

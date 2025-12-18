@@ -50,7 +50,7 @@ liteprofilesutils_show_menu:
         - define slaveitem <item[emerald]>
         - define slavename <proc[character_get_name].context[<player[<[slaveuuid]>]>]>
         - if <[slavename]> == null:
-    	    - define slavename "Unnamed Character"
+            - define slavename "Unnamed Character"
         - adjust def:slaveitem display:<&f><[slavename]>
         - adjust def:slaveitem lore:<list[<&e>Alt Profile|<&f>|<&8>UUID:|<&8><[slaveuuid]>]>
         - flag <[slaveitem]> liteprofiles:<map[].with[type].as[slave].with[value].as[<[slaveuuid]>]>

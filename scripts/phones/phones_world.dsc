@@ -115,11 +115,11 @@ phones_world_gui:
                 - run phones_gui_music def.player:<player> def.page:0 def.ringtone:false
         - else if <[title]> == <&1>邒:
             - if <context.item.material.name> == ender_pearl:
-                - define page <player.flag[phones_gui_page].sub_int[1]>
+                - define page <player.flag[phones_gui_page].sub[1]>
                 - flag <player> phones_gui_page:<[page]>
                 - run phones_gui_texts def.player:<player> def.page:<[page]>
             - else if <context.item.material.name> == ender_eye:
-                - define page <player.flag[phones_gui_page].add_int[1]>
+                - define page <player.flag[phones_gui_page].add[1]>
                 - flag <player> phones_gui_page:<[page]>
                 - run phones_gui_texts def.player:<player> def.page:<[page]>
             - else if <context.slot> == 50:
@@ -130,11 +130,11 @@ phones_world_gui:
         # Music
         - else if <[title]> == <&2>邒:
             - if <context.item.material.name> == ender_pearl:
-                - define page <player.flag[phones_gui_page].sub_int[1]>
+                - define page <player.flag[phones_gui_page].sub[1]>
                 - flag <player> phones_gui_page:<[page]>
                 - run phones_gui_music def.player:<player> def.page:<[page]> def.ringtone:false
             - else if <context.item.material.name> == ender_eye:
-                - define page <player.flag[phones_gui_page].add_int[1]>
+                - define page <player.flag[phones_gui_page].add[1]>
                 - flag <player> phones_gui_page:<[page]>
                 - run phones_gui_music def.player:<player> def.page:<[page]> def.ringtone:false
             - else if <context.slot> == 50:
@@ -158,11 +158,11 @@ phones_world_gui:
         # Ringtone Select
         - else if <[title]> == <&4>邒:
             - if <context.item.material.name> == ender_pearl:
-                - define page <player.flag[phones_gui_page].sub_int[1]>
+                - define page <player.flag[phones_gui_page].sub[1]>
                 - flag <player> phones_gui_page:<[page]>
                 - run phones_gui_music def.player:<player> def.page:<[page]> def.ringtone:true
             - else if <context.item.material.name> == ender_eye:
-                - define page <player.flag[phones_gui_page].add_int[1]>
+                - define page <player.flag[phones_gui_page].add[1]>
                 - flag <player> phones_gui_page:<[page]>
                 - run phones_gui_music def.player:<player> def.page:<[page]> def.ringtone:true
             - else if <context.slot> == 50:
@@ -174,11 +174,11 @@ phones_world_gui:
         # Blocked
         - else if <[title]> == <&5>邒:
             - if <context.item.material.name> == ender_pearl:
-                - define page <player.flag[phones_gui_page].sub_int[1]>
+                - define page <player.flag[phones_gui_page].sub[1]>
                 - flag <player> phones_gui_page:<[page]>
                 - run phones_gui_settings_blocked def.player:<player> def.page:<[page]>
             - else if <context.item.material.name> == ender_eye:
-                - define page <player.flag[phones_gui_page].add_int[1]>
+                - define page <player.flag[phones_gui_page].add[1]>
                 - flag <player> phones_gui_page:<[page]>
                 - run phones_gui_settings_blocked def.player:<player> def.page:<[page]>
             - else if <context.slot> == 50:

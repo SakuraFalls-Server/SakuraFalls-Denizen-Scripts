@@ -62,7 +62,7 @@ furniture_menu:
                 item: <[item]>
         - define contents <[contents].with[<[loop_index]>].as[<[item_entry]>]>
     - if <[page]> > 0:
-        - define contents_extra:
+        - definemap contents_extra:
             49:
                 item: <item[ender_pearl[display=<&a><&lt><&lt>]]>
                 script: furniture_menu
@@ -71,7 +71,7 @@ furniture_menu:
                     page: <[page].sub[1]>
         - define contents <[contents].include[<[contents_extra]>]>
     - if <[page].add[1].mul[27]> < <[contents].size>:
-        - define contents_extra:
+        - definemap contents_extra:
             51:
                 item: <item[ender_eye[display=<&a><&gt><&gt>]]>
                 script: furniture_menu

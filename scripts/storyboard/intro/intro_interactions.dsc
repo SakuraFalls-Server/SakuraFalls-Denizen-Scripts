@@ -17,7 +17,7 @@ intro_interact_posters_task:
     script:
     - ~run textbox_write def.player:<player>  def.queue:<queue> "def.line3s:Book-related posters are on the wall."
     - ~run textbox_write def.player:<player>  def.queue:<queue> "def.line3s:<&o><&dq>Screw that. I'm running away.<&dq>"
-    - ~run textbox_write def.player:<player>  def.queue:<queue> "def.line3s:<&o><&dq>Where?<&dq>"
+    - ~run textbox_write def.player:<player>  def.queue:<queue> def.line3s:<&o><&dq>Where?<&dq>
     - ~run textbox_write def.player:<player>  def.queue:<queue> "def.line3s:<&o><&dq>Dunno. Do you want to come?<&dq>"
     - ~run textbox_write def.player:<player>  def.queue:<queue> "def.line3s:<&o><&dq>Yes,<&dq> I said without thinking."
 
@@ -74,12 +74,12 @@ intro_interact_laptop_task_name_callback:
     - define __player <[player]>
     - define name <[input].substring[1,24]>
     - execute as_player player:<[player]> "rpname <[name]>"
-    - ~run textbox_write def.player:<player>  def.queue:<queue> "def.line3s:<[name]>"
+    - ~run textbox_write def.player:<player>  def.queue:<queue> def.line3s:<[name]>
     - ~run textbox_write def.player:<player>  def.queue:<queue> "def.line3s:How nice!"
     - ~run textbox_write def.player:<player>  def.queue:<queue> "def.line3s:Let's give them a description.$$nlDescribe their physical attributes."
     - waituntil <player.has_flag[textbox_state].not> max:5s
     - ~run textbox_flush def.player:<player>
-    - run anvil_input def.player:<player> "def.prompt:Description" def.callback:intro_interact_laptop_task_description_callback
+    - run anvil_input def.player:<player> def.prompt:Description def.callback:intro_interact_laptop_task_description_callback
 
 intro_interact_laptop_task_description_callback:
     debug: false
@@ -116,7 +116,7 @@ intro_interact_laptop_task_role_menu:
             definitions:
                 player: <[player]>
                 input: yes
-    - run menu_open def.player:<[player]> "def.title:<&f>邑邑邑邑酐<&a><&sp><&b><&sp><&c><&sp>" def.size:9 def.contents:<[contents]>
+    - run menu_open def.player:<[player]> def.title:<&f>邑邑邑邑酐<&a><&sp><&b><&sp><&c><&sp> def.size:9 def.contents:<[contents]>
 
 intro_interact_laptop_task_role_callback:
     debug: false
@@ -196,5 +196,4 @@ intro_interact_laptop_task_role_callback:
     - adjust <player> remove_effects
     - adjust <player> show_to_players
     - flag <player> intro:done
-    - execute as_player player:<player> "spawn"
-
+    - execute as_player player:<player> spawn

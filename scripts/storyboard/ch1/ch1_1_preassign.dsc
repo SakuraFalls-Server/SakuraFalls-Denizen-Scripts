@@ -17,7 +17,6 @@ ch1_1_marie_assign:
     interact scripts:
     - ch1_1_marie_interact
 
-# TODO: this seems like the wrong place
 ch1_1_define_phone:
     debug: false
     type: task

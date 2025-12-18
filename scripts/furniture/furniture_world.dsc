@@ -43,7 +43,7 @@ furniture_world_custom_block:
         - if !<player.has_permission[furniture.customblock.place]> && !<player.is_op>:
             - stop
         - if <context.item.material.advanced_matches[air]>:
-        	- stop
+            - stop
         - if !<proc[furniture_custom_block_any].context[<context.item.material>|<context.item.custom_model_data.if_null[0]>]>:
             - stop
         - ratelimit <player> 5t
@@ -80,7 +80,7 @@ furniture_world_custom_block:
         - if <proc[custom_block_at].context[<context.location>]> == null:
             - stop
         - if !<player.has_permission[furniture.customblock.break]> && !<player.is_op>:
-        	- determine cancelled passively
+            - determine cancelled passively
             - stop
         - run custom_block_destroy def.at:<context.location>
         #
@@ -96,7 +96,7 @@ furniture_world_collision_block:
     events:
         on player right clicks block bukkit_priority:high:
         - if <context.location.if_null[null]> == null:
-        	- stop
+            - stop
         - if !<player.has_permission[furniture.collisionblock.interact]> && !<player.is_op>:
             - stop
         - if <context.location.material.advanced_matches[air].if_null[false]>:

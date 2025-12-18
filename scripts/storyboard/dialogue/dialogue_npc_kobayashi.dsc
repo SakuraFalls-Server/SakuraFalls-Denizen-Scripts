@@ -27,7 +27,7 @@ dialogue_npc_kobayashi:
                 - ~run textbox_choice def.player:<player> def.queue:<queue> def.choices:<[choices]> save:result
                 - define choice <entry[result].created_queue.determination.get[1]>
                 - if <[choice]> == left:
-                    - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:What?$$nlWhy?"
+                    - ~run textbox_write def.player:<player> def.queue:<queue> def.line3s:What?$$nlWhy?
                     - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:Well, look, I can't tell you that, luv.$$nl It's against Hospital Policy."
                     - definemap choices:
                         left:

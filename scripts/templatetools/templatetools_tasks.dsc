@@ -55,7 +55,7 @@ templatetools_schematic_set_index:
     script:
     - define schematics <proc[templatetools_available_schematics].context[<[player]>]>
     - if <schematic.list.contains[<[player].flag[templatetools_schematic]>]>:
-    	- ~schematic unload name:<[player].flag[templatetools_schematic]>
+        - ~schematic unload name:<[player].flag[templatetools_schematic]>
     - schematic load name:templatetools_<[player].uuid> filename:<[player].flag[templatetools_pack]>/<[schematics].get[<[player].flag[templatetools_pack_index]>]>
     - actionbar "<&e>Schematic <[player].flag[templatetools_pack_index]>: <&f><[schematics].get[<[player].flag[templatetools_pack_index]>]>" targets:<[player]>
 

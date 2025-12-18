@@ -30,7 +30,7 @@ guns_world_gun:
             - playeffect effect:redstone at:<player.location.above[1].points_between[<[location]>].distance[0.1]> special_data:0.5|white visibility:16 quantity:6 offset:0,0,0
             - stop
         - playeffect effect:redstone at:<player.location.above[1].points_between[<[target].location.above[1]>].distance[0.1]> special_data:0.5|white visibility:16 quantity:6 offset:0,0,0
-        - if <[target].entity_type> != player:
+        - if <[target].type> != player:
             - stop
         - if <[target].has_flag[guns_frozen]>:
             - stop
@@ -51,7 +51,7 @@ guns_world_taser:
         - define target <player.precise_target[7]||null>
         - if <[target]> == null:
             - stop
-        - if <[target].entity_type> != player:
+        - if <[target].type> != player:
             - stop
         - if <[target].has_flag[guns_frozen]>:
             - stop

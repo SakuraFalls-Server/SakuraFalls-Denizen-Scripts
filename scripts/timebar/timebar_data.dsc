@@ -3,6 +3,3 @@ timebar_worlds:
     type: data
     world: Atarashikibo
     atarashikibo: Atarashikibo
-    matsuhama: Matsuhama [ DEBUG ]
-    noshoko: Noshoko
-    pussyschool: Pussy

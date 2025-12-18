@@ -58,11 +58,32 @@ vehicles_world:
             - adjust <context.entity> passenger:<player>
         # vehicle control
         on player steers armor_stand:
+        - if <player.viaversion_protocol> >= 767:
+            # >=1.21 uses player input event instead
+            - stop
         - if <context.entity.flag[vehicles].if_null[null]> != driver:
             - stop
         - define vehicle <context.entity.flag[vehicles_data]>
         - flag <[vehicle]> vehicles_player_input:<map[].with[forward].as[<context.forward>].with[sideways].as[<context.sideways>]>
         # place vehicle down
+        on player input:
+        - if <player.viaversion_protocol> < 767:
+            # <1.21 uses player steers event instead
+            - stop
+        - if <player.vehicle.flag[vehicles].if_null[null]> != driver:
+            - stop
+        - define forward_backward 0
+        - if <context.forward>:
+            - define forward_backward 1
+        - if <context.backward>:
+            - define forward_backward -1
+        - define left_right 0
+        - if <context.left>:
+            - define left_right 1
+        - if <context.right>:
+            - define left_right -1
+        - define vehicle <player.vehicle.flag[vehicles_data]>
+        - flag <[vehicle]> vehicles_player_input:<map[].with[forward].as[<[forward_backward]>].with[sideways].as[<[left_right]>]>
         on player right clicks block:
         - if <player.item_in_hand.has_flag[vehicles]>:
             - determine cancelled passively
@@ -90,18 +111,18 @@ vehicle_world_parallel_loop:
     - define forward <[vehicles_player_input].get[forward].if_null[0]>
     - define sideways <[vehicles_player_input].get[sideways].if_null[0]>
     - if <[forward]> != 0:
-    	- define speed <[vehicle].flag[vehicles_speed].if_null[0]>
+        - define speed <[vehicle].flag[vehicles_speed].if_null[0]>
         - define speed <[speed].add[<[vehicle].flag[vehicles_data].get[acceleration].mul[<[forward]>]>]>
         - define max <[vehicle].flag[vehicles_data].get[max_speed]>
         - if <[speed]> < <[max].mul[-1].div[3]>:
-        	- define speed <[max].mul[-1].div[3]>
+            - define speed <[max].mul[-1].div[3]>
         - if <[speed]> > <[max]>:
-        	- define speed <[max]>
+            - define speed <[max]>
         - flag <[vehicle]> vehicles_speed:<[speed]>
     - if <[sideways]> != 0:
-    	- define speed <[vehicle].flag[vehicles_speed].if_null[0]>
+        - define speed <[vehicle].flag[vehicles_speed].if_null[0]>
         - if <[speed].abs> > 0.1:
-        	- define max_speed <[vehicle].flag[vehicles_data].get[max_speed]>
+            - define max_speed <[vehicle].flag[vehicles_data].get[max_speed]>
             - define speed_turn_coefficient <[speed].div[<[max_speed]>].mul[0.25].add[0.85]>
             - define turn_speed <[vehicle].flag[vehicles_data].get[turn_speed_percentage].mul[360].mul[<[speed_turn_coefficient]>]>
             - define turn_speed <[turn_speed].mul[<[sideways]>].mul[-1].mul[<tern[<[speed].is_less_than[0]>].pass[-1].fail[1]>]>
