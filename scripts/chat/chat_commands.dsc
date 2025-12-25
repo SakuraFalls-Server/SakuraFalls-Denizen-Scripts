@@ -378,14 +378,14 @@ chat_command_channelswitch:
     - define channel <context.args.get[1].to_lowercase>
     - choose <[channel]>:
         - case ic:
-            - flag <player> chat_channel:ic
+            - run settings_set def.player:<player> def.key:text_rp_chat_channel def.value:ic
             - narrate format:formats_prefix "Changed channel to IC."
             - stop
         - case ooc:
             - if <player.has_flag[chat_disableooc]>:
                 - narrate "<&c>You currently have OOC disabled. Use /ooc first to enable it."
                 - stop
-            - flag <player> chat_channel:ooc
+            - run settings_set def.player:<player> def.key:text_rp_chat_channel def.value:oocz
             - narrate format:formats_prefix "Changed channel to OOC."
             - stop
     - narrate "<&c>Unknown channel <[channel]>. Please try: ic, ooc."
@@ -414,5 +414,5 @@ chat_command_chatcolor:
     - if !<proc[chat_allowed_colors].contains[<[color]>]>:
         - narrate "<&c>You must choose a color from this list: <proc[chat_allowed_colors].comma_separated>"
         - stop
-    - flag <player> chat_color:<element[&<color[<[color]>].hex>].parse_color>
+    - run settings_set def.player:<player> def.key:text_rp_chat_color def.value:<[color]>
     - narrate format:formats_prefix "Changed chat color to <element[&<color[<[color]>].hex>].parse_color><[color]>."

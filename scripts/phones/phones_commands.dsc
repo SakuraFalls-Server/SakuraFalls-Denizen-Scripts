@@ -83,7 +83,8 @@ phones_commands_phonecall:
         #
         # before accepted
         - if !<[target].has_flag[phones_is_maybe_called]>:
-            - nbs file:data/phones/songs/<[target].flag[phones].get[ringtone].if_null[Bad Apple]> play targets:<[target]>
+            - if !<proc[settings_get].context[<[target]>|game_disable_phone_ringtone]>:
+                - nbs file:data/phones/songs/<[target].flag[phones].get[ringtone].if_null[Bad Apple]> play targets:<[target]>
         - narrate targets:<[target]> "<&6>*** <&e>You're being called by <&e><[relative]><&7>."
         - narrate targets:<[target]> <&hover[<&a>Click to accept call from <[relative]>...]><element[<&a><&l>[ ACCEPT ]].on_click[<entry[accept].command>]><&end_hover>
         # wait...

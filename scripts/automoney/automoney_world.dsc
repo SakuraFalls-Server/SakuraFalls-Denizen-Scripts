@@ -9,4 +9,5 @@ automoney_world:
             - if <[time_passed].is_more_than[<duration[30m]>]>:
                 - flag <[player]> automoney_last:<util.time_now>
                 - money give players:<[player]> quantity:500
-                - narrate format:formats_prefix targets:<[player]> "Thanks for being online! You have received ¥500."
+                - if <proc[settings_get].context[<[player]>|game_see_auto_money_announcements]>:
+                    - narrate format:formats_prefix targets:<[player]> "Thanks for being online! You have received ¥500."

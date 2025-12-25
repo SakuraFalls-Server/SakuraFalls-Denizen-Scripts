@@ -86,7 +86,7 @@ settings_config:
             name: Textbox volume
             description: Changes the volume when the textbox is writing.
             type: number
-            default: 80
+            default: 50
             min: 0
             max: 100
             increment: 5
@@ -98,11 +98,12 @@ settings_config:
             default: 50
             min: 0
             max: 100
+            increment: 5
         ##
-        accessibility_rp_chat_disable_colors:
+        accessibility_chat_disable_colors:
             tab: Accessibility
-            name: Disable colors in chat channels
-            description: If enabled, hides all colors in chat channels, instead using plain white.
+            name: Disable colors in chat
+            description: If enabled, hides all colors in chat, instead using plain white.
             type: boolean
             default: false
         accessibility_rp_chat_space_messages:
