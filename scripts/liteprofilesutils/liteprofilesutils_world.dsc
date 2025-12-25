@@ -16,7 +16,8 @@ liteprofilesutils_world:
         - flag server liteprofilesutils_lastbestlimit:<[lastbestlimit].with[<[masteruuid]>].as[<[profilelimit].max[<[lastbestlimit].get[<[masteruuid]>].if_null[1]>]>]>
         #
         - define joinleavedata <script[liteprofilesutils_data].data_key[join-leave]>
-        - announce <[joinleavedata].get[leave].parsed>
+        - define setting_enabled_players <server.online_players.filter_tag[<proc[settings_get].context[<[filter_value]>|general_see_player_join_leave]>]>
+        - narrate <[joinleavedata].get[leave].parsed> targets:<[setting_enabled_players]>
         on player joins:
         - define masteruuid <proc[liteprofilesutils_get_master_uuid].context[<player>]>
         # sync groups, O(scary)
@@ -61,7 +62,8 @@ liteprofilesutils_world:
             - if <server.flag[liteprofilesutils_welcome].if_null[<list[]>].contains[<player.uuid>]>:
                 - announce <[joinleavedata].get[welcome].parsed>
                 - flag server liteprofilesutils_welcome:<server.flag[liteprofilesutils_welcome].if_null[<list[]>].include[<player.uuid>]>
-        - announce <[joinleavedata].get[join].parsed>
+        - define setting_enabled_players <server.online_players.filter_tag[<proc[settings_get].context[<[filter_value]>|general_see_player_join_leave]>]>
+        - narrate <[joinleavedata].get[join].parsed> targets:<[setting_enabled_players]>
         ## prevent /profile remove
         on command:
         - if <context.command.to_lowercase> == profile || <context.command.to_lowercase> == account || <context.command.to_lowercase> == pf:

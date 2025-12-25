@@ -98,7 +98,7 @@ settings_menu_set_text_callback:
     - define error <entry[result].created_queue.determination.get[1].if_null[null]>
     - if <[error]> != null:
         - narrate targets:<[player]> <&c><[error]>
-    - wait 1t
+    - wait 4t
     - run settings_menu def.player:<[player]> def.tab:<[temp_state].get[tab]> def.page:<[temp_state].get[page]>
 
 settings_menu_set_text_helper:
@@ -166,7 +166,7 @@ settings_menu_render_tabs:
     type: task
     script:
     - foreach <[tabs]> as:t:
-        - define tab_button <item[book[display=<&b><[t]>]]>
+        - define tab_button <item[<tern[<[t].equals[<[tab]>]>].pass[enchanted_book].fail[book]>[display=<&b><[t]>]]>
         - definemap content_entry_value:
             item: <[tab_button]>
             script: settings_menu
@@ -182,7 +182,7 @@ settings_menu_render_settings:
     type: task
     script:
     - foreach <proc[settings_all_settings_from_page_from_tab].context[<[tab]>|<[page]>]> as:setting_key:
-        - define setting_item <item[paper[display=<&3><[keys].get[<[setting_key]>].get[name]>;lore=<[keys].get[<[setting_key]>].get[description].split_lines_by_width[128].split[<&nl>].parse_tag[<&7><[parse_value]>]>]]>
+        - define setting_item <item[paper[display=<&3><[keys].get[<[setting_key]>].get[name]>;lore=<[keys].get[<[setting_key]>].get[description].split_lines_by_width[<[keys].get[<[setting_key]>].get[name].text_width>].split[<&nl>].parse_tag[<&7><[parse_value]>]>]]>
         - definemap content_entry_value:
             item: <[setting_item]>
         - define position <[loop_index].mul[9].add[1]>

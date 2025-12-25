@@ -29,7 +29,8 @@ chat_channel_ooc:
     script:
     - define message <[message].strip_color.replace[&\].with[&].unescaped>
     - define final "<&8>[<&7><&l>OOC<&8>] <proc[chat_special_group].context[<[player]>]><proc[chat_name_ooc].context[<[player]>]><&7>: <&l><[message]>"
-    - narrate targets:<server.online_players.filter_tag[<[filter_value].has_flag[chat_disableooc].not>]> <[final]>
+    - define targets <server.online_players.filter_tag[<[filter_value].has_flag[chat_disableooc].not>]>
+    - narrate targets:<[targets]> <[final]>
     - announce to_console <[final]>
 
 chat_channel_looc:
@@ -39,7 +40,8 @@ chat_channel_looc:
     script:
     - define message <[message].strip_color.replace[&\].with[&].unescaped>
     - define final "<&8>[<&7>LOOC<&8>] <proc[chat_special_group].context[<[player]>]><&7><proc[character_get_name].context[<[player]>]> <proc[chat_name_ooc].context[<[player]>]><&7>: <[message]>"
-    - narrate targets:<[player].location.find_players_within[10]> <[final]>
+    - define targets <[player].location.find_players_within[10]>
+    - narrate targets:<[targets]> <[final]>
     - announce to_console <[final]>
 
 chat_allowed_colors:
@@ -71,6 +73,40 @@ chat_tokenize_actions:
         - define index <[index].add[1]>
     - determine <[result].trim>
 
+chat_channel_check_targets:
+    debug: false
+    type: task
+    script:
+    - if <[targets].size> <= 1:
+        - if <proc[settings_get].context[<[player]>|text_rp_chat_distance_warning]>:
+            - narrate "<&6>* <&7><&o>It seemed like nobody could hear you." targets:<[player]>
+
+chat_channel_check_targets_language:
+    debug: false
+    type: task
+    script:
+    - if <[all].size> <= 1:
+        - if <proc[settings_get].context[<[player]>|text_rp_chat_distance_warning]>:
+            - narrate "<&6>* <&7><&o>It seemed like nobody could hear you." targets:<[player]>
+
+chat_accessibility_space_message_inject_define:
+    debug: false
+    type: task
+    script:
+    - define space_targets <[targets].filter_tag[<proc[settings_get].context[<[filter_value]>|accessibility_rp_chat_space_messages]>]>
+
+chat_accessibility_space_message_inject_define_language:
+    debug: false
+    type: task
+    script:
+    - define space_targets <[all].filter_tag[<proc[settings_get].context[<[filter_value]>|accessibility_rp_chat_space_messages]>]>
+
+chat_accessibility_space_message_inject_apply:
+    debug: false
+    type: task
+    script:
+    - narrate targets:<[space_targets]> <&f>
+
 chat_channel_ic:
     debug: false
     type: task
@@ -84,9 +120,14 @@ chat_channel_ic:
         - stop
     - if !<[player].has_permission[chat.colors]>:
         - define message <[message].strip_color>
-    - define tokenized <proc[chat_tokenize_actions].context[<[message]>|<player.flag[chat_color].if_null[<&e>]>says<&7>:|<player.flag[chat_color].if_null[<&e>]>|<&f>|<&f><&dq><&f>|false].replace[&\].with[&].unescaped>
+    - define tokenized <proc[chat_tokenize_actions].context[<[message]>|<element[&<color[<proc[settings_get].context[<[player]>|text_rp_chat_color]>].hex>].parse_color>says<&7>:|<element[&<color[<proc[settings_get].context[<[player]>|text_rp_chat_color]>].hex>].parse_color>|<&f>|<&f><&dq><&f>|false].replace[&\].with[&].unescaped>
     - define final "<&color[#b8b9ba]><placeholder[essentials_nickname].player[<[player]>]> <&f><proc[chat_special_group].context[<[player]>]><proc[chat_roles_group].context[<[player]>]> <proc[character_get_name].context[<[player]>]> <[tokenized]>"
-    - narrate targets:<[player].location.find_players_within[10]> <[final]>
+    - define targets <[player].location.find_players_within[10]>
+    - inject chat_accessibility_space_message_inject_define
+    - inject chat_accessibility_space_message_inject_apply
+    - inject chat_channel_check_targets
+    - narrate targets:<[targets]> <[final]>
+    - inject chat_accessibility_space_message_inject_apply
     - announce to_console <[final]>
 
 chat_channel_ic_me:
@@ -97,8 +138,13 @@ chat_channel_ic_me:
     - define message <[message].replace[&\].with[&].unescaped>
     - if !<[player].has_permission[chat.colors]>:
         - define message <[message].strip_color>
-    - define final "<&e>*** <&f><placeholder[essentials_nickname].player[<[player]>]> <proc[chat_special_group].context[<[player]>]><proc[chat_roles_group].context[<[player]>]> <proc[character_get_name].context[<[player]>]> <player.flag[chat_color].if_null[<&e>]><&o><[message]>"
-    - narrate targets:<[player].location.find_players_within[10]> <[final]>
+    - define final "<&e>*** <&f><placeholder[essentials_nickname].player[<[player]>]> <proc[chat_special_group].context[<[player]>]><proc[chat_roles_group].context[<[player]>]> <proc[character_get_name].context[<[player]>]> <element[&<color[<proc[settings_get].context[<[player]>|text_rp_chat_color]>].hex>].parse_color><&o><[message]>"
+    - define targets <[player].location.find_players_within[10]>
+    - inject chat_accessibility_space_message_inject_define
+    - inject chat_accessibility_space_message_inject_apply
+    - inject chat_channel_check_targets
+    - narrate targets:<[targets]> <[final]>
+    - inject chat_accessibility_space_message_inject_apply
     - announce to_console <[final]>
 
 chat_channel_ic_mec:
@@ -109,8 +155,13 @@ chat_channel_ic_mec:
     - define message <[message].replace[&\].with[&].unescaped>
     - if !<[player].has_permission[chat.colors]>:
         - define message <[message].strip_color>
-    - define final "<&e>* <&f><placeholder[essentials_nickname].player[<[player]>]> <proc[chat_special_group].context[<[player]>]><proc[chat_roles_group].context[<[player]>]> <proc[character_get_name].context[<[player]>]> <player.flag[chat_color].if_null[<&e>]><&o><[message]>"
-    - narrate targets:<[player].location.find_players_within[3]> <[final]>
+    - define final "<&e>* <&f><placeholder[essentials_nickname].player[<[player]>]> <proc[chat_special_group].context[<[player]>]><proc[chat_roles_group].context[<[player]>]> <proc[character_get_name].context[<[player]>]> <element[&<color[<proc[settings_get].context[<[player]>|text_rp_chat_color]>].hex>].parse_color><&o><[message]>"
+    - define targets <[player].location.find_players_within[3]>
+    - inject chat_accessibility_space_message_inject_define
+    - inject chat_accessibility_space_message_inject_apply
+    - inject chat_channel_check_targets
+    - narrate targets:<[targets]> <[final]>
+    - inject chat_accessibility_space_message_inject_apply
     - announce to_console <[final]>
 
 chat_channel_ic_mel:
@@ -121,8 +172,13 @@ chat_channel_ic_mel:
     - define message <[message].replace[&\].with[&].unescaped>
     - if !<[player].has_permission[chat.colors]>:
         - define message <[message].strip_color>
-    - define final "<&e>**** <&f><placeholder[essentials_nickname].player[<[player]>]> <proc[chat_special_group].context[<[player]>]><proc[chat_roles_group].context[<[player]>]> <proc[character_get_name].context[<[player]>]> <player.flag[chat_color].if_null[<&e>]><&o><[message]>"
-    - narrate targets:<[player].location.find_players_within[25]> <[final]>
+    - define final "<&e>**** <&f><placeholder[essentials_nickname].player[<[player]>]> <proc[chat_special_group].context[<[player]>]><proc[chat_roles_group].context[<[player]>]> <proc[character_get_name].context[<[player]>]> <element[&<color[<proc[settings_get].context[<[player]>|text_rp_chat_color]>].hex>].parse_color><&o><[message]>"
+    - define targets <[player].location.find_players_within[25]>
+    - inject chat_accessibility_space_message_inject_define
+    - inject chat_accessibility_space_message_inject_apply
+    - inject chat_channel_check_targets
+    - narrate targets:<[targets]> <[final]>
+    - inject chat_accessibility_space_message_inject_apply
     - announce to_console <[final]>
 
 chat_channel_ic_whisper:
@@ -140,7 +196,12 @@ chat_channel_ic_whisper:
         - define message <[message].strip_color>
     - define tokenized <proc[chat_tokenize_actions].context[<[message]>|whispers|<&8>|<&7>|<&6><&sq>|false].replace[&\].with[&].unescaped>
     - define final "<&color[#d1d1d1]><placeholder[essentials_nickname].player[<[player]>]> <&f><proc[chat_special_group].context[<[player]>]><proc[chat_roles_group].context[<[player]>]> <proc[character_get_name].context[<[player]>]> <[tokenized]>"
-    - narrate targets:<[player].location.find_players_within[3]> <[final]>
+    - define targets <[player].location.find_players_within[3]>
+    - inject chat_accessibility_space_message_inject_define
+    - inject chat_accessibility_space_message_inject_apply
+    - inject chat_channel_check_targets
+    - narrate targets:<[targets]> <[final]>
+    - inject chat_accessibility_space_message_inject_apply
     - announce to_console <[final]>
 
 chat_channel_ic_yell:
@@ -158,7 +219,11 @@ chat_channel_ic_yell:
         - define message <[message].strip_color>
     - define tokenized <proc[chat_tokenize_actions].context[<[message]>|yells|<&6>|<&f>|<&6><&sq>|true].replace[&\].with[&].unescaped>
     - define final "<&f><placeholder[essentials_nickname].player[<[player]>]> <proc[chat_special_group].context[<[player]>]><proc[chat_roles_group].context[<[player]>]> <proc[character_get_name].context[<[player]>]> <[tokenized]>"
-    - narrate targets:<[player].location.find_players_within[25]> <[final]>
+    - define targets <[player].location.find_players_within[25]>
+    - inject chat_accessibility_space_message_inject_define
+    - inject chat_accessibility_space_message_inject_apply
+    - narrate targets:<[targets]> <[final]>
+    - inject chat_accessibility_space_message_inject_apply
     - announce to_console <[final]>
 
 chat_channel_ic_my:
@@ -175,7 +240,11 @@ chat_channel_ic_my:
     - else:
         - define possession_name <[possession_name]><&sq>s
     - define final "<&e>*** <&f><placeholder[essentials_nickname].player[<[player]>]> <proc[chat_special_group].context[<[player]>]><proc[chat_roles_group].context[<[player]>]> <[possession_name]> <&f><[message]>"
-    - narrate targets:<[player].location.find_players_within[10]> <[final]>
+    - define targets <[player].location.find_players_within[10]>
+    - inject chat_accessibility_space_message_inject_define
+    - inject chat_accessibility_space_message_inject_apply
+    - narrate targets:<[targets]> <[final]>
+    - inject chat_accessibility_space_message_inject_apply
     - announce to_console <[final]>
 
 chat_channel_ic_it:
@@ -187,7 +256,11 @@ chat_channel_ic_it:
     - if !<[player].has_permission[chat.colors]>:
         - define message <[message].strip_color>
     - define final "<&6>*** <&e><[message]> <&7>(<proc[character_get_name].context[<[player]>]>)"
-    - narrate targets:<[player].location.find_players_within[10]> <[final]>
+    - define targets <[player].location.find_players_within[10]>
+    - inject chat_accessibility_space_message_inject_define
+    - inject chat_accessibility_space_message_inject_apply
+    - narrate targets:<[targets]> <[final]>
+    - inject chat_accessibility_space_message_inject_apply
     - announce to_console <[final]>
 
 chat_channel_ic_itc:
@@ -199,7 +272,11 @@ chat_channel_ic_itc:
     - if !<[player].has_permission[chat.colors]>:
         - define message <[message].strip_color>
     - define final "<&6>* <&e><[message]> <&7>(<proc[character_get_name].context[<[player]>]>)"
-    - narrate targets:<[player].location.find_players_within[3]> <[final]>
+    - define targets <[player].location.find_players_within[3]>
+    - inject chat_accessibility_space_message_inject_define
+    - inject chat_accessibility_space_message_inject_apply
+    - narrate targets:<[targets]> <[final]>
+    - inject chat_accessibility_space_message_inject_apply
     - announce to_console <[final]>
 
 chat_channel_ic_itl:
@@ -211,7 +288,11 @@ chat_channel_ic_itl:
     - if !<[player].has_permission[chat.colors]>:
         - define message <[message].strip_color>
     - define final "<&6>**** <&e><[message]> <&7>(<proc[character_get_name].context[<[player]>]>)"
-    - narrate targets:<[player].location.find_players_within[25]> <[final]>
+    - define targets <[player].location.find_players_within[25]>
+    - inject chat_accessibility_space_message_inject_define
+    - inject chat_accessibility_space_message_inject_apply
+    - narrate targets:<[targets]> <[final]>
+    - inject chat_accessibility_space_message_inject_apply
     - announce to_console <[final]>
 
 chat_channel_ic_language:
@@ -225,10 +306,14 @@ chat_channel_ic_language:
     - define final_known "<&6>[<&7>L<&6>] <&f><placeholder[essentials_nickname].player[<[player]>]> <proc[chat_special_group].context[<[player]>]><proc[chat_roles_group].context[<[player]>]> <proc[character_get_name].context[<[player]>]> <player.flag[chat_color].if_null[<&f>]>says <&f><&dq><&o><[message]><&f><&dq> in <[language]>"
     - define final_unknown "<&6>[<&7>L<&6>] <&f><placeholder[essentials_nickname].player[<[player]>]> <proc[chat_special_group].context[<[player]>]><proc[chat_roles_group].context[<[player]>]> <proc[character_get_name].context[<[player]>]> <player.flag[chat_color].if_null[<&f>]>says something in <[language]>"
     - define all <[player].location.find_players_within[10]>
+    - inject chat_accessibility_space_message_inject_define_language
+    - inject chat_accessibility_space_message_inject_apply
+    - inject chat_channel_check_targets_language
     - define speakers <[all].filter_tag[<[filter_value].flag[chat_languages].contains[<[language]>].if_null[false]>]>
     - define others <[all].exclude[<[speakers]>]>
     - narrate targets:<[speakers]> <[final_known]>
     - narrate targets:<[others]> <[final_unknown]>
+    - inject chat_accessibility_space_message_inject_apply
     - announce to_console <[final_known]>
 
 chat_channel_ic_languagewhisper:
@@ -242,10 +327,14 @@ chat_channel_ic_languagewhisper:
     - define final_known "<&6>[<&7>L<&6>] <&f><placeholder[essentials_nickname].player[<[player]>]> <proc[chat_special_group].context[<[player]>]><proc[chat_roles_group].context[<[player]>]> <proc[character_get_name].context[<[player]>]> <&f>whispers <&dq><&o><[message]><&f><&dq> in <[language]>"
     - define final_unknown "<&6>[<&7>L<&6>] <&f><placeholder[essentials_nickname].player[<[player]>]> <proc[chat_special_group].context[<[player]>]><proc[chat_roles_group].context[<[player]>]> <proc[character_get_name].context[<[player]>]> <&f>whispers something in <[language]>"
     - define all <[player].location.find_players_within[3]>
+    - inject chat_accessibility_space_message_inject_define_language
+    - inject chat_accessibility_space_message_inject_apply
+    - inject chat_channel_check_targets_language
     - define speakers <[all].filter_tag[<[filter_value].flag[chat_languages].contains[<[language]>].if_null[false]>]>
     - define others <[all].exclude[<[speakers]>]>
     - narrate targets:<[speakers]> <[final_known]>
     - narrate targets:<[others]> <[final_unknown]>
+    - inject chat_accessibility_space_message_inject_apply
     - announce to_console <[final_known]>
 
 chat_channel_ic_languageyell:
@@ -259,8 +348,12 @@ chat_channel_ic_languageyell:
     - define final_known "<&6>[<&7>L<&6>] <&f><placeholder[essentials_nickname].player[<[player]>]> <proc[chat_special_group].context[<[player]>]><proc[chat_roles_group].context[<[player]>]> <proc[character_get_name].context[<[player]>]> <&f>yells <&dq><&o><[message].to_uppercase><&f><&dq> in <[language]>"
     - define final_unknown "<&6>[<&7>L<&6>] <&f><placeholder[essentials_nickname].player[<[player]>]> <proc[chat_special_group].context[<[player]>]><proc[chat_roles_group].context[<[player]>]> <proc[character_get_name].context[<[player]>]> <&f>yells something in <[language]>"
     - define all <[player].location.find_players_within[25]>
+    - inject chat_accessibility_space_message_inject_define_language
+    - inject chat_accessibility_space_message_inject_apply
+    - inject chat_channel_check_targets_language
     - define speakers <[all].filter_tag[<[filter_value].flag[chat_languages].contains[<[language]>].if_null[false]>]>
     - define others <[all].exclude[<[speakers]>]>
     - narrate targets:<[speakers]> <[final_known]>
     - narrate targets:<[others]> <[final_unknown]>
+    - inject chat_accessibility_space_message_inject_apply
     - announce to_console <[final_known]>

@@ -156,7 +156,8 @@ vehicle_world_parallel_loop:
             - teleport <[vehicle]> <[new_location]> cause:plugin offthread_repeat:8
             - flag <[vehicle]> vehicles_speed:<[speed]>
     - if <[vehicle].flag[vehicles_data].get[driver_entity].has_passenger>:
-        - playsound <[new_location]> custom sound:vehicle.engine pitch:<element[0.5].add[<[speed].abs.mul[32].mod[24].round_down.div[18]>]>
+        - foreach <[vehicle].location.find_players_within[15]> as:listener:
+            - playsound <[new_location]> <[listener]> custom sound:vehicle.engine pitch:<element[0.5].add[<[speed].abs.mul[32].mod[24].round_down.div[18]>]> volume:<proc[settings_get].context[<[listener]>|sound_vehicles_volume].div[200]>
     - if <[vehicle].flag[vehicles_last_location]> == <[new_location]>:
         - stop
     - define driver_entity <[vehicle].flag[vehicles_data].get[driver_entity]>

@@ -44,6 +44,7 @@ textbox_write:
     - bossbar create textbox_<[player].uuid>_2 players:<[player]> title:<empty>
     - bossbar create textbox_<[player].uuid>_3 players:<[player]> title:<empty>
     - wait 1t
+    - define write_speed <proc[settings_get].context[<[player]>|text_textbox_write_speed].if_null[1]>
     - if <[avatar_unicode]> != null:
         - bossbar create textbox_<[player].uuid>_avatar players:<[player]> title:<element[ ].repeat[64]><[avatar_unicode]>
     - foreach <[lines]> as:line:
@@ -58,20 +59,20 @@ textbox_write:
                 - stop
             - bossbar update textbox_<[player].uuid>_<[loop_index]> title:<black><bold><[line].substring[1,<[value]>]>
             - if <[value].sub[1].mod[3]> == 0:
-                - playsound sound:textbox.text <[player]> custom pitch:<util.random.decimal[0.98].to[1]>
-            - wait 1t
+                - playsound sound:textbox.text <[player]> custom pitch:<util.random.decimal[0.98].to[1]> volume:<proc[settings_get].context[<[player]>|sound_textbox_volume].div[100].if_null[1]>
+            - wait <[write_speed]>t
             - if <[line].substring[<[value].add[1]>,<[value].add[1]>].trim.length.if_null[1]> == 0:
                 - if <[line].substring[<[value]>,<[value]>]> == .:
-                    - wait 2t
+                    - wait <[write_speed].add[1]>t
                 - if <[line].substring[<[value]>,<[value]>]> == !:
-                    - wait 2t
+                    - wait <[write_speed].add[1]>t
                 - if <[line].substring[<[value]>,<[value]>]> == ?:
-                    - wait 2t
+                    - wait <[write_speed].add[1]>t
                 - if <[line].substring[<[value]>,<[value]>]> == -:
-                    - wait 2t
+                    - wait <[write_speed].add[1]>t
                 - if <[line].substring[<[value]>,<[value]>]> == ,:
-                    - wait 2t
-        - wait <duration[1t]>
+                    - wait <[write_speed].add[1]>t
+        - wait <duration[<[write_speed]>t]>
     - if <[player].flag[textbox_state].if_null[null]> != writing:
         - if <[queue].if_null[null]> != null && <[player].flag[textbox_state].if_null[null]> != continue:
             - debug log "[Textbox] Write; cancelled queue <[queue].numeric_id><&at><[queue].script.name> for <[player].name>; state mismatch."
@@ -207,12 +208,12 @@ textbox_handle_click:
         - ratelimit <player> 5t
     - else if <[state]> == continue:
         - determine cancelled passively
-        - playsound sound:textbox.close <player> custom
+        - playsound sound:textbox.close <player> custom volume:<proc[settings_get].context[<[player]>|sound_textbox_volume].div[100].if_null[1]>
         - ~run textbox_flush def.player:<player>
         - ratelimit <player> 10t
     - else if <[state]> == choice:
         - determine cancelled passively
-        - playsound sound:input.ok <player> custom
+        - playsound sound:input.ok <player> custom volume:<proc[settings_get].context[<[player]>|sound_textbox_volume].div[100].if_null[1]>
         - flag <player> textbox_choice_select:<player.flag[textbox_choices].get[current]>
         - ~run textbox_flush def.player:<player>
         - ratelimit <player> 10t
@@ -314,4 +315,4 @@ textbox_internal_choice_select:
     - if <[bottom]> != <&0><&l>null:
         - bossbar update textbox_<[player].uuid>_bottom title:<[bottom]>
     - flag <[player]> textbox_choices:<map[].with[data].as[<[choices]>].with[current].as[<[choice_dir]>]>
-    - playsound BLOCK_NOTE_BLOCK_BIT <[player]> pitch:2
+    - playsound BLOCK_NOTE_BLOCK_BIT <[player]> pitch:2 volume:<proc[settings_get].context[<[player]>|sound_textbox_volume].div[100].if_null[1]>
