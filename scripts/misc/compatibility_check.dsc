@@ -20,10 +20,10 @@ compatibility_check_world:
     type: world
     events:
         after player joins:
-        - if !<proc[settings_get].context[<player>|general_ignore_version_compatibility_check]>:
+        - if <proc[settings_get].context[<player>|general_ignore_version_compatibility_check]>:
             - stop
-        - define player_version <player.viaversion_version.split[-].get[1].split[.].limit[3].get[1|2].separated_by[.]>
-        - define server_version <server.version.split[(].get[2].split[:].get[2].split[)].get[1].trim.split[.].limit[3].get[1|2].separated_by[.]>
+        - define player_version <player.viaversion_version.split[-].get[1]>
+        - define server_version <server.version.split[(].get[2].split[:].get[2].split[)].get[1].trim>
         - if <proc[compatibility_check_compare_versions].context[<[player_version]>|<[server_version]>]> == -1:
             - wait 5s
             - if !<player.is_online>:

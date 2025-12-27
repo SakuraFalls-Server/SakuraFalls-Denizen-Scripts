@@ -8,7 +8,7 @@ sports_volleyball_world:
         - define ball <context.entity>
         - if !<[ball].has_flag[ball]>:
             - stop
-        - if <[ball].type> == armor_stand:
+        - if <[ball].type> != slime:
             - define ball <proc[ball_get].context[<[ball].flag[ball]>]>
         - if !<[ball].flag[ball].starts_with[sports_volleyball]>:
             - stop
