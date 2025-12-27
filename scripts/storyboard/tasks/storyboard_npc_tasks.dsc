@@ -247,6 +247,7 @@ storyboard_npc_internal_auto_display_entities:
     type: world
     events:
         after player joins bukkit_priority:high:
+        - wait 1t
         - foreach <server.online_players.exclude[<player>]> as:target:
             - define registry registry_<[target].uuid>
             - define npcs <server.npcs[<[registry]>].if_null[<list[]>]>

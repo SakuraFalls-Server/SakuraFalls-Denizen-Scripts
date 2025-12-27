@@ -18,7 +18,7 @@ ball_create:
     - spawn slime[silent=true;size=<[size]>;has_ai=false;visible=false] <[location].with_pitch[0].with_yaw[0]> save:ball_collision
     - define ball_collision <entry[ball_collision].spawned_entity>
     - define size <[ball_collision].bounding_box.get[1].sub[<[ball_collision].location>].x.abs.add[0.01]>
-    - spawn armor_stand[invulnerable=true;has_ai=false;gravity=false;visible=false] <[location].with_pitch[0].with_yaw[0].below[<[size].add[1]>]> save:ball_display
+    - spawn zombie[silent=true;has_ai=false;gravity=false;visible=false] <[location].with_pitch[0].with_yaw[0].below[<[size].add[1]>]> save:ball_display
     - define ball_display <entry[ball_display].spawned_entity>
     - adjust <[ball_display]> equipment:<map[].with[helmet].as[<[display_item]>]>
     - flag <[ball_collision]> ball:<[id]>
@@ -142,8 +142,5 @@ ball_internal_physics_update_ball:
                 - define next <[changes].get[1].if_null[<[next]>]>
                 - define velocity <[changes].get[2].if_null[<[velocity]>]>
     - flag <[ball]> ball_velocity:<[velocity]>
-    - if <[size]> <= 2:
-        - teleport <[ball].flag[ball_display]> <[next].below[<[size].add[0.7]>]>
-    - else:
-        - teleport <[ball].flag[ball_display]> <[next].below[<[size].add[0.7]>]>
+    - teleport <[ball].flag[ball_display]> <[ball].bounding_box.get[1].add[<[ball].bounding_box.get[2]>].div[2].below[1.575].below[0.125]>
     - teleport <[ball]> <[next]>

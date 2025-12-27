@@ -7,7 +7,10 @@ sports_football_world:
         - ratelimit <player> 10t
         - if !<context.entity.has_flag[ball]>:
             - stop
-        - if !<context.entity.flag[ball].starts_with[sports_football]>:
+        - define ball <context.entity>
+        - if <[ball].type> != slime:
+            - define ball <proc[ball_get].context[<[ball].flag[ball]>]>
+        - if !<[ball].flag[ball].starts_with[sports_football]>:
             - stop
         - if !<player.has_flag[sports]>:
             - stop
@@ -19,13 +22,13 @@ sports_football_world:
         - define min_y <player.eye_location.direction.vector.y>
         - if <[min_y]> < 0:
             - define min_y 0
-        - define velo <context.entity.flag[ball_velocity].normalize.mul[0.05]>
+        - define velo <[ball].flag[ball_velocity].normalize.mul[0.05]>
         - define kick <player.eye_location.direction.vector.mul[0.75].with_y[<[min_y]>].add[0,0.25,0].add[<[velo]>]>
         - if <player.is_sprinting>:
             - define kick <player.eye_location.direction.vector.with_y[0.25].mul[1.5]>
             - if !<player.is_on_ground>:
                 - define kick <player.eye_location.direction.vector.with_y[0.75].mul[1.5]>
-        - run ball_vector_add def.ball:<context.entity> def.vector:<[kick]>
+        - run ball_vector_add def.ball:<[ball]> def.vector:<[kick]>
         ## out of bounds & ball collision
         on player walks:
         - if !<player.has_flag[sports]>:
