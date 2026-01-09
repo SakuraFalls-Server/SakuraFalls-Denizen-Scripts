@@ -60,6 +60,36 @@ storyboard_player_unfreeze:
     - adjust <player> walk_speed:<player.flag[storyboard_freeze_speed]>
     - flag <player> storyboard_freeze_speed:!
 
+# Marks the script after this task as an atomic sequence, meaning that
+# the script either fully completes or is restored back to this point.
+# This task does not ensure the atomicity, instead it will block any
+# futher executions of the given script (deduced from the queue) until
+# storyboard_player_end_atomic_sequence is called, or until the player
+# logs off (which basically negates the atomicity). The developer must
+# ensure that the script enclosed by the begin and end tasks is atomic.
+storyboard_player_begin_atomic_sequence:
+    debug: false
+    type: task
+    definitions: queue|player
+    script:
+    - announce to_ops <[queue].script.name>
+    - if <[player].flag[storyboard_atomic].if_null[<map[]>].contains[<[queue].script.name>]>:
+        - queue <[queue]> stop
+        - stop
+    - flag <[player]> storyboard_atomic:<[player].flag[storyboard_atomic].if_null[<map[]>].with[<[queue].script.name>].as[<util.time_now>]>
+
+# Ends the atomic sequence above this task. See the sibling task
+# storyboard_player_begin_atomic_sequence for more details.
+storyboard_player_end_atomic_sequence:
+    debug: false
+    type: task
+    definitions: queue|player
+    script:
+    - if !<[player].flag[storyboard_atomic].if_null[<map[]>].contains[<[queue].script.name>]>:
+        - debug error "Tried ending storyboard atomic sequence <[queue].script.name> before storyboard_player_begin_atomic_sequence was called! (Player UUID <[player].uuid>)"
+        - stop
+    - flag <[player]> storyboard_atomic:<[player].flag[storyboard_atomic].if_null[<map[]>].exclude[<[queue].script.name>]>
+
 ## Internal only!
 storyboard_player_freeze_check:
     debug: false
@@ -68,3 +98,12 @@ storyboard_player_freeze_check:
         on player joins:
         - if <player.has_flag[storyboard_freeze_speed]>:
             - run storyboard_player_unfreeze def.player:<player>
+
+storyboard_player_atomic_sequence_disconnect_handler:
+    debug: false
+    type: world
+    events:
+        on player quit:
+        - flag <player> storyboard_atomic:!
+        on player joins:
+        - flag <player> storyboard_atomic:!

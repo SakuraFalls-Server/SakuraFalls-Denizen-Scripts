@@ -34,6 +34,7 @@ ch1_1_marie_interact:
         1:
             click trigger:
                 script:
+                - run storyboard_player_begin_atomic_sequence def.queue:<queue> def.player:<player>
                 - if <player.flag[textbox_state].if_null[null]> != null:
                     - stop
                 - engage player duration:999999s
@@ -97,9 +98,11 @@ ch1_1_marie_interact:
                     - run storyboard_npc_state_set def.player:<player> def.name:marie def.key:opinion def.value:-1
                 - zap 2
                 - disengage player
+                - run storyboard_player_end_atomic_sequence def.queue:<queue> def.player:<player>
         2:
             click trigger:
                 script:
+                - run storyboard_player_begin_atomic_sequence def.queue:<queue> def.player:<player>
                 - if <player.flag[textbox_state].if_null[null]> != null:
                     - stop
                 - engage player duration:999999s
@@ -235,3 +238,4 @@ ch1_1_marie_interact:
                 - inventory update
                 - zap 3
                 - disengage player
+                - run storyboard_player_end_atomic_sequence def.queue:<queue> def.player:<player>

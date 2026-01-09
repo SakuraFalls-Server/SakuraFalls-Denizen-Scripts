@@ -15,11 +15,13 @@ intro_interact_posters_task:
     debug: false
     type: task
     script:
+    - run storyboard_player_begin_atomic_sequence def.queue:<queue> def.player:<player>
     - ~run textbox_write def.player:<player>  def.queue:<queue> "def.line3s:Book-related posters are on the wall."
     - ~run textbox_write def.player:<player>  def.queue:<queue> "def.line3s:<&o><&dq>Screw that. I'm running away.<&dq>"
     - ~run textbox_write def.player:<player>  def.queue:<queue> def.line3s:<&o><&dq>Where?<&dq>
     - ~run textbox_write def.player:<player>  def.queue:<queue> "def.line3s:<&o><&dq>Dunno. Do you want to come?<&dq>"
     - ~run textbox_write def.player:<player>  def.queue:<queue> "def.line3s:<&o><&dq>Yes,<&dq> I said without thinking."
+    - run storyboard_player_end_atomic_sequence def.queue:<queue> def.player:<player>
 
 # Cirno
 intro_interact_cirno:
@@ -38,8 +40,10 @@ intro_interact_cirno_task:
     debug: false
     type: task
     script:
+    - run storyboard_player_begin_atomic_sequence def.queue:<queue> def.player:<player>
     - ~run textbox_write def.player:<player>  def.queue:<queue> "def.line3s:A quality, soft plushie of a beloved$$nlcharacter."
     - ~run textbox_write def.player:<player>  def.queue:<queue> "def.line3s:It seems familiar, as if there are a$$nlsubstantial amount of images circulating$$nlaround with this character."
+    - run storyboard_player_end_atomic_sequence def.queue:<queue> def.player:<player>
 
 # Laptop
 intro_interact_laptop:
@@ -58,6 +62,7 @@ intro_interact_laptop_task:
     debug: false
     type: task
     script:
+    - run storyboard_player_begin_atomic_sequence def.queue:<queue> def.player:<player>
     - ~run textbox_write def.player:<player>  def.queue:<queue> "def.line3s:It looks like a game is booted up.$$nlYou can see a city, and it looks like..."
     - ~run textbox_write def.player:<player>  def.queue:<queue> "def.line3s:. . ."
     - ~run textbox_write def.player:<player>  def.queue:<queue> "def.line3s:It's <bold>you!$$nl. . .$$nlWell, it's your character."
@@ -197,3 +202,4 @@ intro_interact_laptop_task_role_callback:
     - adjust <player> show_to_players
     - flag <player> intro:done
     - execute as_player player:<player> spawn
+    - run storyboard_player_end_atomic_sequence def.queue:<queue> def.player:<player>
