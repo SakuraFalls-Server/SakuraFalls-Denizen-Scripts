@@ -4,7 +4,10 @@ tabcomplete_config:
     groups:
         default:
             commands:
+            # please keep these here...
             - plugins
+            - denizenclickable
+            # anything else
             - sit
             - lay
             - crawl

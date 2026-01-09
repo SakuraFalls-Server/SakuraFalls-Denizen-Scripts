@@ -72,7 +72,6 @@ storyboard_player_begin_atomic_sequence:
     type: task
     definitions: queue|player
     script:
-    - announce to_ops <[queue].script.name>
     - if <[player].flag[storyboard_atomic].if_null[<map[]>].contains[<[queue].script.name>]>:
         - queue <[queue]> stop
         - stop
@@ -88,6 +87,8 @@ storyboard_player_end_atomic_sequence:
     - if !<[player].flag[storyboard_atomic].if_null[<map[]>].contains[<[queue].script.name>]>:
         - debug error "Tried ending storyboard atomic sequence <[queue].script.name> before storyboard_player_begin_atomic_sequence was called! (Player UUID <[player].uuid>)"
         - stop
+    - waituntil !<player.has_flag[textbox_state]>
+    - wait 5t
     - flag <[player]> storyboard_atomic:<[player].flag[storyboard_atomic].if_null[<map[]>].exclude[<[queue].script.name>]>
 
 ## Internal only!

@@ -78,6 +78,11 @@ intro_interact_laptop_task_name_callback:
     script:
     - define __player <[player]>
     - define name <[input].substring[1,24]>
+    - if <server.flag[character_rpnames].contains[<[name]>]>:
+        - narrate targets:<[player]> "<&c>That RP name is already taken. Try a different one!"
+        - wait 1s
+        - run anvil_input def.player:<player> "def.prompt:Character Name" def.callback:intro_interact_laptop_task_name_callback
+        - stop
     - execute as_player player:<[player]> "rpname <[name]>"
     - ~run textbox_write def.player:<player>  def.queue:<queue> def.line3s:<[name]>
     - ~run textbox_write def.player:<player>  def.queue:<queue> "def.line3s:How nice!"
