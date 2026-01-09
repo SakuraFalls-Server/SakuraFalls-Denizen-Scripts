@@ -35,7 +35,7 @@ textbox_write:
             - queue stop <[queue]>
             - run textbox_flush def.player:<[player]>
         - stop
-    - define lines <[line3s].split[$$nl].parse_tag[<[parse_value].trim>]>
+    - define lines <[line3s].split[$$nl].parse_tag[<[parse_value].trim.replace[<&0>].with[<&6>]>]>
     - flag <[player]> textbox_state:writing
     - flag <[player]> textbox_input:<[lines]>
     - flag <[player]> textbox_lines:<[lines].size>
@@ -57,7 +57,7 @@ textbox_write:
                 - stop
             - if !<[player].is_online>:
                 - stop
-            - bossbar update textbox_<[player].uuid>_<[loop_index]> title:<black><bold><[line].substring[1,<[value]>]>
+            - bossbar update textbox_<[player].uuid>_<[loop_index]> title:<&6><&l><[line].substring[1,<[value]>]>
             - if <[value].sub[1].mod[3]> == 0:
                 - playsound sound:textbox.text <[player]> custom pitch:<util.random.decimal[0.98].to[1]> volume:<proc[settings_get].context[<[player]>|sound_textbox_volume].div[100].if_null[1]>
             - wait <[write_speed]>t
@@ -100,7 +100,7 @@ textbox_skip:
             - bossbar create textbox_<[player].uuid>_<[value]> players:<[player]> title:<empty>
     - define lines <[player].flag[textbox_input]>
     - foreach <[lines]> as:line:
-        - bossbar update textbox_<[player].uuid>_<[loop_index]> title:<black><bold><[line]>
+        - bossbar update textbox_<[player].uuid>_<[loop_index]> title:<&6><&l><[line]>
     - flag <[player]> textbox_state:continue
 
 # Clears textbox and flushes all flag memory values
@@ -208,12 +208,12 @@ textbox_handle_click:
         - ratelimit <player> 5t
     - else if <[state]> == continue:
         - determine cancelled passively
-        - playsound sound:textbox.close <player> custom volume:<proc[settings_get].context[<[player]>|sound_textbox_volume].div[100].if_null[1]>
+        - playsound sound:textbox.close <player> custom volume:<proc[settings_get].context[<player>|sound_textbox_volume].div[100].if_null[1]>
         - ~run textbox_flush def.player:<player>
         - ratelimit <player> 10t
     - else if <[state]> == choice:
         - determine cancelled passively
-        - playsound sound:input.ok <player> custom volume:<proc[settings_get].context[<[player]>|sound_textbox_volume].div[100].if_null[1]>
+        - playsound sound:input.ok <player> custom volume:<proc[settings_get].context[<player>|sound_textbox_volume].div[100].if_null[1]>
         - flag <player> textbox_choice_select:<player.flag[textbox_choices].get[current]>
         - ~run textbox_flush def.player:<player>
         - ratelimit <player> 10t
@@ -250,7 +250,13 @@ textbox_choice:
             - teleport <[player]> <[player].location.below.above.with_y[<[player].location.below.above.y.round_down>]>
         - else:
             - stop
-    - waituntil <[player].flag[textbox_state].if_null[null]> == null
+    - waituntil <[player].flag[textbox_state].if_null[null]> == null || !<[player].is_online>
+    - if !<[player].is_online>:
+        - if <[queue].if_null[null]> != null:
+            - debug log "[Textbox] Choice; cancelled queue <[queue].numeric_id><&at><[queue].script.name> for <[player].name>; offline"
+            - queue stop <[queue]>
+            - run textbox_flush def.player:<[player]>
+        - stop
     - ~run textbox_flush def.player:<[player]>
     - flag <[player]> textbox_state:choice
     - flag <[player]> textbox_choices:<map[].with[data].as[<[choices]>].with[current].as[left]>
@@ -284,35 +290,35 @@ textbox_internal_choice_select:
         - bossbar create textbox_<[player].uuid>_bottom players:<[player]> title:<empty>
     - define choices <[player].flag[textbox_choices].get[data]>
     #
-    - define left <&0><&l><[choices].get[left].get[text].if_null[null]>
-    - define right <&0><&l><[choices].get[right].get[text].if_null[null]>
-    - define top <&0><&l><[choices].get[top].get[text].if_null[null]>
-    - define bottom <&0><&l><[choices].get[bottom].get[text].if_null[null]>
+    - define left <&6><&l><[choices].get[left].get[text].if_null[null]>
+    - define right <&6><&l><[choices].get[right].get[text].if_null[null]>
+    - define top <&6><&l><[choices].get[top].get[text].if_null[null]>
+    - define bottom <&6><&l><[choices].get[bottom].get[text].if_null[null]>
     #
     - if <[choice_dir]> == left:
-        - if <[left]> == <&0><&l>null:
+        - if <[left]> == <&6><&l>null:
             - stop
-        - define left "<&4>❤ <&0><&l><[left]>"
+        - define left "<&4>❤ <&6><&l><[left]>"
     - else if <[choice_dir]> == right:
-        - if <[right]> == <&0><&l>null:
+        - if <[right]> == <&6><&l>null:
             - stop
-        - define right "<&4>❤ <&0><&l><[right]>"
+        - define right "<&4>❤ <&6><&l><[right]>"
     - else if <[choice_dir]> == top:
-        - if <[top]> == <&0><&l>null:
+        - if <[top]> == <&6><&l>null:
             - stop
-        - define top "<&4>❤ <&0><&l><[top]>"
+        - define top "<&4>❤ <&6><&l><[top]>"
     - else:
-        - if <[bottom]> == <&0><&l>null:
+        - if <[bottom]> == <&6><&l>null:
             - stop
-        - define bottom "<&4>❤ <&0><&l><[bottom]>"
+        - define bottom "<&4>❤ <&6><&l><[bottom]>"
     #
     - define mid_padding <element[<&sp>].repeat[<element[30].sub[<[left].strip_color.length>].sub[<[right].strip_color.length>]>]>
     #
-    - if <[top]> != <&0><&l>null:
+    - if <[top]> != <&6><&l>null:
         - bossbar update textbox_<[player].uuid>_top title:<[top]>
-    - if <[left]> != <&0><&l>null || <[right]> != <&0><&l>null:
+    - if <[left]> != <&6><&l>null || <[right]> != <&6><&l>null:
         - bossbar update textbox_<[player].uuid>_mid title:<[left]><[mid_padding]><[right]>
-    - if <[bottom]> != <&0><&l>null:
+    - if <[bottom]> != <&6><&l>null:
         - bossbar update textbox_<[player].uuid>_bottom title:<[bottom]>
     - flag <[player]> textbox_choices:<map[].with[data].as[<[choices]>].with[current].as[<[choice_dir]>]>
     - playsound BLOCK_NOTE_BLOCK_BIT <[player]> pitch:2 volume:<proc[settings_get].context[<[player]>|sound_textbox_volume].div[100].if_null[1]>

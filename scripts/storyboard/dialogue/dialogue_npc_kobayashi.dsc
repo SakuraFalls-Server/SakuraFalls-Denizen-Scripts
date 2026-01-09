@@ -14,6 +14,7 @@ dialogue_npc_kobayashi:
         1:
             click trigger:
                 script:
+                - run storyboard_player_begin_atomic_sequence def.queue:<queue> def.player:<player>
                 - if <player.flag[textbox_state].if_null[null]> != null:
                     - stop
                 - engage player
@@ -45,3 +46,4 @@ dialogue_npc_kobayashi:
                     - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:Indeed, luv."
                 - wait 1s
                 - disengage player
+                - run storyboard_player_end_atomic_sequence def.queue:<queue> def.player:<player>
