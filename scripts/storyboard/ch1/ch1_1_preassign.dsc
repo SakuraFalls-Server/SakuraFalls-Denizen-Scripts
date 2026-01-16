@@ -131,6 +131,7 @@ ch1_1_marie_interact:
                         - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* Mkay." def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[upset]>
                         - wait 1s
                         - disengage player
+                        - run storyboard_player_end_atomic_sequence def.queue:<queue> def.player:<player>
                         - stop
                     - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* Hm. Are you now?" def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[upset]>
                     - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* You know, that was kind of$$nlmean of you." def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[upset]>
