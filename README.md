@@ -21,7 +21,7 @@ A summary can be found here: https://www.tldrlegal.com/license/gnu-general-publi
 ## How to use
 You should just be able to drag & drop this into your `plugins/Denizen` folder on your server.  
 Server software: **PaperMC 1.21.10-117**  
-*Denizen* version: **1.3.1-SNAPSHOT (build 7255-DEV)**.  
+*Denizen* version: **1.3.1-SNAPSHOT (build 7235-DEV)**.  
 
 Enjoy! 
 
