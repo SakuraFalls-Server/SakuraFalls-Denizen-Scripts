@@ -39,6 +39,7 @@ storyboard_npc_memalloc:
     - define npc_id npc_<[player].uuid>_<[name]>
     - if !<server.npcs[<[registry]>].if_null[<list[]>].contains[<[npc_id]>]>:
         - define npcs <[player].flag[storyboard_state].get[npcs].if_null[<map[]>]>
+        - chunkload <[at].chunk> duration:10s
         - create <[type]> <[npc_id]> <[at]> registry:<[registry]> save:npc
         - define npc <entry[npc].created_npc>
         - playeffect at:<[npc].location.above[1]> offset:0.35,1,0.35 effect:SOUL_FIRE_FLAME quantity:20
@@ -84,7 +85,6 @@ storyboard_npc_memalloc:
             - adjust <[npc]> skin_blob:<[skin_blob]>
         - if <[assignment]> != null:
             - assignment set script:<[assignment]> to:<[npc]>
-        - wait 2t
         - run storyboard_npc_internal_show_to_player def.player:<[player]> def.npc:<[npc]>
     - else:
         - define index <server.npcs[<[registry]>].find[<[npc_id]>]>
@@ -99,7 +99,7 @@ storyboard_npc_by_name:
     script:
     - define registry registry_<[player].uuid>
     - define npc_id npc_<[player].uuid>_<[name]>
-    - determine <server.npcs[<[registry]>].filter_tag[<[filter_value].name.equals[<[npc_id]>]>].get[1]>
+    - determine <server.npcs[<[registry]>].filter_tag[<[filter_value].name.equals[<[npc_id]>]>].get[1].if_null[null]>
 
 # Frees an NPC from memory, but does not destroy its state.
 #
