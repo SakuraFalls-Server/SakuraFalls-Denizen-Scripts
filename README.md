@@ -1,5 +1,5 @@
 # denizen-scripts
-<img src="https://sakurafalls.net/data/assets/logo/logo-bg-new-rsc2.png" width="300">
+<img src="https://sakurafalls.net/data/assets/logo/forumlogo4.png" width="180">
 <img src="https://forum.denizenscript.com/data/assets/logo/logo.png" width="160">
 
 
@@ -21,7 +21,7 @@ A summary can be found here: https://www.tldrlegal.com/license/gnu-general-publi
 ## How to use
 You should just be able to drag & drop this into your `plugins/Denizen` folder on your server.  
 Server software: **PaperMC 1.21.10-117**  
-*Denizen* version: **1.3.1-SNAPSHOT (build 7235-DEV)**.  
+*Denizen* version: **1.3.1-SNAPSHOT (build 7255-DEV)**.  
 
 Enjoy! 
 
