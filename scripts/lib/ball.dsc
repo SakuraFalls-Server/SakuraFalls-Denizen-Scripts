@@ -20,6 +20,13 @@ ball_create:
     - define size <[ball_collision].bounding_box.get[1].sub[<[ball_collision].location>].x.abs.add[0.01]>
     - spawn zombie[silent=true;has_ai=false;gravity=false;visible=false] <[location].with_pitch[0].with_yaw[0].below[<[size].add[1]>]> save:ball_display
     - define ball_display <entry[ball_display].spawned_entity>
+    - if <[ball_display].is_baby>:
+        - age <[ball_display]> adult lock
+    - if <[ball_display].is_inside_vehicle>:
+        # CHICKEN JOCKEEEEEEEEEEEEEEEEEEEEEEEEEY
+        - define chicken <[ball_display].vehicle>
+        - adjust <[chicken]> passengers:<list[]>
+        - remove <[chicken]>
     - adjust <[ball_display]> equipment:<map[].with[helmet].as[<[display_item]>]>
     - flag <[ball_collision]> ball:<[id]>
     - flag <[ball_collision]> ball_display:<[ball_display]>

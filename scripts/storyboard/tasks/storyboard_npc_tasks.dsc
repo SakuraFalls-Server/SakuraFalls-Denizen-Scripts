@@ -41,6 +41,7 @@ storyboard_npc_memalloc:
         - define npcs <[player].flag[storyboard_state].get[npcs].if_null[<map[]>]>
         - create <[type]> <[npc_id]> <[at]> registry:<[registry]> save:npc
         - define npc <entry[npc].created_npc>
+        - playeffect at:<[npc].location.above[1]> offset:0.35,1,0.35 effect:SOUL_FIRE_FLAME quantity:20
         - define npc_state <map[]>
         - define assignment null
         - if <[npcs].contains[<[name]>]>:
@@ -137,6 +138,14 @@ storyboard_npc_memdestroy:
     - define npc <proc[storyboard_npc_by_name].context[<[player]>|<[name]>]>
     - remove <[npc]>
 
+# Checks if an NPC exists for the given player.
+storyboard_npc_exists:
+    debug: false
+    type: procedure
+    definitions: player|name
+    script:
+    - determine <proc[storyboard_npc_by_name].context[<[player]>|<[name]>].if_null[null].equals[null].not>
+
 # Flags the NPC by name, mapping the given key to the given value.
 storyboard_npc_state_set:
     debug: false
@@ -215,6 +224,7 @@ storyboard_npc_internal_auto_memory_management:
     type: world
     events:
         after player joins:
+        - wait 1s
         - define npcs <player.flag[storyboard_state].get[npcs].if_null[<map[]>]>
         - foreach <[npcs]> key:name as:data:
             - define allocated  <[data].get[allocated].if_null[null]>

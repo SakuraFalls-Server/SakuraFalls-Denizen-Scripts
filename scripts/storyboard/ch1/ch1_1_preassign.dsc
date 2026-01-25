@@ -2,9 +2,11 @@ ch1_1_preassign:
     debug: false
     type: world
     events:
-        on player joins:
+        after player joins:
+        - wait 1s
         - if <proc[storyboard_player_state_get].context[<player>|preassign]> == null:
-            - run storyboard_npc_memalloc "def:<player>|marie|player|<location[-4,2,-15,world]>|Marie Ayashibayomi|true|<script[storyboard_skin_dump].data_key[marie].get[a]>"
+            - if !<proc[storyboard_npc_exists].context[<player>|marie]>:
+                - run storyboard_npc_memalloc "def:<player>|marie|player|<location[-4,2,-15,world]>|Marie Ayashibayomi|true|<script[storyboard_skin_dump].data_key[marie].get[a]>"
             - run storyboard_npc_set_assignment def.player:<player> def.name:marie def.assignment:ch1_1_marie_assign
             - run storyboard_player_state_set def.player:<player> def.key:preassign def.value:true
 
@@ -131,6 +133,7 @@ ch1_1_marie_interact:
                         - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* Mkay." def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[upset]>
                         - wait 1s
                         - disengage player
+                        - run storyboard_player_end_atomic_sequence def.queue:<queue> def.player:<player>
                         - stop
                     - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* Hm. Are you now?" def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[upset]>
                     - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* You know, that was kind of$$nlmean of you." def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[upset]>
