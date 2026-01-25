@@ -66,6 +66,10 @@ liteprofilesutils_world:
         - narrate <[joinleavedata].get[join].parsed> targets:<[setting_enabled_players]>
         ## prevent /profile remove
         on command:
+        - if <context.source_type> != player:
+            - stop
+        - if <player.is_op>:
+            - stop
         - if <context.command.to_lowercase> == profile || <context.command.to_lowercase> == account || <context.command.to_lowercase> == pf:
             - if <context.args.get[1].to_lowercase.if_null[null]> == remove:
                 - determine cancelled passively
