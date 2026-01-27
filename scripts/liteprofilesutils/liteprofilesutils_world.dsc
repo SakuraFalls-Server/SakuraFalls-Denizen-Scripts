@@ -99,3 +99,11 @@ liteprofilesutils_world:
         - else if <[data].get[type]> == free:
             - execute as_player "profile add"
             - run liteprofilesutils_show_menu def.player:<player>
+        ## patch whitelisting
+        on player prelogin:
+        - define uuid <context.uuid>
+        - define master <proc[liteprofilesutils_get_master_uuid].context[<player[<[uuid]>]>]>
+        - if <[master]> == <[uuid]>:
+            - stop
+        - adjust <player[<[uuid]>]> whitelisted:<player[<[master]>].is_whitelisted>
+
