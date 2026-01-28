@@ -20,17 +20,16 @@ guns_world_gun:
         - if !<player.item_in_hand.has_flag[guns_gun]>:
             - stop
         - ratelimit <player> 1s
-        # - playsound <player.location> custom sound:your_custom_sound
-        - playsound <player.location> sound:entity_arrow_shoot
-        - define target <player.precise_target[25]||null>
+        - playsound <player.location> custom sound:item.anaconda
+        - define target <player.precise_target[25].if_null[null]>
         - if <[target]> == null:
-            - define location <player.cursor_on[25]||null>
+            - define location <player.cursor_on[25].if_null[null]>
             - if <[location]> == null:
                 - define location <player.location.forward[25]>
             - playeffect effect:redstone at:<player.location.above[1].points_between[<[location]>].distance[0.1]> special_data:0.5|white visibility:16 quantity:6 offset:0,0,0
             - stop
         - playeffect effect:redstone at:<player.location.above[1].points_between[<[target].location.above[1]>].distance[0.1]> special_data:0.5|white visibility:16 quantity:6 offset:0,0,0
-        - if <[target].type> != player:
+        - if !<[target].is_player>:
             - stop
         - if <[target].has_flag[guns_frozen]>:
             - stop
@@ -51,13 +50,12 @@ guns_world_taser:
         - define target <player.precise_target[7]||null>
         - if <[target]> == null:
             - stop
-        - if <[target].type> != player:
+        - if !<[target].is_player>:
             - stop
         - if <[target].has_flag[guns_frozen]>:
             - stop
         - playeffect effect:redstone at:<player.location.above[1].points_between[<[target].location.above[1]>].distance[0.1]> special_data:0.5|white visibility:16 quantity:6 offset:0,0,0
-        # - playsound <player.location> custom sound:your_custom_sound
-        - playsound <player.location> sound:entity_armor_stand_hit
+        - playsound <player.location> custom sound:item.taser
         - animate <[target]> animation:sit
         - flag <[target]> guns_frozen:true
         - run guns_unfreeze path:script def:<[target]>
