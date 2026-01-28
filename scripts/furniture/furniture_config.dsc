@@ -40,6 +40,9 @@ furniture_config:
         iron_horse_armor,7:
             represents: Clipboard
             collision: warped_trapdoor
+        iron_horse_armor,8:
+            represents: Vending Machine
+            collision: barrier
     # List of collision blocks - disables interaction without perms
     collision_blocks:
     #- skeleton_skull
