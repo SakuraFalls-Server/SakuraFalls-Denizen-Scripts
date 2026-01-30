@@ -85,6 +85,7 @@ storyboard_npc_memalloc:
             - adjust <[npc]> skin_blob:<[skin_blob]>
         - if <[assignment]> != null:
             - assignment set script:<[assignment]> to:<[npc]>
+        - wait 1t
         - run storyboard_npc_internal_show_to_player def.player:<[player]> def.npc:<[npc]>
     - else:
         - define index <server.npcs[<[registry]>].find[<[npc_id]>]>
