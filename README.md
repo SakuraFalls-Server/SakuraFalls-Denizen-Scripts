@@ -8,7 +8,7 @@
 This repository contains the *Denizen* `scripts` and `data` folders of SakuraFalls.  
 
 It contains the actual code used on the server at this time. You are free to explore and to
-use the scripts that our server uses! We believe that gatekeeping roleplaying servers furhter 
+use the scripts that our server uses! We believe that gatekeeping roleplaying servers further 
 only leads to less variety and creativity. We hope that the code here, although just given as 
 is without further instructions, will lead to a new generation of awesome roleplaying servers.
 
