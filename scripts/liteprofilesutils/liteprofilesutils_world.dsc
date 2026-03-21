@@ -106,4 +106,3 @@ liteprofilesutils_world:
         - if <[master]> == <[uuid]>:
             - stop
         - adjust <player[<[uuid]>]> whitelisted:<player[<[master]>].is_whitelisted>
-

@@ -4,7 +4,12 @@ liteprofilesutils_data:
     rank-sync:
     - owner
     - admin
+    - mod
     - media
+    - lore
+    - event
+    - dev
+    - builder
     sync-op: true
     join-leave:
         join: <&8>[<&a>+<&8>] <&7><player.name>

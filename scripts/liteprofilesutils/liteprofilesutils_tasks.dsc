@@ -64,7 +64,7 @@ liteprofilesutils_show_menu:
         - adjust def:freeitem lore:<list[<&f>Click here to create a new profile]>
         - flag <[freeitem]> liteprofiles:<map[].with[type].as[free]>
         - define contents <[contents].include[<[freeitem]>]>
-    - repeat <[profilelimit].sub[<[profilecount]>]>:
+    - repeat <[profilelimit].sub[<[profilecount]>].sub[2]>:
         - define unuseditem <item[gray_dye]>
         - adjust def:unuseditem "display:<&7>Free Slot"
         - define contents <[contents].include[<[unuseditem]>]>
