@@ -23,6 +23,8 @@ phones_has_phone:
     script:
     - if !<[player].is_online>:
         - determine false
+    - if <[player].inventory.title.contains[鄀].if_null[false]>:
+        - determine true
     - foreach <[player].inventory.map_slots> key:slot as:item:
         - if <[item].flag[phones].if_null[false]>:
             - determine true
@@ -262,7 +264,9 @@ phones_gui_texts:
     definitions: player|page
     script:
     - define inventory <inventory[generic[size=54;title=<&f>邑邑邑邑鄀<&1>邒]]>
-    - define textslist <util.list_files[data/phones/texts].filter[starts_with[<player.uuid>]].parse[split[_].get[2].split[.].get[1]].parse_tag[<player[<[parse_value]>]>].get[<[page].mul[16].add[1]>].to[<[page].add[1].mul[16]>].if_null[<list[]>]>
+    - define texts <util.list_files[data/phones/texts].filter[starts_with[<player.uuid>]].parse[split[_].get[2].split[.].get[1]].parse_tag[<player[<[parse_value]>]>].if_null[<list[]>]>
+    - define textslist <[texts].get[<[page].mul[15].add[1]>].to[<[page].add[1].mul[15]>].if_null[<list[]>]>
+    - define textssize <[texts].size>
     # show contacts/numbers
     - foreach <[textslist]> as:target:
         - define receiver <proc[phones_relative_name].context[<[player]>|<[target]>]>
@@ -289,7 +293,7 @@ phones_gui_texts:
         - define prevpage <item[ender_pearl]>
         - adjust def:prevpage "display:<&a>Previous Page"
         - inventory set destination:<[inventory]> slot:49 origin:<[prevpage]>
-    - if <[textslist].size> > <[page].add[1].mul[16]>:
+    - if <[textssize]> > <[page].add[1].mul[15]>:
         - define nextpage <item[ender_eye]>
         - adjust def:nextpage "display:<&a>Next Page"
         - inventory set destination:<[inventory]> slot:51 origin:<[nextpage]>
@@ -413,7 +417,7 @@ phones_gui_settings_blocked:
     definitions: player|page
     script:
     - define inventory <inventory[generic[size=54;title=<&f>邑邑邑邑鄀<&5>邒]]>
-    - define blockedlist <[player].flag[phones].get[blocked].get[<[page].mul[16].add[1]>].to[<[page].add[1].mul[16]>].if_null[<list[]>]>
+    - define blockedlist <[player].flag[phones].get[blocked].get[<[page].mul[15].add[1]>].to[<[page].add[1].mul[15]>].if_null[<list[]>]>
     # show blocked numbers
     - foreach <[blockedlist]> as:target:
         - define blockednumber <proc[phones_nicer_format].context[<[target].flag[phones].get[number]>]>
@@ -431,7 +435,7 @@ phones_gui_settings_blocked:
         - define prevpage <item[ender_pearl]>
         - adjust def:prevpage "display:<&a>Previous Page"
         - inventory set destination:<[inventory]> slot:49 origin:<[prevpage]>
-    - if <[blockedlist].size> > <[page].add[1].mul[16]>:
+    - if <[blockedlist].size> > <[page].add[1].mul[15]>:
         - define nextpage <item[ender_eye]>
         - adjust def:nextpage "display:<&a>Next Page"
         - inventory set destination:<[inventory]> slot:51 origin:<[nextpage]>

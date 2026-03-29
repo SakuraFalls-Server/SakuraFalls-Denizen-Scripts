@@ -263,6 +263,8 @@ storyboard_npc_internal_auto_display_entities:
             - define registry registry_<[target].uuid>
             - define npcs <server.npcs[<[registry]>].if_null[<list[]>]>
             - foreach <[npcs]> as:npc:
+                - if !<[npc].is_spawned>:
+                    - foreach next
                 - adjust <player> hide_entity:<[npc]>
                 - foreach <[npc].hologram_npcs.if_null[<list[]>]> as:hologram:
                     - adjust <player> hide_entity:<[hologram]>

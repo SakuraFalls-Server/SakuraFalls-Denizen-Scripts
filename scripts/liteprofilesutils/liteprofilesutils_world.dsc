@@ -105,4 +105,4 @@ liteprofilesutils_world:
         - define master <proc[liteprofilesutils_get_master_uuid].context[<player[<[uuid]>]>]>
         - if <[master]> == <[uuid]>:
             - stop
-        - adjust <player[<[uuid]>]> whitelisted:<player[<[master]>].is_whitelisted>
+        - adjust <player[<[uuid]>]> whitelisted:<player[<[master]>].whitelisted>
