@@ -69,7 +69,6 @@ intro_interact_laptop_task:
     - ~run textbox_write def.player:<player>  def.queue:<queue> "def.line3s:You should give your character$$nla cool name, right?"
     - waituntil <player.has_flag[textbox_state].not> max:5s
     - ~run textbox_flush def.player:<player>
-    - run storyboard_player_end_atomic_sequence def.queue:<queue> def.player:<player>
     - run anvil_input def.player:<player> "def.prompt:Character Name" def.callback:intro_interact_laptop_task_name_callback
 
 intro_interact_laptop_task_name_callback:
@@ -77,7 +76,6 @@ intro_interact_laptop_task_name_callback:
     type: task
     definitions: player|input
     script:
-    - run storyboard_player_begin_atomic_sequence def.queue:<queue> def.player:<player>
     - define __player <[player]>
     - define name <[input].substring[1,24]>
     - if <server.flag[character_rpnames].contains[<[name]>]>:
@@ -91,7 +89,6 @@ intro_interact_laptop_task_name_callback:
     - ~run textbox_write def.player:<player>  def.queue:<queue> "def.line3s:Let's give them a description.$$nlDescribe their physical attributes."
     - waituntil <player.has_flag[textbox_state].not> max:5s
     - ~run textbox_flush def.player:<player>
-    - run storyboard_player_end_atomic_sequence def.queue:<queue> def.player:<player>
     - run anvil_input def.player:<player> def.prompt:Description def.callback:intro_interact_laptop_task_description_callback
 
 intro_interact_laptop_task_description_callback:
@@ -99,7 +96,6 @@ intro_interact_laptop_task_description_callback:
     type: task
     definitions: player|input
     script:
-    - run storyboard_player_begin_atomic_sequence def.queue:<queue> def.player:<player>
     - define __player <[player]>
     - execute as_player player:<[player]> "setdesc <[input]>"
     - ~run textbox_write def.player:<player>  def.queue:<queue> "def.line3s:Great, your character's almost ready."
@@ -108,7 +104,6 @@ intro_interact_laptop_task_description_callback:
     - ~run textbox_write def.player:<player>  def.queue:<queue> "def.line3s:For complete beginners, we recommend$$nlstarting out as a student."
     - waituntil <player.has_flag[textbox_state].not> max:5s
     - ~run textbox_flush def.player:<player>
-    - run storyboard_player_end_atomic_sequence def.queue:<queue> def.player:<player>
     - run intro_interact_laptop_task_role_menu def.player:<player>
 
 intro_interact_laptop_task_role_menu:
@@ -138,7 +133,6 @@ intro_interact_laptop_task_role_callback:
     type: task
     definitions: player|input
     script:
-    - run storyboard_player_begin_atomic_sequence def.queue:<queue> def.player:<player>
     - inventory close player:<[player]>
     - define __player <[player]>
     - define adult <[input].to_lowercase.trim.equals[yes]>
