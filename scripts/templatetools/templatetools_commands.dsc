@@ -183,3 +183,64 @@ templatetools_command_distributeover:
         - define x <[x].add[<[desired_x]>].add[<[x_distribution]>]>
     - run templatetools_push_undo def.player:<player> def.data:<[undodata]>
     - narrate format:templatetools_formats_main "Distributed <[material].name> over x=<[x_length]>, z=<[z_length]> blocks."
+
+templatetools_command_fastcommandpush:
+    debug: false
+    type: command
+    name: fastcommandpush
+    description: Adds a command to a fast command by name.
+    usage: /fastcommandpush (name) (command)
+    permission: templatetools.command.fastcommandpush
+    tab completions:
+        1: <server.flag[templatetools_fastcommands].keys.if_null[<list[]>]>
+        2: command
+    script:
+    - if <context.args.length> < 2:
+        - narrate "<&c>Please provide a name and command!"
+        - stop
+    - define name <context.args.get[1]>
+    - define command <context.args.get[2].to[-1].space_separated>
+    - run templatetools_fastcommand_store_push def.name:<[name]> def.command:<[command]>
+    - narrate format:templatetools_formats_main "Pushed command '<[command]>' to fast command '<[name].to_lowercase>'."
+
+templatetools_command_fastcommandpop:
+    debug: false
+    type: command
+    name: fastcommandpop
+    description: Removes a command from a fast command by name.
+    usage: /fastcommandpop (name)
+    permission: templatetools.command.fastcommandpoop
+    tab completions:
+        1: <server.flag[templatetools_fastcommands].keys.if_null[<list[]>]>
+    script:
+    - if <context.args.length> < 1:
+        - narrate "<&c>Please provide a name and command."
+        - stop
+    - define name <context.args.get[1]>
+    - if !<proc[templatetools_fastcommand_exists].context[<[name]>]>:
+        - narrate "<&c>Fast command <[name].to_lowercase> is already empty."
+        - stop
+    - run templatetools_fastcommand_store_pop def.name:<[name]>
+    - narrate format:templatetools_formats_main "Popped last command from fast command '<[name].to_lowercase>'."
+
+templatetools_command_fastcommand:
+    debug: false
+    type: command
+    name: fastcommand
+    description: Executes all pushed commands sequentially as the player.
+    usage: /fastcommand (name)
+    permission: templatetools.command.distributeover
+    tab completions:
+        1: <server.flag[templatetools_fastcommands].keys.if_null[<list[]>]>
+    script:
+    - if <context.source_type> != player:
+        - narrate "<&c>Please run this command as a player."
+        - stop
+    - if <context.args.length> < 1:
+        - narrate "<&c>Please provide a name."
+        - stop
+    - define name <context.args.get[1]>
+    - if !<proc[templatetools_fastcommand_exists].context[<[name]>]>:
+        - narrate "<&c>Fast command <[name].to_lowercase> is empty."
+        - stop
+    - run templatetools_fastcommand_execute def.player:<player> def.name:<[name]>

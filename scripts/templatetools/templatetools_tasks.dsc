@@ -181,3 +181,47 @@ templatetools_pop_undo:
     - foreach <[player].flag[templatetools_undo].last> key:location as:material:
         - modifyblock <[material]> <[location]> no_physics
     - flag <[player]> templatetools_undo:<[player].flag[templatetools_undo].remove[last]>
+
+
+templatetools_fastcommand_exists:
+    debug: false
+    type: procedure
+    definitions: name
+    script:
+    - determine <server.flag[templatetools_fastcommands].contains[<[name].to_lowercase>].if_null[false]>
+
+templatetools_fastcommand_store_push:
+    debug: false
+    type: task
+    definitions: name|command
+    script:
+    - define current <server.flag[templatetools_fastcommands].get[<[name].to_lowercase>].if_null[<list[]>]>
+    - define current <[current].include[<[command]>]>
+    - flag server templatetools_fastcommands:<server.flag[templatetools_fastcommands].if_null[<map[]>].with[<[name].to_lowercase>].as[<[current]>]>
+
+templatetools_fastcommand_store_pop:
+    debug: false
+    type: task
+    definitions: name
+    script:
+    - define current <server.flag[templatetools_fastcommands].get[<[name].to_lowercase>].if_null[<list[]>]>
+    - define current <[current].remove[-1]>
+    - if !<[current].is_empty>:
+        - flag server templatetools_fastcommands:<server.flag[templatetools_fastcommands].if_null[<map[]>].with[<[name].to_lowercase>].as[<[current]>]>
+    - else:
+        - flag server templatetools_fastcommands:<server.flag[templatetools_fastcommands].if_null[<map[]>].exclude[<[name].to_lowercase>]>
+
+templatetools_fastcommand_execute:
+    debug: false
+    type: task
+    definitions: player|name
+    script:
+    - define commands <server.flag[templatetools_fastcommands].get[<[name].to_lowercase>].if_null[<list[]>]>
+    - if <[commands].is_empty>:
+        - stop
+    - foreach <[commands]> as:command:
+        - define final_command <[command].substring[2].replace[&dq].with[<&dq>]>
+        - narrate format:templatetools_formats_main "Executing <[final_command]>"
+        - announce to_console "[TemplateTools] Fast command <[name]> for <[player].name>: <[final_command]>"
+        - wait 1t
+        - execute as_player <[final_command]>

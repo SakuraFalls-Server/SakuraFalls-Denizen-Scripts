@@ -42,8 +42,8 @@ custom_block_create:
     - if <[headless].if_null[false]>:
         - stop
     - define players <list[]>
-    - repeat 3 from:<[chunk_x].sub[1]> as:i:
-        - repeat 3 from:<[chunk_z].sub[1]> as:k:
+    - repeat 7 from:<[chunk_x].sub[3]> as:i:
+        - repeat 7 from:<[chunk_z].sub[3]> as:k:
             - define chunk <chunk[<[i]>,<[k]>,<[world]>]>
             - foreach <[chunk].players> as:player:
                 - define players <[players].include[<[player]>].deduplicate>
@@ -77,8 +77,8 @@ custom_block_destroy:
     - if <[headless].if_null[false]>:
         - stop
     - define players <list[]>
-    - repeat 3 from:<[chunk_x].sub[1]> as:i:
-        - repeat 3 from:<[chunk_z].sub[1]> as:k:
+    - repeat 7 from:<[chunk_x].sub[3]> as:i:
+        - repeat 7 from:<[chunk_z].sub[3]> as:k:
             - define chunk <chunk[<[i]>,<[k]>,<[world]>]>
             - foreach <[chunk].players> as:player:
                 - define players <[players].include[<[player]>].deduplicate>
@@ -138,13 +138,13 @@ custom_block_render:
     - flag <[player]> custom_block_lry:<[player_y]>
     - define prerendered <[player].flag[custom_block_prerendered].if_null[<map[]>]>
     - define valid <map[]>
-    - repeat 3 from:<[chunk_x].sub[1]> as:i:
-        - repeat 3 from:<[chunk_z].sub[1]> as:k:
+    - repeat 7 from:<[chunk_x].sub[3]> as:i:
+        - repeat 7 from:<[chunk_z].sub[3]> as:k:
             - define entry_key custom_block_<[world]>,<[i]>,<[k]>
             - if <server.has_flag[<[entry_key]>]>:
                 - foreach <server.flag[<[entry_key]>]> as:cblock:
                     - define cblock <[cblock].split[,]>
-                    - if <[cblock].get[2].sub[<[player_y]>].abs> > 24:
+                    - if <[cblock].get[2].sub[<[player_y]>].abs> > 48:
                         - foreach next
                     - define at <location[<[cblock].get[1]>,<[cblock].get[2]>,<[cblock].get[3]>,<[cblock].get[4]>,<[cblock].get[5]>,<[world]>]>
                     - define valid <[valid].with[<[at].escaped>].as[true]>
@@ -154,7 +154,7 @@ custom_block_render:
                     - define display <entity[item_display]>
                     - adjust def:display item:<item[<[of]>]>
                     - adjust def:display display:fixed
-                    - adjust def:display view_range:0.75
+                    - adjust def:display view_range:2
                     - adjust def:display custom_name:__CustomBlock__
                     - fakespawn <[display]> <[at]> player:<[player]> duration:-1
                     - define prerendered <[prerendered].with[<[at].escaped>].as[true]>
