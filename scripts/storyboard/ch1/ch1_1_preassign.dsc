@@ -23,11 +23,7 @@ ch1_1_define_phone:
     debug: false
     type: task
     script:
-    - define phone <item[glistering_melon_slice]>
-    - adjust def:phone "display:<&e>Flip Phone"
-    - adjust def:phone custom_model_data:2
-    - flag <[phone]> phones:true
-    - determine <[phone]>
+    - determine <proc[itemdb_get].context[flip phone]>
 
 ch1_1_marie_interact:
     debug: false
