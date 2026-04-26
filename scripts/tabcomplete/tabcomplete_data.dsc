@@ -80,3 +80,4 @@ tabcomplete_config:
             - spawn
             - profiles
             - settings
+            - dailyreward
