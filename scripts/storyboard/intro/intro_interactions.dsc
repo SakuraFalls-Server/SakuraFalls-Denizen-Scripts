@@ -140,7 +140,7 @@ intro_interact_laptop_task_role_callback:
         - execute as_server "lp user <player.name> parent add adult"
         - ~run textbox_write def.player:<player>  def.queue:<queue> "def.line3s:An adult it shall be.$$nlIf this is wrong, let us know."
     - else:
-        - execute as_server "lp user <player.name> parent add grade-10"
+        - execute as_server "lp user <player.name> parent add school-grade-10"
         - ~run textbox_write def.player:<player>  def.queue:<queue> "def.line3s:A student it shall be.$$nlIf this is wrong, let us know."
     - ~run textbox_write def.player:<player>  def.queue:<queue> "def.line3s:You should now be ready to start!"
     - ~run textbox_write def.player:<player>  def.queue:<queue> "def.line3s:Have fun!"

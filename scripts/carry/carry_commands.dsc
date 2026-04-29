@@ -33,6 +33,9 @@ carry_command_carry:
     - if <[target].is_inside_vehicle>:
         - narrate "<&c>This player is already being carried!"
         - stop
+    - if <[target].location.distance_squared[<player.location>]> > 25:
+        - narrate "<&c>The player you want to carry must be within 5 blocks of you."
+        - stop
     - define player <player>
     - clickable usages:1 until:10s save:carry:
         - if !<player.is_empty>:
