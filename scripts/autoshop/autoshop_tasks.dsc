@@ -3,19 +3,19 @@ autoshop_title_by_size:
     type: procedure
     definitions: size
     script:
-    # U+9150 -> U+9155
+    # U+9101 -> U+9106
     - if <[size]> == 9:
-        - determine 酐
+        - determine 鄁
     - else if <[size]> == 18:
-        - determine 酑
+        - determine 鄂
     - else if <[size]> == 27:
-        - determine 酒
+        - determine 鄃
     - else if <[size]> == 36:
-        - determine 酓
+        - determine 鄄
     - else if <[size]> == 45:
-        - determine 酔
+        - determine 鄅
     - else:
-        - determine 酕
+        - determine 鄆
 
 autoshop_open:
     debug: false
@@ -33,7 +33,7 @@ autoshop_open:
         - adjust def:item_button lore:<[item_button].lore.if_null[<list[]>].include[<&f>|<&f>Buy for <&e>¥<[price]>]>
         - define contents <[contents].with[<[slot]>].as[<map[].with[item].as[<[item_button]>].with[script].as[autoshop_buy].with[definitions].as[<map[].with[player].as[<[player]>].with[price].as[<[price]>].with[item].as[<[actual_item]>]>]>]>
     - define title <proc[autoshop_title_by_size].context[<[size]>]>
-    - run menu_open def.player:<[player]> def.title:<&f>邑<&sp>邑邑邑邑<[title]><&a><&sp><&b><&sp><&f><&sp> def.size:<[size]> def.contents:<[contents]>
+    - run menu_open def.player:<[player]> def.title:<&a>邑邑邑<&f>邑<[title]><&a><&sp><&b><&sp><&f><&sp> def.size:<[size]> def.contents:<[contents]>
 
 autoshop_buy:
     debug: false

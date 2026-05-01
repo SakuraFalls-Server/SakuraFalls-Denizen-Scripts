@@ -16,7 +16,7 @@ carry_command_carry:
         - stop
     - define target <player.target[player].within[5].if_null[null]>
     - if <[target]> == null:
-        - define target <server.match_player[<context.args.get[1]>].if_null[null]>
+        - define target <server.match_player[<context.args.get[1].if_null[<empty>]>].if_null[null]>
         - if <[target]> == null:
             - narrate "<&c>Please look at the player to carry or specify their username."
             - stop
@@ -43,6 +43,9 @@ carry_command_carry:
             - stop
         - if <[target].is_inside_vehicle>:
             - narrate targets:<[target]> "<&c>You're already being carried!"
+            - stop
+        - if <[target].location.distance_squared[<[player].location>]> > 25:
+            - narrate "<&c>The player you want to carry must be within 5 blocks of you."
             - stop
         - adjust <[player]> passengers:<[player].passengers.include[<[target]>]>
     - narrate format:formats_prefix "Sent a carry request to <&e><proc[character_get_name].context[<[target]>]>"

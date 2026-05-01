@@ -108,6 +108,7 @@ apartments_world:
         - if <player.has_flag[apartments_edit]>:
             - determine cancelled
         # forbid water flow in apartment regions
+        on liquid spreads:
         - if <proc[apartments_at].context[<context.location>]> != null:
             - determine cancelled
         # forbid sapling/other growing things in apartment regions
