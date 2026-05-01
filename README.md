@@ -1,6 +1,6 @@
 # denizen-scripts
 <img src="https://sakurafalls.net/data/assets/logo/forumlogo4.png" width="180">
-<img src="https://forum.denizenscript.com/data/assets/logo/logo.png" width="160">
+<img src="https://proxy.spigotmc.org/7d8aa87ed02bef63b36bc22a189dd6ddc120f544/68747470733a2f2f692e616c6578676f6f6477696e2e6d656469612f692f6d6973632f6535333961392e706e67" width="160">
 
 
 # About

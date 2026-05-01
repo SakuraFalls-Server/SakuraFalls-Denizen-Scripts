@@ -18,7 +18,6 @@ no_unregistered_items_temp_patch:
                 - if !<context.item.has_flag[itemregistry]>:
                     - determine cancelled passively
                     - adjust <player> item_on_cursor:air
-                    - narrate "<&6>[<&c>!<&6>] <&c>Unregistered weapon/item prone to duping will be removed from inventory."
         on player drags in inventory:
         - if <player.is_op>:
             - stop
