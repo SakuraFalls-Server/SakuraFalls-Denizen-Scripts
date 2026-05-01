@@ -90,13 +90,13 @@ custom_block_at:
     type: procedure
     definitions: at
     script:
-    - define world <[at].world.name>
-    - define chunk_x <[at].chunk.x>
-    - define chunk_z <[at].chunk.z>
+    - define world <[at].world.name.if_null[null]>
+    - define chunk_x <[at].chunk.x.if_null[999999]>
+    - define chunk_z <[at].chunk.z.if_null[999999]>
     - define entry_key custom_block_<[world]>,<[chunk_x]>,<[chunk_z]>
     #
     - define at <[at].center>
-    - define where <[at].x>,<[at].y>,<[at].z>
+    - define where <[at].x.if_null[999999]>,<[at].y.if_null[0]>,<[at].z.if_null[999999]>
     #
     - if !<server.has_flag[<[entry_key]>]>:
         - determine null
