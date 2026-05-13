@@ -13,6 +13,8 @@ phones_commands_phonecall:
         - determine <list[]>
     - if <player.has_flag[phones_call]>:
         - determine <list[<&lt>message<&gt>]>
+    - if <context.args.get[1].equals[110].if_null[false]>:
+        - determine <list[police|ambulance]>
     - determine <player.flag[phones].get[contacts].keys.if_null[<list[]>]>
     script:
     # checks...
@@ -30,12 +32,51 @@ phones_commands_phonecall:
         - if <context.args.size> < 1:
             - narrate "<&c>Invalid use. First, call a number. Please try /<context.alias> (number/contact)."
             - stop
-        # definitions
-        - define receiver <context.args.get[1]>
-        - define target <proc[phones_get_owner].context[<player>|<[receiver]>]>
+        # no holding phone
         - if !<player.item_in_hand.flag[phones].if_null[false]>:
             - narrate "<&c>Please hold a phone in your hand, and ensure it is powered on."
             - stop
+        # definitions
+        - define receiver <context.args.get[1]>
+        # emergency?
+        - if <[receiver]> == 110:
+            # valid?
+            - define emergency_type <context.args.get[2].to_lowercase.if_null[null]>
+            - if !<list[police|ambulance].contains[<[emergency_type]>]>:
+                - narrate "<&c>Invalid emergency type. To call emergency services, try /<context.alias> 110 (police|ambulance)."
+                - stop
+            # if accepted, go in
+            - define targets <server.online_players.filter_tag[<[filter_value].has_permission[phones.emergency.<[emergency_type]>]>]>
+            - define player <player>
+            - clickable save:accept until:30s:
+                - if !<player.item_in_hand.flag[phones].if_null[false]>:
+                    - narrate targets:<player> "<&c>Please hold a phone before accepting the call, and ensure it is powered on."
+                    - stop
+                - clickable cancel:<[player].flag[phones_call_clickable]>
+                - nbs stop targets:<player>
+                - flag <player> phones_call:<[player]>
+                - flag <[player]> phones_call:110_<[emergency_type]>
+                - flag <[player]> phones_call_clickable:!
+                - flag <player> phones_is_maybe_called:!
+                - flag <player> phones_emergency:110_<[emergency_type]>
+                - narrate targets:<list[<[player]>].include[<[targets]>]> "<&2>*** <&a>The call was answered."
+                - narrate targets:<player> "<&2>*** <&a>You answered the caller."
+                - define callgroup <list[<[player]>|<player>]>
+                - narrate targets:<[callgroup]> <&f>
+                - narrate targets:<[callgroup]> "<&7>Talk using <&e>/call (message)<&7>."
+                - narrate targets:<[callgroup]> "<&e>Unequip <&7>your phone to <&c>end <&7>the call."
+                - narrate targets:<[callgroup]> <&f>
+            # before accepted
+            - define relative <proc[phones_nicer_format].context[<player.flag[phones].get[number]>]>
+            - narrate targets:<[targets]> "<&6>*** <&c>[EMERGENCY] <&e>You're being called by <&e><[relative]><&7>."
+            - narrate targets:<[targets]> <&hover[<&a>Click to connect to <[relative]>...]><element[<&a><&l>[ ACCEPT ]].on_click[<entry[accept].command>]><&end_hover>
+            # wait...
+            - flag <player> phones_call:<[emergency_type]>
+            - flag <player> phones_call_clickable:<entry[accept].id>
+            - narrate "<&6>*** <&e>You called the emergency services."
+            - narrate "<&7>Unequip your phone to cancel the call."
+            - stop
+        - define target <proc[phones_get_owner].context[<player>|<[receiver]>]>
         # invalid number/contact
         - if <[target]> == null:
             - narrate "<&c>Invalid phone number or contact <[receiver]>. Please try again."
@@ -101,9 +142,19 @@ phones_commands_phonecall:
             - stop
         # definitions
         - define target <player.flag[phones_call]>
+        - if <[target].starts_with[110_].if_null[false]>:
+            - define emergency_type <[target].substring[5]>
+            - define target <server.online_players.filter_tag[<[filter_value].has_permission[phones.emergency.<[emergency_type]>]>]>
+        - if <player.has_flag[phones_emergency]>:
+            - define emergency_type <player.flag[phones_emergency].substring[5]>
+            - define target <server.online_players.filter_tag[<[filter_value].has_permission[phones.emergency.<[emergency_type]>]>]>
         - define message <context.args.get[1].to[last].space_separated>
         # speak...
-        - define final "<&6>[<&7>P<&6>] <&f><placeholder[essentials_nickname].player[<player>]> <proc[chat_special_group].context[<player>]><proc[chat_roles_group].context[<player>]> <proc[character_get_name].context[<player>]> <&f>says <&dq><[message]><&f><&dq> over the phone."
+        - if !<player.has_flag[phones_emergency]>:
+            - define common_name "<placeholder[essentials_nickname].player[<player>]> <proc[chat_special_group].context[<player>]><proc[chat_roles_group].context[<player>]> <proc[character_get_name].context[<player>]>"
+        - else:
+            - define common_name <player.flag[phones_emergency].substring[5].to_sentence_case>
+        - define final "<&6>[<&7>P<&6>] <&f><[common_name]> <&f>says <&dq><[message]><&f><&dq> over the phone."
         - narrate targets:<player.location.find_players_within[10].include[<[target]>].deduplicate> <[final]>
 
 ## callw, cally use similar routines
@@ -136,7 +187,18 @@ phones_command_call_common_routine:
             - stop
         # definitions
         - define target <player.flag[phones_call]>
+        - if <[target].starts_with[110_].if_null[false]>:
+            - define emergency_type <[target].substring[5]>
+            - define target <server.online_players.filter_tag[<[filter_value].has_permission[phones.emergency.<[emergency_type]>]>]>
+        - else if <player.has_flag[phones_emergency]>:
+            - define emergency_type <player.flag[phones_emergency].substring[5]>
+            - define target <server.online_players.filter_tag[<[filter_value].has_permission[phones.emergency.<[emergency_type]>]>].include[<player.flag[phones_call]>]>
         - define message <context.args.get[1].to[last].space_separated>
+        # speak...
+        - if !<player.has_flag[phones_emergency]>:
+            - define common_name "<placeholder[essentials_nickname].player[<player>]> <proc[chat_special_group].context[<player>]><proc[chat_roles_group].context[<player>]> <proc[character_get_name].context[<player>]>"
+        - else:
+            - define common_name <player.flag[phones_emergency].substring[5].to_sentence_case>
 
 phones_command_phonecallwhisper:
     debug: false
@@ -160,7 +222,7 @@ phones_command_phonecallwhisper:
     - if !<[continue]>:
         - stop
     # speak...
-    - define final "<&6>[<&7>P<&6>] <&f><placeholder[essentials_nickname].player[<player>]> <proc[chat_special_group].context[<player>]><proc[chat_roles_group].context[<player>]> <proc[character_get_name].context[<player>]> <&8>whispers <&6><&sq><&7><[message]><&6><&sq> <&8>over the phone."
+    - define final "<&6>[<&7>P<&6>] <&f><[common_name]> <&8>whispers <&6><&sq><&7><[message]><&6><&sq> <&8>over the phone."
     - narrate targets:<player.location.find_players_within[3].include[<[target]>].deduplicate> <[final]>
 
 phones_command_phonecallyell:
@@ -185,7 +247,7 @@ phones_command_phonecallyell:
     - if !<[continue]>:
         - stop
     # speak...
-    - define final "<&6>[<&7>P<&6>] <&f><placeholder[essentials_nickname].player[<player>]> <proc[chat_special_group].context[<player>]><proc[chat_roles_group].context[<player>]> <proc[character_get_name].context[<player>]> <&6>yells <&sq><&f><[message].to_uppercase><&6><&sq> over the phone."
+    - define final "<&6>[<&7>P<&6>] <&f><[common_name]> <&6>yells <&sq><&f><[message].to_uppercase><&6><&sq> over the phone."
     - narrate targets:<player.location.find_players_within[25].include[<[target]>].deduplicate> <[final]>
 
 ## langcall, langcallw, langcally use similar routines
@@ -249,8 +311,8 @@ phones_command_phonelangcall:
     - if !<[continue]>:
         - stop
     # speak...
-    - define final_known "<&6>[<&7>P<&6>] <&f><placeholder[essentials_nickname].player[<player>]> <proc[chat_special_group].context[<player>]><proc[chat_roles_group].context[<player>]> <proc[character_get_name].context[<player>]> <&f>says <&dq><&o><[message]><&f><&dq> in <[language]> over the phone."
-    - define final_unknown "<&6>[<&7>P<&6>] <&f><placeholder[essentials_nickname].player[<player>]> <proc[chat_special_group].context[<player>]><proc[chat_roles_group].context[<player>]> <proc[character_get_name].context[<player>]> <&f>says something in <[language]> over the phone."
+    - define final_known "<&6>[<&7>P<&6>] <&f><[common_name]> <&f>says <&dq><&o><[message]><&f><&dq> in <[language]> over the phone."
+    - define final_unknown "<&6>[<&7>P<&6>] <&f><[common_name]> <&f>says something in <[language]> over the phone."
     - define all <player.location.find_players_within[10].include[<[target]>].deduplicate>
     - define speakers <[all].filter_tag[<[filter_value].flag[chat_languages].contains[<[language]>].if_null[false]>]>
     - define others <[all].exclude[<[speakers]>]>
@@ -282,8 +344,8 @@ phones_command_phonelangcallwhisper:
     - if !<[continue]>:
         - stop
     # speak...
-    - define final_known "<&6>[<&7>P<&6>] <&f><placeholder[essentials_nickname].player[<player>]> <proc[chat_special_group].context[<player>]><proc[chat_roles_group].context[<player>]> <proc[character_get_name].context[<player>]> <&f>whispers <&dq><&o><[message]><&f><&dq> in <[language]> over the phone."
-    - define final_unknown "<&6>[<&7>P<&6>] <&f><placeholder[essentials_nickname].player[<player>]> <proc[chat_special_group].context[<player>]><proc[chat_roles_group].context[<player>]> <proc[character_get_name].context[<player>]> <&f>whispers something in <[language]> over the phone."
+    - define final_known "<&6>[<&7>P<&6>] <&f><[common_name]> <&f>whispers <&dq><&o><[message]><&f><&dq> in <[language]> over the phone."
+    - define final_unknown "<&6>[<&7>P<&6>] <&f><[common_name]> <&f>whispers something in <[language]> over the phone."
     - define all <player.location.find_players_within[3].include[<[target]>].deduplicate>
     - define speakers <[all].filter_tag[<[filter_value].flag[chat_languages].contains[<[language]>].if_null[false]>]>
     - define others <[all].exclude[<[speakers]>]>
@@ -315,8 +377,8 @@ phones_command_phonelangcallyell:
     - if !<[continue]>:
         - stop
     # speak...
-    - define final_known "<&6>[<&7>P<&6>] <&f><placeholder[essentials_nickname].player[<player>]> <proc[chat_special_group].context[<player>]><proc[chat_roles_group].context[<player>]> <proc[character_get_name].context[<player>]> <&f>yells <&dq><&o><[message].to_uppercase><&f><&dq> in <[language]> over the phone."
-    - define final_unknown "<&6>[<&7>P<&6>] <&f><placeholder[essentials_nickname].player[<player>]> <proc[chat_special_group].context[<player>]><proc[chat_roles_group].context[<player>]> <proc[character_get_name].context[<player>]> <&f>yells something in <[language]> over the phone."
+    - define final_known "<&6>[<&7>P<&6>] <&f><[common_name]> <&f>yells <&dq><&o><[message].to_uppercase><&f><&dq> in <[language]> over the phone."
+    - define final_unknown "<&6>[<&7>P<&6>] <&f><[common_name]> <&f>yells something in <[language]> over the phone."
     - define all <player.location.find_players_within[25].include[<[target]>].deduplicate>
     - define speakers <[all].filter_tag[<[filter_value].flag[chat_languages].contains[<[language]>].if_null[false]>]>
     - define others <[all].exclude[<[speakers]>]>

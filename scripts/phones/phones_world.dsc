@@ -80,13 +80,22 @@ phones_inject_end_call:
     - if <[iswaiting]>:
         - clickable cancel:<player.flag[phones_call_clickable]>
         - flag <player> phones_call_clickable:!
-    - if <[callwho].flag[phones_call].if_null[null]> == <player>:
+    - if <[callwho].flag[phones_call].if_null[null]> == <player> || <[callwho].flag[phones_call].if_null[null].starts_with[110_]>:
         - narrate targets:<[callwho]> format:formats_prefix "Call was ended by the other side."
         - flag <[callwho]> phones_call:!
+        - flag <[callwho]> phones_emergency:!
     - else:
-        - nbs stop targets:<[callwho]>
-        - narrate targets:<[callwho]> format:formats_prefix "The person on the other side hung up before you answered."
+        - if <[callwho].uuid.if_null[null]> != null:
+            - nbs stop targets:<[callwho]>
+            - narrate targets:<[callwho]> format:formats_prefix "The person on the other side hung up before you answered."
+        - else:
+            - define emergency_type <[callwho]>
+            - narrate format:formats_prefix targets:<server.online_players.filter_tag[<[filter_value].has_permission[phones.emergency.<[emergency_type]>]>]> "The person on the other side hung up."
     - narrate format:formats_prefix "You ended the call."
+    - if <player.has_flag[phones_emergency]>:
+        - define emergency_type <[target].substring[5]>
+        - narrate format:formats_prefix targets:<server.online_players.filter_tag[<[filter_value].has_permission[phones.emergency.<[emergency_type]>]>].include[<[callwho]>]> "Call ended by the emergency services."
+    - flag <player> phones_emergency:!
 
 ## only gui handling
 phones_world_gui:
