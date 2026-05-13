@@ -357,3 +357,14 @@ chat_channel_ic_languageyell:
     - narrate targets:<[others]> <[final_unknown]>
     - inject chat_accessibility_space_message_inject_apply
     - announce to_console <[final_known]>
+
+chat_channel_modchat:
+    debug: false
+    type: task
+    definitions: player|message
+    script:
+    - define message <[message].strip_color.replace[&\].with[&].unescaped>
+    - define final "<&2>[<&6><&l>MOD<&2>] <proc[chat_special_group].context[<[player]>]><proc[chat_name_ooc].context[<[player]>]><&6>: <[message]>"
+    - define targets <server.online_players.filter_tag[<[filter_value].has_permission[chat.command.chat.modchat]>]>
+    - narrate targets:<[targets]> <[final]>
+    - announce to_console <[final]>

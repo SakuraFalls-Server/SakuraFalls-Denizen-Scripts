@@ -9,5 +9,9 @@ tab_prefix_shortened:
     - define bracket_left <[full_prefix].substring[1,3]>
     - define bracket_right <[full_prefix].substring[<[full_prefix].length.sub[2]>,<[full_prefix].length>]>
     - define color <[full_prefix].substring[4,5]>
-    - define abbreviation <[full_prefix].substring[6,<[full_prefix].length.sub[3]>].split[-].parse_tag[<[color]><tern[<[parse_value].is_integer>].pass[<[parse_value]>].fail[<[parse_value].substring[1,1].to_uppercase>]>].separated_by[.]>
+    - define color_offset 2
+    - if <[color]> == <&ss>x:
+        - define color <[full_prefix].substring[4,17]>
+        - define color_offset 14
+    - define abbreviation <[full_prefix].substring[<[color_offset].add[4]>,<[full_prefix].length.sub[3]>].split[-].parse_tag[<[color]><tern[<[parse_value].is_integer>].pass[<[parse_value]>].fail[<[parse_value].substring[1,1].to_uppercase>]>].separated_by[.]>
     - determine <[bracket_left]><[abbreviation]><[bracket_right]>

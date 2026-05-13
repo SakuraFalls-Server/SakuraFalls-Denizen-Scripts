@@ -353,6 +353,26 @@ chat_command_languageyell:
         - stop
     - run chat_channel_ic_languageyell def.player:<player> def.message:<context.raw_args.split.get[2].to[last].space_separated.parse_color.escaped.replace[&].with[&\]> def.language:<[language]>
 
+chat_command_modchat:
+    debug: false
+    type: command
+    name: modchat
+    usage: /modchat (message)
+    aliases:
+    - mc
+    description: Sends a message in moderator chat.
+    permission: chat.command.chat.modchat
+    tab completions:
+        1: <&lt>message<&gt>
+    script:
+    - if <context.source_type> != player:
+        - narrate "<&c>Please run this command as a player."
+        - stop
+    - if <context.args.size> <= 0:
+        - narrate "<&c>Please enter a message!"
+        - stop
+    - run chat_channel_modchat def.player:<player> def.message:<context.raw_args.escaped.replace[&].with[&\]>
+
 ##
 ## Channel switch
 ##

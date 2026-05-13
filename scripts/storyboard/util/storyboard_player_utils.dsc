@@ -25,3 +25,30 @@ storyboard_waituntil_safe:
     - if !<[player].is_online>:
         - queue stop <[queue]>
         - debug log "[Storyboard] Cancelled queue <[queue].numeric_id><&at><[queue].script.name> for <[player].name>; offline"
+
+# Resets as much as possible from the player.
+storyboard_reset_dev_only:
+    debug: false
+    type: task
+    script:
+    - if <player.if_null[null]> == null:
+        - stop
+    - define registry registry_<player.uuid>
+    - define npcs <server.npcs[<[registry]>].if_null[<list[]>]>
+    - foreach <[npcs]> as:npc:
+        - define assignment <[npc].scripts.get[1].data_key[interact scripts].get[1].if_null[null]>
+        - if <[assignment]> != null:
+            - zap <[assignment]> 1
+    - flag <player> storyboard_reset_dev_only:true
+
+storyboard_internal_reset_dev_only_world:
+    debug: false
+    type: world
+    events:
+        after player quits:
+        - if <player.has_flag[storyboard_reset_dev_only]>:
+            - flag <player> storyboard_state:!
+            - flag <player> storyboard_reset_dev_only:!
+        on player joins:
+        - if <player.has_flag[storyboard_reset_dev_only]>:
+            - flag <player> storyboard_reset_dev_only:!
