@@ -9,6 +9,6 @@ vehicles_config:
             driver-offset: 0,-1.25,0
             passengers:
             - 0,-1.25,1
-            acceleration: 0.03
-            max-speed: 2.25
+            acceleration: 0.02
+            max-speed: 2.37
             turn-speed-percentage: 0.01
