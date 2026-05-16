@@ -81,21 +81,30 @@ phones_inject_end_call:
         - clickable cancel:<player.flag[phones_call_clickable]>
         - flag <player> phones_call_clickable:!
     - if <[callwho].flag[phones_call].if_null[null]> == <player> || <[callwho].flag[phones_call].if_null[null].starts_with[110_]>:
-        - narrate targets:<[callwho]> format:formats_prefix "Call was ended by the other side."
+        - if !<player.has_flag[phones_emergency]>:
+            - narrate targets:<[callwho]> format:formats_prefix "Call was ended by the other side."
         - flag <[callwho]> phones_call:!
         - flag <[callwho]> phones_emergency:!
+        - flag <[callwho]> phones_emergency_actual_target:!
     - else:
         - if <[callwho].uuid.if_null[null]> != null:
             - nbs stop targets:<[callwho]>
             - narrate targets:<[callwho]> format:formats_prefix "The person on the other side hung up before you answered."
         - else:
-            - define emergency_type <[callwho]>
-            - narrate format:formats_prefix targets:<server.online_players.filter_tag[<[filter_value].has_permission[phones.emergency.<[emergency_type]>]>]> "The person on the other side hung up."
+            - define emergency_type <[callwho].substring[5]>
+            - narrate format:formats_prefix targets:<server.online_players.filter_tag[<[filter_value].has_permission[phones.emergency.<[emergency_type]>]>].filter_tag[<proc[phones_has_phone].context[<[filter_value]>]>]> "The person on the other side hung up."
     - narrate format:formats_prefix "You ended the call."
     - if <player.has_flag[phones_emergency]>:
-        - define emergency_type <[target].substring[5]>
-        - narrate format:formats_prefix targets:<server.online_players.filter_tag[<[filter_value].has_permission[phones.emergency.<[emergency_type]>]>].include[<[callwho]>]> "Call ended by the emergency services."
+        - define emergency_type <player.flag[phones_emergency].substring[5]>
+        - narrate format:formats_prefix targets:<server.online_players.filter_tag[<[filter_value].has_permission[phones.emergency.<[emergency_type]>]>].include[<[callwho]>].filter_tag[<proc[phones_has_phone].context[<[filter_value]>]>]> "Call ended by the emergency services."
     - flag <player> phones_emergency:!
+    - if <player.has_flag[phones_emergency_actual_target]>:
+        - define actual_target <player.flag[phones_emergency_actual_target]>
+        - flag <[actual_target]> phones_call:!
+        - flag <[actual_target]> phones_call_clickable:!
+        - flag <[actual_target]> phones_emergency:!
+        - flag <[actual_target]> phones_emergency_actual_target:!
+    - flag <player> phones_emergency_actual_target:!
 
 ## only gui handling
 phones_world_gui:

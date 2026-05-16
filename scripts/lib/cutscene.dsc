@@ -215,6 +215,7 @@ cutscene_create_and_save:
         speed: <[speed]>
         interpolation_procedure: <[interpolation_procedure]>
     - flag server cutscene:<server.flag[cutscene].if_null[<map[]>].with[<[name]>].as[<[cutscene]>]>
+    - adjust server save
     - determine true
 
 # Destroys an existing cutscnee.
@@ -228,6 +229,7 @@ cutscene_destroy:
     - if !<server.flag[cutscene].if_null[<map[]>].contains[<[name]>]>:
         - determine false
     - flag server cutscene:<server.flag[cutscene].if_null[<map[]>].exclude[<[name]>]>
+    - adjust server save
     - determine false
 
 # Previews the given path for the given player, using a saved cutscene as the source.

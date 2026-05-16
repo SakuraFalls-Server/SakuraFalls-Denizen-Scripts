@@ -59,6 +59,7 @@ apartments_add_member:
     - define access_all <[owner].flag[apartments_access].get[<[apartment]>].if_null[<map[]>].with[<[member]>].as[member]>
     - flag <[owner]> apartments_access:<[owner].flag[apartments_access].if_null[<map[]>].with[<[apartment]>].as[<[access_all]>]>
     - execute as_server "as addfriend <[member].name> <[apartment].id>"
+    - adjust server save
 
 apartments_add_moderator:
     debug: false
@@ -72,6 +73,7 @@ apartments_add_moderator:
     - define access_all <[owner].flag[apartments_access].get[<[apartment]>].if_null[<map[]>].with[<[moderator]>].as[moderator]>
     - flag <[owner]> apartments_access:<[owner].flag[apartments_access].if_null[<map[]>].with[<[apartment]>].as[<[access_all]>]>
     - execute as_server "as addfriend <[moderator].name> <[apartment].id>"
+    - adjust server save
 
 apartments_remove_access:
     debug: false
@@ -85,6 +87,7 @@ apartments_remove_access:
     - define access_all <[owner].flag[apartments_access].get[<[apartment]>].if_null[<map[]>].exclude[<[member]>]>
     - flag <[owner]> apartments_access:<[owner].flag[apartments_access].if_null[<map[]>].with[<[apartment]>].as[<[access_all]>]>
     - execute as_server "as delfriend <[member].name> <[apartment].id>"
+    - adjust server save
 
 apartments_begin_edit:
     debug: false
@@ -95,6 +98,7 @@ apartments_begin_edit:
         apartment: <[apartment]>
         inventory: <[player].inventory.map_slots>
     - flag <[player]> apartments_edit:<[apartments_edit_data]>
+    - adjust server save
     - inventory clear player:<[player]>
     - adjust <[player]> gamemode:creative
 
@@ -109,6 +113,7 @@ apartments_end_edit:
         - inventory set origin:<[item]> slot:<[slot]> player:<[player]>
     - adjust <[player]> gamemode:survival
     - flag <[player]> apartments_edit:!
+    - adjust server save
 
 apartments_all_with_access:
     debug: false

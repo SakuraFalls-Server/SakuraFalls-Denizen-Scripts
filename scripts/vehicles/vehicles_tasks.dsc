@@ -113,6 +113,7 @@ vehicle_pickup:
         - else:
             # praying there's nothing there... will special-flag just in case
             - flag <[owner]> vehicles_i_need_help:<player.inventory.map_slots.get[18]>
+            - adjust server save
             - inventory set slot:18 origin:<[item]> player:<[owner]>
             - run vehicle_destroy def.vehicle_entity:<[vehicle_entity]>
             - flag <[owner]> vehicles:!

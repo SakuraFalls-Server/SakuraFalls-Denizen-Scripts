@@ -38,6 +38,7 @@ custom_block_create:
         - stop
     - define block_set <[block_set].include[<[value_key]>]>
     - flag server <[entry_key]>:<[block_set]>
+    - adjust server save
     #
     - if <[headless].if_null[false]>:
         - stop
@@ -73,6 +74,7 @@ custom_block_destroy:
         - flag server <[entry_key]>:!
     - else:
         - flag server <[entry_key]>:<[block_set]>
+    - adjust server save
     #
     - if <[headless].if_null[false]>:
         - stop

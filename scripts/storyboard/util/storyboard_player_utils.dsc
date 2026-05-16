@@ -40,6 +40,7 @@ storyboard_reset_dev_only:
         - if <[assignment]> != null:
             - zap <[assignment]> 1
     - flag <player> storyboard_reset_dev_only:true
+    - adjust server save
 
 storyboard_internal_reset_dev_only_world:
     debug: false
@@ -49,6 +50,8 @@ storyboard_internal_reset_dev_only_world:
         - if <player.has_flag[storyboard_reset_dev_only]>:
             - flag <player> storyboard_state:!
             - flag <player> storyboard_reset_dev_only:!
+            - adjust server save
         on player joins:
         - if <player.has_flag[storyboard_reset_dev_only]>:
             - flag <player> storyboard_reset_dev_only:!
+            - adjust server save

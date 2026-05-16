@@ -74,6 +74,7 @@ storyboard_npc_memalloc:
             assignment: <[assignment]>
         - define npcs <[npcs].with[<[name]>].as[<[npc_data]>]>
         - flag <[player]> storyboard_state:<[player].flag[storyboard_state].if_null[<map[]>].with[npcs].as[<[npcs]>]>
+        - adjust server save
         - adjust <[npc]> auto_update_skin:false
         - adjust <[npc]> name_visible:false
         - lookclose <[npc]> state:true range:4
@@ -121,6 +122,7 @@ storyboard_npc_memfree:
     - define npc_data <[npc_data].with[allocated].as[<[reallocate]>]>
     - define npcs <[npcs].with[<[name]>].as[<[npc_data]>]>
     - flag <[player]> storyboard_state:<[player].flag[storyboard_state].if_null[<map[]>].with[npcs].as[<[npcs]>]>
+    - adjust server save
     - remove <[npc]>
 
 # Destroys an NPC from memory, which destroys its state.
@@ -136,6 +138,7 @@ storyboard_npc_memdestroy:
     - define npcs <[player].flag[storyboard_state].get[npcs].if_null[<map[]>]>
     - define npcs <[npcs].exclude[<[name]>]>
     - flag <[player]> storyboard_state:<[player].flag[storyboard_state].if_null[<map[]>].with[npcs].as[<[npcs]>]>
+    - adjust server save
     - define npc <proc[storyboard_npc_by_name].context[<[player]>|<[name]>]>
     - remove <[npc]>
 
@@ -161,6 +164,7 @@ storyboard_npc_state_set:
     - define npc_data <[npc_data].with[state].as[<[state]>]>
     - define npcs <[npcs].with[<[name]>].as[<[npc_data]>]>
     - flag <[player]> storyboard_state:<[player].flag[storyboard_state].if_null[<map[]>].with[npcs].as[<[npcs]>]>
+    - adjust server save
 
 # Gets a state value from the NPC by name and key; effectively like reading a flag.
 # If the given key does not exist/is not set, determines null.
@@ -188,6 +192,7 @@ storyboard_npc_state_clear:
     - define npc_data <[npc_data].with[state].as[<[state]>]>
     - define npcs <[npcs].with[<[name]>].as[<[npc_data]>]>
     - flag <[player]> storyboard_state:<[player].flag[storyboard_state].if_null[<map[]>].with[npcs].as[<[npcs]>]>
+    - adjust server save
 
 # Sets an NPCs assignment, which also persists across memfrees.
 storyboard_npc_set_assignment:
@@ -201,6 +206,7 @@ storyboard_npc_set_assignment:
     - define npc_data <[npc_data].with[assignment].as[<[assignment]>]>
     - define npcs <[npcs].with[<[name]>].as[<[npc_data]>]>
     - flag <[player]> storyboard_state:<[player].flag[storyboard_state].if_null[<map[]>].with[npcs].as[<[npcs]>]>
+    - adjust server save
     - assignment set script:<[assignment]> to:<[npc]>
 
 # Moves an NPC to a new location, both physically, and in memory also.
@@ -217,6 +223,7 @@ storyboard_npc_movement_commit:
     - define npc_data <[npc_data].with[at].as[<[new_location]>]>
     - define npcs <[npcs].with[<[name]>].as[<[npc_data]>]>
     - flag <[player]> storyboard_state:<[player].flag[storyboard_state].if_null[<map[]>].with[npcs].as[<[npcs]>]>
+    - adjust server save
     - teleport <[npc]> <[new_location]>
 
 ## Internal only!

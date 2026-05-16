@@ -65,6 +65,7 @@ wardrobe_save_latest:
         - narrate targets:<[player]> "<&c>You already have your latest Minecraft skin saved in your wardrobe."
         - stop
     - flag <[player]> wardrobe_all:<[player].flag[wardrobe_all].if_null[<map[]>].with[<[player].flag[wardrobe_latest]>].as[<[latest_texture]>]>
+    - adjust server save
     - narrate format:formats_prefix "Saved latest Minecraft skin in your wardrobe."
 
 wardrobe_delete:
@@ -73,6 +74,7 @@ wardrobe_delete:
     definitions: player|skin_blob
     script:
     - flag <[player]> wardrobe_all:<[player].flag[wardrobe_all].exclude[<[skin_blob]>]>
+    - adjust server save
     - narrate format:formats_prefix "Deleted saved skin."
 
 wardrobe_apply:
@@ -82,6 +84,7 @@ wardrobe_apply:
     script:
     - adjust <[player]> skin_blob:<[skin_blob]>
     - flag <[player]> wardrobe_current:<[skin_blob]>
+    - adjust server save
     - narrate format:formats_prefix "Applied saved skin from wardrobe."
 
 wardrobe_clear:
@@ -91,6 +94,7 @@ wardrobe_clear:
     script:
     - adjust <[player]> skin:<[player].name>
     - flag <[player]> wardrobe_current:!
+    - adjust server save
     - narrate format:formats_prefix "Cleared current skin. You are now using your latest Minecraft skin instead."
 
 wardrobe_menu:

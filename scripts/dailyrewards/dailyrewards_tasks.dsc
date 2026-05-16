@@ -43,12 +43,13 @@ dailyrewards_collect_reward:
     definitions: player|day
     script:
     - define config <script[dailyrewards_config].data_key[rewards]>
-    - money give <[player]> quantity:<[config].get[<[day]>]>
+    - money give players:<[player]> quantity:<[config].get[<[day]>]>
     - if <[day]> < 7:
         - flag <[player]> dailyrewards_last_reward_day:<[day]>
         - flag <[player]> dailyrewards_last_reward_time:<util.time_now>
     - else:
         - flag <[player]> dailyrewards_last_reward_day:!
         - flag <[player]> dailyrewards_last_reward_time:<util.time_now>
+    - adjust server save
     - narrate format:formats_prefix "Collected day <[day]> reward! Come again tomorrow for the next reward!"
     - run dailyrewards_menu def.player:<[player]>

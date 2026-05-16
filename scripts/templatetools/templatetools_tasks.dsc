@@ -170,6 +170,7 @@ templatetools_push_undo:
     definitions: player|data
     script:
     - flag <[player]> templatetools_undo:<[player].flag[templatetools_undo].if_null[<list[]>].include[<[data]>]>
+    - adjust server save
 
 templatetools_pop_undo:
     debug: false
@@ -181,6 +182,7 @@ templatetools_pop_undo:
     - foreach <[player].flag[templatetools_undo].last> key:location as:material:
         - modifyblock <[material]> <[location]> no_physics
     - flag <[player]> templatetools_undo:<[player].flag[templatetools_undo].remove[last]>
+    - adjust server save
 
 
 templatetools_fastcommand_exists:
@@ -198,6 +200,7 @@ templatetools_fastcommand_store_push:
     - define current <server.flag[templatetools_fastcommands].get[<[name].to_lowercase>].if_null[<list[]>]>
     - define current <[current].include[<[command]>]>
     - flag server templatetools_fastcommands:<server.flag[templatetools_fastcommands].if_null[<map[]>].with[<[name].to_lowercase>].as[<[current]>]>
+    - adjust server save
 
 templatetools_fastcommand_store_pop:
     debug: false
@@ -210,6 +213,7 @@ templatetools_fastcommand_store_pop:
         - flag server templatetools_fastcommands:<server.flag[templatetools_fastcommands].if_null[<map[]>].with[<[name].to_lowercase>].as[<[current]>]>
     - else:
         - flag server templatetools_fastcommands:<server.flag[templatetools_fastcommands].if_null[<map[]>].exclude[<[name].to_lowercase>]>
+    - adjust server save
 
 templatetools_fastcommand_execute:
     debug: false

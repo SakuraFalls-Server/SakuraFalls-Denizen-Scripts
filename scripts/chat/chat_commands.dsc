@@ -245,6 +245,7 @@ chat_command_languageadd:
         - narrate "<&c>Language <[language]> is not a known language."
         - stop
     - flag <[player]> chat_languages:<[player].flag[chat_languages].if_null[<list[]>].include[<[language]>].deduplicate>
+    - adjust server save
     - narrate format:formats_prefix "Player <&e><[player].name> <&7>may now speak in <[language]>."
 
 chat_command_languageremove:
@@ -274,6 +275,7 @@ chat_command_languageremove:
         - narrate "<&c>Language <[language]> is not a known language."
         - stop
     - flag <[player]> chat_languages:<[player].flag[chat_languages].if_null[<list[]>].exclude[<[language]>]>
+    - adjust server save
     - narrate format:formats_prefix "Player <&e><[player].name> <&7>cannot speak <[language]> any longer."
 
 chat_command_language:

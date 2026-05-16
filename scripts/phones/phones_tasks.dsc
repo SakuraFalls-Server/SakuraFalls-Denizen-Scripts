@@ -213,6 +213,7 @@ phones_texts_store:
         - define textnotifications <[textnotifications].with[<[player]>].as[<[textnotifications].get[<[player]>].if_null[0].add[1]>]>
         - define notifications <[notifications].with[textmessages].as[<[textnotifications]>]>
         - flag <[target]> phones_notifications:<[notifications]>
+        - adjust server save
 
 phones_texts_print:
     debug: false
@@ -257,6 +258,7 @@ phones_texts_print:
         - define textnotifications <[textnotifications].exclude[<[target]>]>
         - define notifications <[notifications].with[textmessages].as[<[textnotifications]>]>
         - flag <[player]> phones_notifications:<[notifications]>
+        - adjust server save
 
 phones_gui_texts:
     debug: false

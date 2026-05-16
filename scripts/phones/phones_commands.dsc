@@ -52,14 +52,18 @@ phones_commands_phonecall:
                 - if !<player.item_in_hand.flag[phones].if_null[false]>:
                     - narrate targets:<player> "<&c>Please hold a phone before accepting the call, and ensure it is powered on."
                     - stop
+                - if <player> == <[player]>:
+                    - narrate targets:<player> "<&c>You cannot answer your own call!"
+                    - stop
                 - clickable cancel:<[player].flag[phones_call_clickable]>
                 - nbs stop targets:<player>
                 - flag <player> phones_call:<[player]>
                 - flag <[player]> phones_call:110_<[emergency_type]>
                 - flag <[player]> phones_call_clickable:!
+                - flag <[player]> phones_emergency_actual_target:<player>
                 - flag <player> phones_is_maybe_called:!
                 - flag <player> phones_emergency:110_<[emergency_type]>
-                - narrate targets:<list[<[player]>].include[<[targets]>]> "<&2>*** <&a>The call was answered."
+                - narrate targets:<list[<[player]>].include[<[targets].filter_tag[<proc[phones_has_phone].context[<[filter_value]>]>]>]> "<&2>*** <&a>The call was answered."
                 - narrate targets:<player> "<&2>*** <&a>You answered the caller."
                 - define callgroup <list[<[player]>|<player>]>
                 - narrate targets:<[callgroup]> <&f>
@@ -68,10 +72,10 @@ phones_commands_phonecall:
                 - narrate targets:<[callgroup]> <&f>
             # before accepted
             - define relative <proc[phones_nicer_format].context[<player.flag[phones].get[number]>]>
-            - narrate targets:<[targets]> "<&6>*** <&c>[EMERGENCY] <&e>You're being called by <&e><[relative]><&7>."
-            - narrate targets:<[targets]> <&hover[<&a>Click to connect to <[relative]>...]><element[<&a><&l>[ ACCEPT ]].on_click[<entry[accept].command>]><&end_hover>
+            - narrate targets:<[targets].filter_tag[<proc[phones_has_phone].context[<[filter_value]>]>]> "<&6>*** <&c>[EMERGENCY] <&e>Call from <&e><[relative]><&7>."
+            - narrate targets:<[targets].filter_tag[<proc[phones_has_phone].context[<[filter_value]>]>]> <&hover[<&a>Click to connect to <[relative]>...]><element[<&a><&l>[ ACCEPT ]].on_click[<entry[accept].command>]><&end_hover>
             # wait...
-            - flag <player> phones_call:<[emergency_type]>
+            - flag <player> phones_call:110_<[emergency_type]>
             - flag <player> phones_call_clickable:<entry[accept].id>
             - narrate "<&6>*** <&e>You called the emergency services."
             - narrate "<&7>Unequip your phone to cancel the call."
@@ -144,10 +148,10 @@ phones_commands_phonecall:
         - define target <player.flag[phones_call]>
         - if <[target].starts_with[110_].if_null[false]>:
             - define emergency_type <[target].substring[5]>
-            - define target <server.online_players.filter_tag[<[filter_value].has_permission[phones.emergency.<[emergency_type]>]>]>
-        - if <player.has_flag[phones_emergency]>:
+            - define target <server.online_players.filter_tag[<[filter_value].has_permission[phones.emergency.<[emergency_type]>]>].filter_tag[<proc[phones_has_phone].context[<[filter_value]>]>]>
+        - else if <player.has_flag[phones_emergency]>:
             - define emergency_type <player.flag[phones_emergency].substring[5]>
-            - define target <server.online_players.filter_tag[<[filter_value].has_permission[phones.emergency.<[emergency_type]>]>]>
+            - define target <server.online_players.filter_tag[<[filter_value].has_permission[phones.emergency.<[emergency_type]>]>].include[<player.flag[phones_call]>].filter_tag[<proc[phones_has_phone].context[<[filter_value]>]>]>
         - define message <context.args.get[1].to[last].space_separated>
         # speak...
         - if !<player.has_flag[phones_emergency]>:
@@ -189,10 +193,10 @@ phones_command_call_common_routine:
         - define target <player.flag[phones_call]>
         - if <[target].starts_with[110_].if_null[false]>:
             - define emergency_type <[target].substring[5]>
-            - define target <server.online_players.filter_tag[<[filter_value].has_permission[phones.emergency.<[emergency_type]>]>]>
+            - define target <server.online_players.filter_tag[<[filter_value].has_permission[phones.emergency.<[emergency_type]>]>].filter_tag[<proc[phones_has_phone].context[<[filter_value]>]>]>
         - else if <player.has_flag[phones_emergency]>:
             - define emergency_type <player.flag[phones_emergency].substring[5]>
-            - define target <server.online_players.filter_tag[<[filter_value].has_permission[phones.emergency.<[emergency_type]>]>].include[<player.flag[phones_call]>]>
+            - define target <server.online_players.filter_tag[<[filter_value].has_permission[phones.emergency.<[emergency_type]>]>].include[<player.flag[phones_call]>].filter_tag[<proc[phones_has_phone].context[<[filter_value]>]>]>
         - define message <context.args.get[1].to[last].space_separated>
         # speak...
         - if !<player.has_flag[phones_emergency]>:
@@ -485,6 +489,7 @@ phones_commands_phoneaddcontact:
     - define contacts <player.flag[phones].get[contacts].if_null[<map[]>]>
     - define contacts <[contacts].with[<[name]>].as[<[target]>]>
     - flag <player> phones:<player.flag[phones].with[contacts].as[<[contacts]>]>
+    - adjust server save
     - narrate format:formats_prefix "Added new contact <[name]> <&7>, targetting phone number <[number]>."
 
 phones_commands_phoneremovecontact:
@@ -513,6 +518,7 @@ phones_commands_phoneremovecontact:
     - define contacts <player.flag[phones].get[contacts].if_null[<map[]>]>
     - define contacts <[contacts].exclude[<[name]>]>
     - flag <player> phones:<player.flag[phones].with[contacts].as[<[contacts]>]>
+    - adjust server save
     - narrate format:formats_prefix "Removed contact <&e><[name]><&7>."
 
 ## TEXT MESSAGES
@@ -599,9 +605,11 @@ phones_commands_phoneblock:
         - define blocked <player.flag[phones].get[blocked].if_null[<list[]>]>
         - define blocked <[blocked].include[<[target]>]>
         - flag <player> phones:<player.flag[phones].with[blocked].as[<[blocked]>]>
+        - adjust server save
         - narrate format:formats_prefix "<&c>Blocked <&7>phone number <&e><[number]><&7>."
     - else:
         - define blocked <player.flag[phones].get[blocked].if_null[<list[]>]>
         - define blocked <[blocked].exclude[<[target]>]>
         - flag <player> phones:<player.flag[phones].with[blocked].as[<[blocked]>]>
+        - adjust server save
         - narrate format:formats_prefix "<&a>Unblocked <&7>phone number <&e><[number]><&7>."

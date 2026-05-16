@@ -17,6 +17,7 @@ sports_arena_register:
         extra_data: <[extra_data]>
     - flag server sports_arenas:<server.flag[sports_arenas].if_null[<map[]>].with[<[id]>].as[<[arena]>]>
     - flag server sports_status:<server.flag[sports_status].if_null[<map[]>].with[<[id]>].as[<[default_status]>]>
+    - adjust server save
 
 sports_arena_update_property:
     debug: false
@@ -29,6 +30,7 @@ sports_arena_update_property:
         - stop
     - define arena <[arena].with[<[property]>].as[<[new_value]>]>
     - flag server sports_arenas:<server.flag[sports_arenas].if_null[<map[]>].with[<[id]>].as[<[arena]>]>
+    - adjust server save
 
 sports_arena_exists:
     debug: false
@@ -50,6 +52,7 @@ sports_arena_cleanup:
     - flag server sports_teams:<server.flag[sports_teams].if_null[<map[]>].exclude[<[id]>]>
     - define default_status <server.flag[sports_arenas].get[<[id]>].get[default_status]>
     - flag server sports_status:<server.flag[sports_status].if_null[<map[]>].with[<[id]>].as[<[default_status]>]>
+    - adjust server save
 
 sports_arena_unregister:
     debug: false
@@ -59,6 +62,7 @@ sports_arena_unregister:
     - run sports_arena_cleanup def.id:<[id]>
     - flag server sports_arenas:<server.flag[sports_arenas].if_null[<map[]>].exclude[<[id]>]>
     - flag server sports_status:<server.flag[sports_status].if_null[<map[]>].exclude[<[id]>]>
+    - adjust server save
 
 sports_arena:
     debug: false
@@ -184,6 +188,7 @@ sports_arena_set_status:
     definitions: id|status
     script:
     - flag server sports_status:<server.flag[sports_status].if_null[<map[]>].with[<[id]>].as[<[status]>]>
+    - adjust server save
 
 sports_arena_get_status:
     debug: false

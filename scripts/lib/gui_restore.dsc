@@ -15,6 +15,7 @@ gui_restore_set_later:
     definitions: player|slot|item
     script:
     - flag <[player]> gui_restore_later:<[player].flag[gui_restore_later].if_null[<map[]>].with[<[slot]>].as[<[item]>]>
+    - adjust server save
 
 gui_restore_save:
     debug: false
@@ -24,6 +25,7 @@ gui_restore_save:
     - if <[player].has_flag[gui_restore]>:
         - run gui_restore_load def.player:<player>
     - flag <[player]> gui_restore:<[player].inventory.map_slots>
+    - adjust server save
     - define equipment <[player].inventory.equipment_map>
     - inventory clear player:<[player]>
     - foreach <[equipment]> key:slot as:item:
@@ -43,6 +45,7 @@ gui_restore_load:
     - foreach <[player].flag[gui_restore]> key:slot as:item:
         - inventory set slot:<[slot]> origin:<[item]> player:<[player]>
     - flag <[player]> gui_restore:!
+    - adjust server save
 
 gui_restore_world:
     debug: false
@@ -51,6 +54,7 @@ gui_restore_world:
         on player joins:
         - if <player.has_flag[gui_restore_later]>:
             - flag <player> gui_restore_later:!
+            - adjust server save
         - if <player.has_flag[gui_restore]>:
             - run gui_restore_load def.player:<player>
         on player opens inventory bukkit_priority:lowest:

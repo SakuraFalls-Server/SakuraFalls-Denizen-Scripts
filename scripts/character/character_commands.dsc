@@ -32,6 +32,7 @@ character_command_rpname:
     - define new_rpnames <[new_rpnames].with[<[name]>].as[<player.uuid>]>
     - flag <player> character_rpname:<[name]>
     - flag server character_rpnames:<[new_rpnames]>
+    - adjust server save
     - narrate format:formats_prefix "Set your RP Name to <&e><[name]><&7>."
 
 character_command_setdescription:
@@ -54,6 +55,7 @@ character_command_setdescription:
         - stop
     - define description <context.args.space_separated.parse_color.strip_color>
     - flag <player> character_description:<[description]>
+    - adjust server save
     - narrate format:formats_prefix "Changed your description! View it with /viewdescription."
 
 character_command_viewdescription:

@@ -11,6 +11,7 @@ itemdb_store:
     definitions: item
     script:
     - flag server itemdb:<server.flag[itemdb].if_null[<list[]>].include[<[item]>].sort_by_value[display]>
+    - adjust server save
 
 itemdb_unstore:
     debug: false
@@ -18,6 +19,7 @@ itemdb_unstore:
     definitions: name
     script:
     - flag server itemdb:<server.flag[itemdb].if_null[<list[]>].filter_tag[<[filter_value].display.strip_color.to_lowercase.equals[<[name]>].not>]>
+    - adjust server save
 
 itemdb_get:
     debug: false

@@ -25,7 +25,7 @@ compatibility_check_world:
         - define player_version <player.viaversion_version.split[-].get[1].if_null[<player.viaversion_version>]>
         - define server_version <server.version.split[(].get[2].split[:].get[2].split[)].get[1].trim>
         - if <proc[compatibility_check_compare_versions].context[<[player_version]>|<[server_version]>]> == -1:
-            - wait 5s
+            - wait 3s
             - if !<player.is_online>:
                 - stop
             - narrate <&f>

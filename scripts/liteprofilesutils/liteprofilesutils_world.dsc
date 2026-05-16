@@ -14,6 +14,7 @@ liteprofilesutils_world:
         #
         - define lastbestlimit <server.flag[liteprofilesutils_lastbestlimit].if_null[<map[]>]>
         - flag server liteprofilesutils_lastbestlimit:<[lastbestlimit].with[<[masteruuid]>].as[<[profilelimit].max[<[lastbestlimit].get[<[masteruuid]>].if_null[1]>]>]>
+        - adjust server save
         #
         - define joinleavedata <script[liteprofilesutils_data].data_key[join-leave]>
         - define setting_enabled_players <server.online_players.filter_tag[<proc[settings_get].context[<[filter_value]>|general_see_player_join_leave]>]>
@@ -62,6 +63,7 @@ liteprofilesutils_world:
             - if <server.flag[liteprofilesutils_welcome].if_null[<list[]>].contains[<player.uuid>]>:
                 - announce <[joinleavedata].get[welcome].parsed>
                 - flag server liteprofilesutils_welcome:<server.flag[liteprofilesutils_welcome].if_null[<list[]>].include[<player.uuid>]>
+                - adjust server save
         - define setting_enabled_players <server.online_players.filter_tag[<proc[settings_get].context[<[filter_value]>|general_see_player_join_leave]>]>
         - narrate <[joinleavedata].get[join].parsed> targets:<[setting_enabled_players]>
         ## prevent /profile remove

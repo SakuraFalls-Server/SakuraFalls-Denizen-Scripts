@@ -17,6 +17,7 @@ storyboard_player_state_set:
     - define state <[player].flag[storyboard_state].get[state].if_null[<map[]>]>
     - define state <[state].with[<[key]>].as[<[value]>]>
     - flag <[player]> storyboard_state:<[player].flag[storyboard_state].if_null[<map[]>].with[state].as[<[state]>]>
+    - adjust server save
 
 # Removes a named key from player state.
 # If the key doesn't exist, silently fails.
@@ -28,6 +29,7 @@ storyboard_player_state_clear:
     - define state <[player].flag[storyboard_state].get[state].if_null[<map[]>]>
     - define state <[state].exclude[<[key]>]>
     - flag <[player]> storyboard_state:<[player].flag[storyboard_state].if_null[<map[]>].with[state].as[<[state]>]>
+    - adjust server save
 
 # Gets a named key from player state.
 # If the key doesn't exist, "null" is returned.
@@ -57,7 +59,7 @@ storyboard_player_unfreeze:
     type: task
     definitions: player
     script:
-    - adjust <player> walk_speed:<player.flag[storyboard_freeze_speed]>
+    - adjust <player> walk_speed:<player.flag[storyboard_freeze_speed].if_null[0.2]>
     - flag <player> storyboard_freeze_speed:!
 
 # Marks the script after this task as an atomic sequence, meaning that
@@ -76,6 +78,7 @@ storyboard_player_begin_atomic_sequence:
         - queue <[queue]> stop
         - stop
     - flag <[player]> storyboard_atomic:<[player].flag[storyboard_atomic].if_null[<map[]>].with[<[queue].script.name>].as[<util.time_now>]>
+    - adjust server save
 
 # Ends the atomic sequence above this task. See the sibling task
 # storyboard_player_begin_atomic_sequence for more details.
@@ -90,6 +93,7 @@ storyboard_player_end_atomic_sequence:
     - waituntil !<player.has_flag[textbox_state]>
     - wait 5t
     - flag <[player]> storyboard_atomic:<[player].flag[storyboard_atomic].if_null[<map[]>].exclude[<[queue].script.name>]>
+    - adjust server save
 
 ## Internal only!
 storyboard_player_freeze_check:

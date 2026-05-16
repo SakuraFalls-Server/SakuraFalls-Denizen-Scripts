@@ -206,5 +206,6 @@ intro_interact_laptop_task_role_callback:
     - adjust <player> remove_effects
     - adjust <player> show_to_players
     - flag <player> intro:done
+    - adjust server save
     - execute as_player player:<player> spawn
     - run storyboard_player_end_atomic_sequence def.queue:<queue> def.player:<player>
