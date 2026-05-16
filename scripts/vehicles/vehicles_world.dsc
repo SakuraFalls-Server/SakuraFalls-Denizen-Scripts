@@ -110,6 +110,7 @@ vehicle_world_parallel_loop:
     - define vehicles_player_input <[vehicle].flag[vehicles_player_input].if_null[null]>
     - define forward <[vehicles_player_input].get[forward].if_null[0]>
     - define sideways <[vehicles_player_input].get[sideways].if_null[0]>
+    - define not_moving true
     - if <[forward]> != 0:
         - define speed <[vehicle].flag[vehicles_speed].if_null[0]>
         - define speed <[speed].add[<[vehicle].flag[vehicles_data].get[acceleration].mul[<[forward]>]>]>
@@ -119,18 +120,19 @@ vehicle_world_parallel_loop:
         - if <[speed]> > <[max]>:
             - define speed <[max]>
         - flag <[vehicle]> vehicles_speed:<[speed]>
+        - define not_moving false
     - if <[sideways]> != 0:
         - define speed <[vehicle].flag[vehicles_speed].if_null[0]>
-        - if <[speed].abs> > 0.1:
+        - if <[speed].abs> > 0.03:
             - define max_speed <[vehicle].flag[vehicles_data].get[max_speed]>
             - define speed_turn_coefficient <[speed].div[<[max_speed]>].mul[0.25].add[0.85]>
             - define turn_speed <[vehicle].flag[vehicles_data].get[turn_speed_percentage].mul[360].mul[<[speed_turn_coefficient]>]>
             - define turn_speed <[turn_speed].mul[<[sideways]>].mul[-1].mul[<tern[<[speed].is_less_than[0]>].pass[-1].fail[1]>]>
             - rotate <[vehicle]> duration:1t yaw:<[turn_speed]>
     - define speed <[vehicle].flag[vehicles_speed].if_null[0]>
-    - if <[speed].abs> < 0.1:
+    - if <[speed].abs> < 0.01:
         - define speed 0
-    - else:
+    - else if <[not_moving]> || <[speed].abs> > 0.5:
         - define speed <[speed].div[1.015]>
     - if <[speed]> >= 0:
         - define ray_cast_location <[vehicle].location.above[0.5].ray_trace[range=<[speed].abs>].if_null[null]>

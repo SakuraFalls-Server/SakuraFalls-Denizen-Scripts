@@ -74,7 +74,7 @@ textbox_write:
                     - wait <[write_speed].add[1]>t
         - wait <duration[<[write_speed]>t]>
     - if <[player].flag[textbox_state].if_null[null]> != writing:
-        - if <[queue].if_null[null]> != null && <[player].flag[textbox_state].if_null[null]> != continue:
+        - if <[queue].if_null[null]> != null && <[player].has_flag[textbox_state]> && <[player].flag[textbox_state].if_null[null]> != continue:
             - debug log "[Textbox] Write; cancelled queue <[queue].numeric_id><&at><[queue].script.name> for <[player].name>; state mismatch."
             - queue stop <[queue]>
             - run textbox_flush def.player:<[player]>
