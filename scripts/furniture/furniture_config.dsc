@@ -43,6 +43,61 @@ furniture_config:
         iron_horse_armor,8:
             represents: Vending Machine
             collision: barrier
+        iron_horse_armor,9:
+            represents: Barstool
+            collision: barrier
+        iron_horse_armor,10:
+            represents: Two Shelf Table (Light)
+            collision: barrier
+        iron_horse_armor,11:
+            represents: Two Shelf Table (Dark)
+            collision: barrier
+        iron_horse_armor,12:
+            represents: Air Conditioner (White)
+            collision: barrier
+            always_upright: true
+        iron_horse_armor,13:
+            represents: Air Conditioner (Black)
+            collision: barrier
+            always_upright: true
+        iron_horse_armor,14:
+            represents: Aquarium (White)
+            collision: barrier
+        iron_horse_armor,15:
+            represents: Aquarium (Black)
+            collision: barrier
+        iron_horse_armor,16:
+            represents: Bookshelf (White)
+            collision: barrier
+        iron_horse_armor,17:
+            represents: Bookshelf (Black)
+            collision: barrier
+        iron_horse_armor,18:
+            represents: Bookshelf (Wooden)
+            collision: barrier
+        iron_horse_armor,19:
+            represents: Bookshelf (Dark)
+            collision: barrier
+        iron_horse_armor,20:
+            represents: Ceiling Fan (White)
+            collision: skeleton_skull
+            always_upright: true
+        iron_horse_armor,21:
+            represents: Ceiling Fan (Black)
+            collision: skeleton_skull
+            always_upright: true
+        iron_horse_armor,22:
+            represents: Coffee Table (White)
+            collision: barrier
+        iron_horse_armor,23:
+            represents: Coffee Table (Black)
+            collision: barrier
+        iron_horse_armor,24:
+            represents: Coffee Table (Wooden)
+            collision: barrier
+        iron_horse_armor,25:
+            represents: Coffee Table (Dark)
+            collision: barrier
     # List of collision blocks - disables interaction without perms
     collision_blocks:
     #- skeleton_skull

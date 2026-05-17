@@ -87,6 +87,9 @@ vehicles_world:
         on player right clicks block:
         - if <player.item_in_hand.has_flag[vehicles]>:
             - determine cancelled passively
+            - if !<script[vehicles_config].data_key[whitelisted_blocks].contains[<player.location.below.material.name>]>:
+                - narrate "<&c>You should stand on the road when spawning your car."
+                - stop
             - if <player.has_flag[vehicles]>:
                 - narrate "<&c>You have spawned a vehicle already. Want to pick it up?"
                 - define vehicle <player.flag[vehicles]>

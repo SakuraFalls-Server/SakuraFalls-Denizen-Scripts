@@ -59,7 +59,7 @@ furniture_world_custom_block:
         #
         - define material <context.item.material.name>[custom_model_data=<context.item.custom_model_data>]
         #
-        - define pitch <tern[<player.eye_location.pitch.is_more_than_or_equal_to[0]>].pass[0].fail[180]>
+        - define pitch <proc[furniture_cmd_to_pitch].context[<player>|<context.item.material>|<context.item.custom_model_data.if_null[0]>]>
         - define yaw <player.eye_location.yaw.div_int[45].add[1].div_int[2]>
         - if <[yaw]> == 1:
             - define yaw 90

@@ -30,6 +30,16 @@ furniture_cmd_to_custom_block_collision:
         - determine null
     - determine <[data].get[<[material].name>,<[cmd]>].get[collision]>
 
+furniture_cmd_to_pitch:
+    debug: false
+    type: procedure
+    definitions: player|material|cmd
+    script:
+    - define data <script[furniture_config].data_key[custom_block]>
+    - if <[data].get[<[material].name>,<[cmd]>].get[always_upright].if_null[false]>:
+        - determine 0
+    - determine <tern[<[player].eye_location.pitch.is_more_than_or_equal_to[0]>].pass[0].fail[180]>
+
 furniture_all_items_sorted:
     debug: false
     type: procedure

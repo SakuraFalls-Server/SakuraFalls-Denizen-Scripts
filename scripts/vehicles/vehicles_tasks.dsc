@@ -85,6 +85,8 @@ vehicle_find_snap_location:
     type: procedure
     definitions: next_location
     script:
+    - if !<script[vehicles_config].data_key[whitelisted_blocks].contains[<[next_location].below[0.5].material.name>]>:
+        - determine collide
     - if <[next_location].above[0.15].material.is_solid>:
         - if !<[next_location].above.material.is_solid>:
             - determine <[next_location].above[0.5]>
