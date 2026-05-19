@@ -26,3 +26,11 @@ no_spawn_eggs:
         - determine cancelled
         on entity spawns because BEEHIVE:
         - determine cancelled
+        on splash_potion spawns:
+        - determine cancelled
+        on lingering_potion spawns:
+        - determine cancelled
+        on egg spawns:
+        - determine cancelled
+        on wither spawns:
+        - determine cancelled
