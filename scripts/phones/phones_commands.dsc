@@ -14,7 +14,7 @@ phones_commands_phonecall:
     - if <player.has_flag[phones_call]>:
         - determine <list[<&lt>message<&gt>]>
     - if <context.args.get[1].equals[110].if_null[false]>:
-        - determine <list[police|ambulance]>
+        - determine <list[<script[phones_config].data_key[hotlines]>]>
     - determine <player.flag[phones].get[contacts].keys.if_null[<list[]>]>
     script:
     # checks...
@@ -42,8 +42,8 @@ phones_commands_phonecall:
         - if <[receiver]> == 110:
             # valid?
             - define emergency_type <context.args.get[2].to_lowercase.if_null[null]>
-            - if !<list[police|ambulance].contains[<[emergency_type]>]>:
-                - narrate "<&c>Invalid emergency type. To call emergency services, try /<context.alias> 110 (police|ambulance)."
+            - if !<list[<script[phones_config].data_key[hotlines]>].contains[<[emergency_type]>]>:
+                - narrate "<&c>Invalid hotline type. To call emergency services, try /<context.alias> 110 (<script[phones_config].data_key[hotlines].separated_by[|]>)."
                 - stop
             # if accepted, go in
             - define targets <server.online_players.filter_tag[<[filter_value].has_permission[phones.emergency.<[emergency_type]>]>]>
@@ -72,12 +72,12 @@ phones_commands_phonecall:
                 - narrate targets:<[callgroup]> <&f>
             # before accepted
             - define relative <proc[phones_nicer_format].context[<player.flag[phones].get[number]>]>
-            - narrate targets:<[targets].filter_tag[<proc[phones_has_phone].context[<[filter_value]>]>]> "<&6>*** <&c>[EMERGENCY] <&e>Call from <&e><[relative]><&7>."
+            - narrate targets:<[targets].filter_tag[<proc[phones_has_phone].context[<[filter_value]>]>]> "<&6>*** <&c><&l>[HOTLINE] <&e>Call from <&e><[relative]><&7>."
             - narrate targets:<[targets].filter_tag[<proc[phones_has_phone].context[<[filter_value]>]>]> <&hover[<&a>Click to connect to <[relative]>...]><element[<&a><&l>[ ACCEPT ]].on_click[<entry[accept].command>]><&end_hover>
             # wait...
             - flag <player> phones_call:110_<[emergency_type]>
             - flag <player> phones_call_clickable:<entry[accept].id>
-            - narrate "<&6>*** <&e>You called the emergency services."
+            - narrate "<&6>*** <&e>You called the a hotline number."
             - narrate "<&7>Unequip your phone to cancel the call."
             - stop
         - define target <proc[phones_get_owner].context[<player>|<[receiver]>]>

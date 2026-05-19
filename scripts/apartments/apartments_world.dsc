@@ -91,7 +91,7 @@ apartments_world:
             - stop
         - if <context.item_in_hand.material.advanced_matches[*banner]>:
             - stop
-        - if <context.item_in_hand.all_raw_nbt.exclude[display].exclude[SkullOwner].filter_tag[<[filter_value].size.is_more_than[0]>].size.if_null[0]> > 0:
+        - if <context.item_in_hand.all_raw_nbt.exclude[display].exclude[SkullOwner].filter_tag[<[filter_value].size.is_more_than[0].if_null[false]>].size.if_null[0]> > 0:
             - determine cancelled
         ##
         ## simple creative safety cases

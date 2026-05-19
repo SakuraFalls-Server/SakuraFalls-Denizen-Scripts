@@ -80,7 +80,7 @@ furniture_menu:
                     player: <[player]>
                     page: <[page].sub[1]>
         - define contents <[contents].include[<[contents_extra]>]>
-    - if <[page].add[1].mul[27]> < <[contents].size>:
+    - if <[page].mul[45]> < <[contents].size>:
         - definemap contents_extra:
             51:
                 item: <item[ender_eye[display=<&a><&gt><&gt>]]>

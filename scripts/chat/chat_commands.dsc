@@ -407,7 +407,7 @@ chat_command_channelswitch:
             - if <player.has_flag[chat_disableooc]>:
                 - narrate "<&c>You currently have OOC disabled. Use /ooc first to enable it."
                 - stop
-            - run settings_set def.player:<player> def.key:text_rp_chat_channel def.value:oocz
+            - run settings_set def.player:<player> def.key:text_rp_chat_channel def.value:ooc
             - narrate format:formats_prefix "Changed channel to OOC."
             - stop
     - narrate "<&c>Unknown channel <[channel]>. Please try: ic, ooc."

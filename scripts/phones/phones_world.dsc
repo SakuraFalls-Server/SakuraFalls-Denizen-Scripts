@@ -96,7 +96,7 @@ phones_inject_end_call:
     - narrate format:formats_prefix "You ended the call."
     - if <player.has_flag[phones_emergency]>:
         - define emergency_type <player.flag[phones_emergency].substring[5]>
-        - narrate format:formats_prefix targets:<server.online_players.filter_tag[<[filter_value].has_permission[phones.emergency.<[emergency_type]>]>].include[<[callwho]>].filter_tag[<proc[phones_has_phone].context[<[filter_value]>]>]> "Call ended by the emergency services."
+        - narrate format:formats_prefix targets:<server.online_players.filter_tag[<[filter_value].has_permission[phones.emergency.<[emergency_type]>]>].include[<[callwho]>].filter_tag[<proc[phones_has_phone].context[<[filter_value]>]>]> "Call ended by the hotline service."
     - flag <player> phones_emergency:!
     - if <player.has_flag[phones_emergency_actual_target]>:
         - define actual_target <player.flag[phones_emergency_actual_target]>
