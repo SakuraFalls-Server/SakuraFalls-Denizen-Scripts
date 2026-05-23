@@ -67,6 +67,7 @@ liteprofilesutils_world:
         - define setting_enabled_players <server.online_players.filter_tag[<proc[settings_get].context[<[filter_value]>|general_see_player_join_leave]>]>
         - narrate <[joinleavedata].get[join].parsed> targets:<[setting_enabled_players]>
         ## prevent /profile remove
+        ## hotfix /profile add
         on command:
         - if <context.source_type> != player:
             - stop
@@ -74,8 +75,14 @@ liteprofilesutils_world:
             - stop
         - if <context.command.to_lowercase> == profile || <context.command.to_lowercase> == account || <context.command.to_lowercase> == pf:
             - if <context.args.get[1].to_lowercase.if_null[null]> == remove:
+                - if <player.has_flag[liteprofiles_auto_removing_extra_profiles]>:
+                    - stop
                 - determine cancelled passively
                 - narrate "<&c>You are forbidden from performing this operation."
+            - else if <context.args.get[1].to_lowercase.if_null[null]> == add:
+                - if <placeholder[liteprofiles_count]> >= <proc[liteprofilesutils_get_profile_limit].context[<player>]>:
+                    - determine cancelled passively
+                    - narrate "<&c>You cannot have more profiles!"
         ## GUI menu
         on player clicks in inventory bukkit_priority:low:
         - if <context.inventory.title> != <&f>邑邑邑邑鄈:
