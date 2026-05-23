@@ -172,7 +172,7 @@ ch1_1_marie_interact:
                 - ~run storyboard_waituntil_safe def.player:<player> def.queue:<queue> def.condition:[player].location.distance_squared[<location[2,2,-130,world]>].is_less_than[10]
                 - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* So this is the academy." def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[normal]>
                 - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* Really big place." def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[happy]>
-                - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* Nobody really likes the <&4><&l>dean<&0><&l>, or$$nlwell, so I hear." def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[neutral]>
+                - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* Nobody really likes the <&4><&l>principal<&0><&l>, or$$nlwell, so I hear." def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[neutral]>
                 - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* Grumpy, rich... You get the idea." def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[neutral]>
                 - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* Although, they did something right." def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[normal]>
                 - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* Behind this building, there are$$nlsome <&o>sport fields." def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[normal]>
@@ -182,7 +182,7 @@ ch1_1_marie_interact:
                 - ~walk <npc> <location[2,2,-197,world]> speed:1
                 - ~walk <npc> <location[2,5,-225,world]> speed:1
                 - ~run storyboard_waituntil_safe def.player:<player> def.queue:<queue> def.condition:[player].location.distance_squared[<location[2,5,-225,world]>].is_less_than[10]
-                - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* So, anyway, the <&4><&l>dean<&0><&l> really went$$nlextra with this." def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[normal]>
+                - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* So, anyway, the <&4><&l>principal<&0><&l> really went$$nlextra with this." def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[normal]>
                 - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* No, but really...$$nlA decorative garden at the$$nlentrance...?" def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[surprised]>
                 - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* Anyway, let's keep going." def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[normal]>
                 - ~walk <npc> <location[12,5,-240,world]> speed:1

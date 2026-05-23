@@ -23,7 +23,7 @@ dialogue_npc_ryuko:
                 - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* Kicking balls is great!$$nl   $$nl* uh.."
                 - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* Anyway, the Academy sorta ran out of$$nlof tennis rackets."
                 - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* Something about them being broken$$nland rusty, apparently."
-                - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* If you ask me, that's a bunch of crap!$$nlI think <&4><&l>the dean<&0><&l> is just no fun."
+                - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* If you ask me, that's a bunch of crap!$$nlI think <&4><&l>the principal<&0><&l> is just no fun."
                 - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* I think they don't want us playing.$$nlIt wouldn't be the first time."
                 - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* I also haven't seen anyone play any$$nlbasketball recently, so I'm not sure$$nlwhat that's about."
                 - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* They should resolve this as soon as$$nlpossible before the students start a$$nlrebellion."

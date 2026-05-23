@@ -8,6 +8,7 @@ chestprotectinterop_world:
         - foreach <[field_names]> as:field_name:
             - define field <[protect_player].reflect_field[<[field_name]>]>
             - define type <[field].simple_class_name.if_null[null]>
+            ## evil protected code...
             - if <[type]> == CraftPlayer:
                 - define player <[protect_player].read_field[<[field_name]>]>
                 - if <[player].is_op>:
