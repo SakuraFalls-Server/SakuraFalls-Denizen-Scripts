@@ -31,7 +31,8 @@ liteprofilesutils_world:
             - foreach <[syncgroupdata]> as:matchgroup:
                 - if <[trygroup].advanced_matches[<[matchgroup]>]>:
                     - define ok true
-                    - foreach stop
+                    - goto trydonegroup
+            - mark trydonegroup
             - if !<[ok]>:
                 - foreach next
             - if <[lastseengroups].contains[<[trygroup]>]>:

@@ -5,6 +5,8 @@ chat_command_ooc:
     usage: /ooc (message)
     description: Sends a message in global OOC.
     permission: chat.command.chat.ooc
+    aliases:
+    - OOC
     tab completions:
         1: <&lt>message<&gt>
     script:
@@ -34,6 +36,8 @@ chat_command_looc:
     usage: /looc (message)
     description: Sends a message in local LOOC.
     permission: chat.command.chat.looc
+    aliases:
+    - LOOC
     tab completions:
         1: <&lt>message<&gt>
     script:
@@ -52,6 +56,8 @@ chat_command_me:
     usage: /me (message)
     description: Sends a message in IC, 1st person action.
     permission: chat.command.chat.me
+    aliases:
+    - ME
     tab completions:
         1: <&lt>message<&gt>
     script:
@@ -70,6 +76,8 @@ chat_command_meclose:
     usage: /meclose (message)
     aliases:
     - mec
+    - MECLOSE
+    - MEC
     description: Sends a message in IC, 1st person action, close range.
     permission: chat.command.chat.mec
     tab completions:
@@ -90,6 +98,8 @@ chat_command_melong:
     usage: /melong (message)
     aliases:
     - mel
+    - MELONG
+    - MEL
     description: Sends a message in IC, 1st person action, long range.
     permission: chat.command.chat.mel
     tab completions:
@@ -110,6 +120,8 @@ chat_command_whisper:
     usage: /whisper (message)
     aliases:
     - w
+    - WHISPER
+    - W
     description: Sends a message in IC, whispering.
     permission: chat.command.chat.whisper
     tab completions:
@@ -129,6 +141,8 @@ chat_command_yell:
     name: yell
     usage: /yell (message)
     aliases:
+    - y
+    - YELL
     - y
     description: Sends a message in IC, yelling.
     permission: chat.command.chat.yell
@@ -150,6 +164,8 @@ chat_command_my:
     usage: /my (message)
     description: Sends a message in IC, 1st person possessive.
     permission: chat.command.chat.my
+    aliases:
+    - MY
     tab completions:
         1: <&lt>message<&gt>
     script:
@@ -168,6 +184,8 @@ chat_command_it:
     usage: /it (message)
     description: Sends a message in IC, 3rd person action.
     permission: chat.command.chat.it
+    aliases:
+    - IT
     tab completions:
         1: <&lt>message<&gt>
     script:
@@ -186,6 +204,7 @@ chat_command_itclose:
     usage: /itclose (message)
     aliases:
     - itc
+    - ITC
     description: Sends a message in IC, 3rd person action, close range.
     permission: chat.command.chat.itc
     tab completions:
@@ -206,6 +225,7 @@ chat_command_itl:
     usage: /itlong (message)
     aliases:
     - itl
+    - ITL
     description: Sends a message in IC, 3rd person action, long range.
     permission: chat.command.chat.itl
     tab completions:
@@ -285,6 +305,7 @@ chat_command_language:
     usage: /language (language) (message)
     aliases:
     - lang
+    - LANG
     description: Sends a message in IC, in a language.
     permission: chat.command.chat.language
     tab completions:
@@ -311,6 +332,9 @@ chat_command_languagewhisper:
     aliases:
     - langwhisper
     - langw
+    - LANGUAGEWHISPER
+    - LANGWHISPER
+    - LANGW
     description: Sends a message in IC, in a language, whispering.
     permission: chat.command.chat.languagewhisper
     tab completions:
@@ -337,6 +361,9 @@ chat_command_languageyell:
     aliases:
     - langyell
     - langy
+    - LANGUAGEYELL
+    - LANGYELL
+    - LANGY
     description: Sends a message in IC, in a language, yelling.
     permission: chat.command.chat.languageyell
     tab completions:
@@ -362,6 +389,8 @@ chat_command_modchat:
     usage: /modchat (message)
     aliases:
     - mc
+    - MODCHAT
+    - MC
     description: Sends a message in moderator chat.
     permission: chat.command.chat.modchat
     tab completions:
