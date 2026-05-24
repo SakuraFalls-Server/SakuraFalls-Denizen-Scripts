@@ -25,7 +25,7 @@ apartments_access:
         - determine false
     - if <[owner]> == <[player]>:
         - determine true
-    - define access <[owner].flag[apartments_access].get[<[apartment]>].get[<[player]>].if_null[null]>
+    - define access <[owner].flag[apartments_access].get[<[apartment]>].get[<[player].uuid>].if_null[null]>
     - if <[access]> == null:
         - determine false
     - determine true
@@ -43,7 +43,10 @@ apartments_access_level:
         - determine none
     - if <[owner]> == <[player]>:
         - determine owner
-    - define access <[owner].flag[apartments_access].get[<[apartment]>].get[<[player]>].if_null[null]>
+    - define access <[owner].flag[apartments_access].get[<[apartment]>].if_null[<map[]>]>
+    - define filter <[owner].flag[apartments_access].get[<[apartment]>].if_null[<map[]>].keys.filter_tag[<[filter_value].escaped.starts_with[p&]>]>
+    - define access <[access].exclude[<[filter]>]>
+    - define access <[access].get[<[player].uuid>].if_null[null]>
     - if <[access]> == null:
         - determine none
     - determine <[access]>
@@ -56,9 +59,13 @@ apartments_add_member:
     - define owner <proc[apartments_owner].context[<[apartment]>]>
     - if <[owner]> == null:
         - stop
-    - define access_all <[owner].flag[apartments_access].get[<[apartment]>].if_null[<map[]>].with[<[member]>].as[member]>
+    - define access_all <[owner].flag[apartments_access].get[<[apartment]>].if_null[<map[]>].with[<[member].uuid>].as[member]>
+    # bugfix since may 2026, have to clear old values..
+    - define filter <[owner].flag[apartments_access].get[<[apartment]>].if_null[<map[]>].keys.filter_tag[<[filter_value].escaped.starts_with[p&]>]>
+    - define access_all <[access_all].exclude[<[filter]>]>
+    #
     - flag <[owner]> apartments_access:<[owner].flag[apartments_access].if_null[<map[]>].with[<[apartment]>].as[<[access_all]>]>
-    - execute as_server "as addfriend <[member].name> <[apartment].id>"
+    - execute player:<[owner]> as_op "as addfriend <[member].name> --region <[apartment].id>"
     - adjust server save
 
 apartments_add_moderator:
@@ -69,10 +76,14 @@ apartments_add_moderator:
     - define owner <proc[apartments_owner].context[<[apartment]>]>
     - if <[owner]> == null:
         - stop
-    - execute as_server "rg addmember <[apartment].id> <[moderator].name> -w <[apartment].world.name>"
-    - define access_all <[owner].flag[apartments_access].get[<[apartment]>].if_null[<map[]>].with[<[moderator]>].as[moderator]>
+    - execute as_server "rg addowner <[apartment].id> <[moderator].name> -w <[apartment].world.name>"
+    - define access_all <[owner].flag[apartments_access].get[<[apartment]>].if_null[<map[]>].with[<[moderator].uuid>].as[moderator]>
+    # bugfix since may 2026, have to clear old values..
+    - define filter <[owner].flag[apartments_access].get[<[apartment]>].if_null[<map[]>].keys.filter_tag[<[filter_value].escaped.starts_with[p&]>]>
+    - define access_all <[access_all].exclude[<[filter]>]>
+    #
     - flag <[owner]> apartments_access:<[owner].flag[apartments_access].if_null[<map[]>].with[<[apartment]>].as[<[access_all]>]>
-    - execute as_server "as addfriend <[moderator].name> <[apartment].id>"
+    - execute player:<[owner]> as_op "as addfriend <[moderator].name> <[apartment].id>"
     - adjust server save
 
 apartments_remove_access:
@@ -84,9 +95,13 @@ apartments_remove_access:
     - if <[owner]> == null:
         - stop
     - execute as_server "rg removemember <[apartment].id> <[member].name> -w <[apartment].world.name>"
-    - define access_all <[owner].flag[apartments_access].get[<[apartment]>].if_null[<map[]>].exclude[<[member]>]>
+    - define access_all <[owner].flag[apartments_access].get[<[apartment]>].if_null[<map[]>].exclude[<[member].uuid>]>
+    # bugfix since may 2026, have to clear old values..
+    - define filter <[owner].flag[apartments_access].get[<[apartment]>].if_null[<map[]>].keys.filter_tag[<[filter_value].escaped.starts_with[p&]>]>
+    - define access_all <[access_all].exclude[<[filter]>]>
+    #
     - flag <[owner]> apartments_access:<[owner].flag[apartments_access].if_null[<map[]>].with[<[apartment]>].as[<[access_all]>]>
-    - execute as_server "as delfriend <[member].name> <[apartment].id>"
+    - execute as_server "as delfriend <[member].name> --region <[apartment].id>"
     - adjust server save
 
 apartments_begin_edit:

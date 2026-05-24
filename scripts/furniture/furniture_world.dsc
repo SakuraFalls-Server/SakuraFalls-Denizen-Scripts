@@ -97,7 +97,7 @@ furniture_world_collision_block:
         on player right clicks block bukkit_priority:high:
         - if <context.location.if_null[null]> == null:
             - stop
-        - if !<player.has_permission[furniture.collisionblock.interact]> && !<player.is_op>:
+        - if <player.has_permission[furniture.collisionblock.interact]> || <player.is_op>:
             - stop
         - if <context.location.material.advanced_matches[air].if_null[false]>:
             - stop

@@ -15,7 +15,9 @@ apartments_world:
             - stop
         - if <context.location.if_null[null]> == null:
             - stop
-        - if !<proc[apartments_access].context[<player>|<context.location>]>:
+        - if <proc[apartments_at].context[<context.location>]> == null:
+            - stop
+        - if <proc[apartments_access].context[<player>|<context.location>]> == none:
             - determine cancelled
         ##
         ## complex creative safety cases

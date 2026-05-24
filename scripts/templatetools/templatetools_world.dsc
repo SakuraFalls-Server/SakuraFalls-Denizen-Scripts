@@ -92,7 +92,7 @@ templatetools_world_redtorchtool:
             - stop
         - if <player.is_sneaking>:
             - stop
-        - determine cancelled passively
         - if <context.location.material.switched.if_null[null]> != null:
+            - determine cancelled passively
             - switch <context.location> no_physics
             - narrate format:templatetools_formats_main "Switched block state."

@@ -2,6 +2,7 @@ vehicles_config:
     debug: false
     type: data
     whitelisted_blocks:
+    - air
     - cobbled_deepslate_stairs
     - gray_concrete_powder
     - white_concrete

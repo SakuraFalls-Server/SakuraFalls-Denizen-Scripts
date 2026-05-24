@@ -61,7 +61,7 @@ furniture_menu:
     definitions: player|page
     script:
     - define page <[page].if_null[0]>
-    - define items <proc[furniture_all_items_sorted].get[<[page].mul[45].add[1]>].to[<[page].add[1].mul[45]>]>
+    - define items <proc[furniture_all_items_sorted].get[<[page].mul[18].add[1]>].to[<[page].add[1].mul[18]>]>
     - define contents <map[]>
     - foreach <[items]> as:item:
         - definemap item_entry:
@@ -70,7 +70,7 @@ furniture_menu:
             definitions:
                 player: <[player]>
                 item: <[item]>
-        - define contents <[contents].with[<[loop_index]>].as[<[item_entry]>]>
+        - define contents <[contents].with[<[loop_index].add[9]>].as[<[item_entry]>]>
     - if <[page]> > 0:
         - definemap contents_extra:
             49:
@@ -80,7 +80,7 @@ furniture_menu:
                     player: <[player]>
                     page: <[page].sub[1]>
         - define contents <[contents].include[<[contents_extra]>]>
-    - if <[page].mul[45]> < <[contents].size>:
+    - if <[page].mul[18]> < <[contents].size>:
         - definemap contents_extra:
             51:
                 item: <item[ender_eye[display=<&a><&gt><&gt>]]>

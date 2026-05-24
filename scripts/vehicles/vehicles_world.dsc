@@ -58,6 +58,8 @@ vehicles_world:
             - adjust <context.entity> passenger:<player>
         # vehicle control
         on player steers armor_stand:
+        - if <player.vehicle.type.if_null[null]> != armor_stand:
+            - stop
         - if <player.viaversion_protocol> >= 767:
             # >=1.21 uses player input event instead
             - stop
