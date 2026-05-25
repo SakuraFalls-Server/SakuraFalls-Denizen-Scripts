@@ -1,0 +1,25 @@
+messages:
+  time&at2024&fs04&fs21_23&co52&co29&co0223_Z:
+    origin: sender
+    value: test
+  time&at2024&fs04&fs21_23&co53&co02&co0873_Z:
+    origin: receiver
+    value: nice
+  time&at2024&fs12&fs17_00&co28&co45&co0762_Z:
+    origin: receiver
+    value: Sup
+  time&at2024&fs12&fs17_00&co28&co48&co0613_Z:
+    origin: sender
+    value: meow
+  time&at2024&fs12&fs17_00&co28&co51&co0662_Z:
+    origin: receiver
+    value: so, check how fast the messages load
+  time&at2024&fs12&fs17_00&co28&co55&co0662_Z:
+    origin: sender
+    value: rare
+  time&at2024&fs12&fs17_00&co29&co12&co0612_Z:
+    origin: receiver
+    value: open the phone & click on our conversation
+  time&at2024&fs12&fs17_00&co29&co16&co0512_Z:
+    origin: receiver
+    value: you'll see it's p much instant

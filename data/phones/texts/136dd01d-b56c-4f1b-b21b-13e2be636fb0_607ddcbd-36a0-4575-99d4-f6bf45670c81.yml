@@ -1,0 +1,10 @@
+messages:
+  time&at2024&fs12&fs19_04&co11&co47&co0702_Z:
+    origin: sender
+    value: HELLO
+  time&at2024&fs12&fs19_04&co12&co05&co0252_Z:
+    origin: receiver
+    value: sup
+  time&at2024&fs12&fs19_04&co12&co11&co0502_Z:
+    origin: receiver
+    value: can you open your phone and see how fast the messages load?

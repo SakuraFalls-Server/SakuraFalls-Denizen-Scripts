@@ -1,0 +1,31 @@
+messages:
+  time&at2025&fs03&fs10_16&co06&co23&co0603_Z:
+    origin: sender
+    value: Test
+  time&at2025&fs03&fs10_16&co06&co23&co0953_Z:
+    origin: sender
+    value: Test
+  time&at2025&fs03&fs10_16&co06&co24&co0204_Z:
+    origin: sender
+    value: Test
+  time&at2025&fs03&fs10_16&co07&co22&co0053_Z:
+    origin: receiver
+    value: hello
+  time&at2025&fs03&fs10_16&co07&co28&co0954_Z:
+    origin: sender
+    value: Test
+  time&at2025&fs03&fs10_16&co07&co29&co0153_Z:
+    origin: sender
+    value: Test
+  time&at2025&fs03&fs10_16&co07&co29&co0353_Z:
+    origin: sender
+    value: Test
+  time&at2025&fs03&fs10_16&co07&co29&co0603_Z:
+    origin: sender
+    value: Test
+  time&at2025&fs03&fs10_16&co07&co34&co0398_Z:
+    origin: sender
+    value: Test
+  time&at2025&fs03&fs10_16&co07&co35&co0153_Z:
+    origin: sender
+    value: Test
