@@ -14,7 +14,7 @@ chestprotectinterop_world:
                 - if <[player].is_op>:
                     - stop
                 - define location <context.reflect_event.read_field[location]>
-                - if <proc[apartments_at].context[<[location]>].if_null[null]> == null || !<proc[apartments_access].context[<[player]>|<[location]>]>:
+                - if !<[location].regions.first.owners.if_null[<list[]>].contains[<[player]>]>:
                     - narrate targets:<[player]> "<&c>You do not have permission to lock here."
                     - determine cancelled
                 - stop
