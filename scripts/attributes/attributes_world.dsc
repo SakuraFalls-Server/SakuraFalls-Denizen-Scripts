@@ -40,10 +40,10 @@ attributes_acro_world:
             # Rate limit so spam jumping under a block doesn't work
             - ratelimit <player> <script[attribute_acro_data].data_key[ratelimit]>s
             - if <player.flag[attribute_jump].if_null[0]> >= <script[attribute_acro_data].data_key[max]>:
-                - cast jump duration:99999 amplifier:<script[attribute_acro_data].data_key[at_max_precent]> <player>
+                - cast jump duration:99999 amplifier:<script[attribute_acro_data].data_key[at_max_precent]> <player> hide_particles no_ambient
                 - stop
             - flag <player> attribute_jump:<player.flag[attribute_jump].if_null[0].add[1]>
             - if <player.flag[attribute_jump].if_null[0]> >= <script[attribute_acro_data].data_key[max].div[2]>:
-                - cast jump duration:99999 amplifier:<script[attribute_acro_data].data_key[at_fifty_precent]> <player>
+                - cast jump duration:99999 amplifier:<script[attribute_acro_data].data_key[at_fifty_precent]> <player> hide_particles no_ambient
 
 # When more mechanics are added that can be turned into attriutes, add them here

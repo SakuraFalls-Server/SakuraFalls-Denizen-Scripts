@@ -1,0 +1,119 @@
+itemregistry_world:
+    debug: false
+    type: world
+    events:
+        on player clicks in inventory:
+        # clicked item
+        - if <context.item.material.advanced_matches[<proc[itemregistry_registered_items_pattern]>]>:
+            - if <context.item.custom_model_data.if_null[0]> != 0:
+                - if !<context.item.has_flag[itemregistry]>:
+                    - determine cancelled passively
+                    - inventory set slot:<context.slot> origin:air
+                    - inventory update
+                    - define message "<&6>[<&2>Item Registry<&6>] <&4>[WARN] <&c>Removed item <context.item> from player <player> because of state mismatch! (on player clicks in inventory - no flag)"
+                    - announce to_ops <[message]>
+                    - debug error <[message]>
+                - else:
+                    - if !<proc[itemregistry_matches_known_data].context[<context.item>|<context.clicked_inventory>]>:
+                        - determine cancelled passively
+                        - inventory set destination:<context.clicked_inventory> slot:<context.slot> origin:air
+                        - inventory update
+                        - narrate "<&6>[<&c>!<&6>] <&c>Registered item prone to duping will be removed from inventory."
+                        - define message "<&6>[<&2>Item Registry<&6>] <&4>[WARN] <&c>Removed item <context.item> from player <player> because of state mismatch! (on player clicks in inventory - on regular click mismatch state)"
+                        - announce to_ops <[message]>
+                        - debug error <[message]>
+                    - else:
+                        - if <player.open_inventory> == <player.inventory>:
+                            - stop
+                        - determine cancelled passively
+                        - if <context.open_inventory.location.if_null[null]> == null:
+                            - stop
+                        - if <context.clicked_inventory> == <player.inventory>:
+                            - define new_inventory <context.inventory>
+                        - else:
+                            - define new_inventory <player.inventory>
+                        - if !<[new_inventory].can_fit[<context.item>]>:
+                            - stop
+                        - inventory set destination:<context.clicked_inventory> slot:<context.slot> origin:air
+                        - ~run itemregistry_update_tracker def.item:<context.item> def.new_inventory:<[new_inventory]>
+                        - give <context.item> quantity:1 to:<[new_inventory]>
+        # hover item
+        - if <context.cursor_item.material.advanced_matches[<proc[itemregistry_registered_items_pattern]>]>:
+            - if <context.cursor_item.custom_model_data.if_null[0]> != 0:
+                - if !<context.cursor_item.has_flag[itemregistry]>:
+                    - determine cancelled passively
+                    - adjust <player> item_on_cursor:air
+                - else:
+                    - if !<proc[itemregistry_matches_known_data].context[<context.cursor_item>|<context.clicked_inventory.if_null[<player.inventory>]>]>:
+                        - determine cancelled passively
+                        - adjust <player> item_on_cursor:air
+                        - narrate "<&6>[<&c>!<&6>] <&c>Registered item prone to duping will be removed from inventory."
+                        - define message "<&6>[<&2>Item Registry<&6>] <&4>[WARN] <&c>Removed item <context.cursor_item> from player <player> because of state mismatch! (on player clicks in inventory - on hover click mismatch state)"
+                        - announce to_ops <[message]>
+                        - debug error <[message]>
+        on player drags in inventory:
+        - if <context.item.material.advanced_matches[<proc[itemregistry_registered_items_pattern]>]>:
+            - if <context.item.custom_model_data.if_null[0]> != 0:
+                - determine cancelled passively
+                - if !<context.item.has_flag[itemregistry]>  || !<proc[itemregistry_matches_known_data].context[<context.item>|<player.inventory>]>:
+                    - adjust <player> item_on_cursor:air
+                    - narrate "<&6>[<&c>!<&6>] <&c>Unregistered item prone to duping will be removed from inventory."
+                    - define message "<&6>[<&2>Item Registry<&6>] <&4>[WARN] <&c>Removed item <context.item> from player <player> because of state mismatch! (on player drags in inventory)"
+                    - announce to_ops <[message]>
+        on player scrolls their hotbar:
+        - define item <player.inventory.slot[<context.new_slot>]>
+        - if <[item].material.advanced_matches[<proc[itemregistry_registered_items_pattern]>]>:
+            - if <[item].custom_model_data.if_null[0]> != 0:
+                - if !<[item].has_flag[itemregistry]> || !<proc[itemregistry_matches_known_data].context[<[item]>|<player.inventory>]>:
+                    - determine cancelled passively
+                    - inventory set slot:<context.new_slot> origin:air
+                    - inventory update
+                    - narrate "<&6>[<&c>!<&6>] <&c>Unregistered item prone to duping will be removed from inventory."
+                    - define message "<&6>[<&2>Item Registry<&6>] <&4>[WARN] <&c>Removed item <[item]> from player <player> because of state mismatch! (on player scrolls their hotbar)"
+                    - announce to_ops <[message]>
+        on player drops item:
+        - define item <context.item>
+        - if <[item].material.advanced_matches[<proc[itemregistry_registered_items_pattern]>]>:
+            - if <[item].custom_model_data.if_null[0]> != 0:
+                - determine cancelled passively
+                - define target <player.target.if_null[null]>
+                - if <[target]> != null:
+                    - if <[target].is_player>:
+                        - if <[target].inventory.can_fit[<[item]>]>:
+                            - if <player.flag[itemregistry_target].if_null[null]> == <[target]>:
+                                - wait 1t
+                                - take item:<[item]> from:<player.inventory>
+                                - ~run itemregistry_update_tracker def.item:<[item]> def.new_inventory:<[target].inventory>
+                                - give <[item]> quantity:1 to:<[target].inventory>
+                                - narrate "<&6>[<&2>Item Registry<&6>] <&e>Item successfully transfered to player <&6><[target].name><&e>."
+                            - else:
+                                - flag <player> itemregistry_target:<[target]> expire:10s
+                                - narrate "<&6>[<&2>Item Registry<&6>] <&e>To transfer your registered item to player <&6><[target].name><&e>, drop the item again while looking at the player."
+                        - else:
+                            - narrate "<&6>[<&2>Item Registry<&6>] <&e>To transfer your registered item to player <&6><[target].name><&e>, they must first have enough space in their inventory."
+        on player picks up item:
+        - define item <context.item>
+        - if <[item].material.advanced_matches[<proc[itemregistry_registered_items_pattern]>]>:
+            - if <[item].custom_model_data.if_null[0]> != 0:
+                - determine cancelled
+        on player swaps items:
+        - define item <context.main>
+        - if <[item].material.advanced_matches[<proc[itemregistry_registered_items_pattern]>]>:
+            - if <[item].custom_model_data.if_null[0]> != 0:
+                - if !<[item].has_flag[itemregistry]> || !<proc[itemregistry_matches_known_data].context[<[item]>|<player.inventory>]>:
+                    - determine cancelled passively
+                    - inventory set slot:hand item:air
+                    - inventory update
+                    - narrate "<&6>[<&c>!<&6>] <&c>Unregistered item prone to duping will be removed from inventory."
+                    - define message "<&6>[<&2>Item Registry<&6>] <&4>[WARN] <&c>Removed item <[item]> from player <player> because of state mismatch! (on player swaps items - main branch)"
+                    - announce to_ops <[message]>
+        - define item <context.offhand>
+        - if <[item].material.advanced_matches[<proc[itemregistry_registered_items_pattern]>]>:
+            - if <[item].custom_model_data.if_null[0]> != 0:
+                - if !<[item].has_flag[itemregistry]> || !<proc[itemregistry_matches_known_data].context[<[item]>|<player.inventory>]>:
+                    - determine cancelled passively
+                    - inventory set slot:offhand item:air
+                    - inventory update
+                    - narrate "<&6>[<&c>!<&6>] <&c>Unregistered item prone to duping will be removed from inventory."
+                    - define message "<&6>[<&2>Item Registry<&6>] <&4>[WARN] <&c>Removed item <[item]> from player <player> because of state mismatch! (on player swaps items - offhand branch)"
+                    - announce to_ops <[message]>
