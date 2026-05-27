@@ -1,10 +1,10 @@
-attributes_display:
+attributes_command_attributes:
     debug: false
     type: command
     name: attributes
     usage: /attributes
-    description: Displays player's stats.
-    permission: chat.command.chat.looc
+    description: Displays player's attributes.
+    permission: attributes.command.attributes
     tab completions:
         1: <&lt>message<&gt>
     script:
@@ -15,6 +15,6 @@ attributes_display:
     - define acro <proc[attribute_percent_acro_getter].context[<context.source_type>]>
     - define cardio <proc[attribute_percent_cardio_getter].context[<context.source_type>]>
     - define swim <proc[attribute_percent_swim_getter].context[<context.source_type>]>
-    - narrate format:formats_prefix "<&nl><player.name>'s attributes:<&nl>Acrobatics:<[acro]><&nl>Cardio:<[cardio]><&nl>Swim:<[swim]>"
+    - narrate format:formats_prefix "<player.name>'s Attributes:<&nl><&e>Acrobatics: <&7><[acro]>%<&nl><&e>Cardio: <&7><[cardio]>%<&nl><&e>Swim: <&7><[swim]>%"
 
 # More need to be added once the rest of the mechanics are implemented

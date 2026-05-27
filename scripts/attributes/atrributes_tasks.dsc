@@ -23,6 +23,7 @@ attribute_percent_acro_getter:
     - if <player.has_flag[attribute_jump]>:
         - define jumps <player.flag[attribute_jump]>
         - determine <[jumps].div[<script[attribute_acro_data].data_key[max]>].mul[100]>
+    - determine 0
 
 attribute_percent_swim_getter:
     type: procedure
