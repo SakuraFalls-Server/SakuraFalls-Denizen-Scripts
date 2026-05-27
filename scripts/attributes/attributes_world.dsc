@@ -20,6 +20,7 @@ attributes_swim_world:
     debug: false
     events:
         on player walks:
+        - ratelimit <player> <script[attribute_swim_data].data_key[ratelimit]>t
         - if <context.new_location.material.advanced_matches[water]>:
             - define swim_stat <player.statistic[swim_one_cm].div[100]>
             - if <[swim_stat]> >= <script[attribute_swim_data].data_key[max]>:
@@ -33,15 +34,12 @@ attributes_acro_world:
     debug: false
     events:
         on player jumps:
+            # Rate limit so spam jumping under a block doesn't work
             - ratelimit <player> <script[attribute_acro_data].data_key[ratelimit]>s
-            - if !<player.has_flag[attribute_jump]>:
-                - flag <player> attribute_jump
-            # limiting to 10000 just to make it easier for the attribute_precent_acro_getter (we are not going over 100%)
-            - if <player.flag[attribute_jump]> < <script[attribute_acro_data].data_key[max]>:
-                - flag <player> attribute_jump:+:1
+            - flag <player> attribute_jump:<player.flag[attribute_jump].if_null[0].add[1]>
             - if <player.flag[attribute_jump]> >= <script[attribute_acro_data].data_key[max]>:
-                - cast jump duration:99999 amplifier:<script[attribute_swim_data].data_key[at_max_precent]> <player>
+                - cast jump duration:99999 amplifier:<script[attribute_acro_data].data_key[at_max_precent]> <player>
             - else if <player.flag[attribute_jump]> >= <script[attribute_acro_data].data_key[max].div[2]>:
-                - cast jump duration:99999 amplifier:<script[attribute_swim_data].data_key[at_fifty_precent]> <player>
+                - cast jump duration:99999 amplifier:<script[attribute_acro_data].data_key[at_fifty_precent]> <player>
 
-# WHEN THE OTHER SKILLS (COOKING, FISHING, ENDURANCE, AND MORE IF IT GETS SUGGESTED) GET THEIR MECHANICS IMPLEMENTED, THEN TURN THEM INTO ATTRIBUTES
+# When more mechanics are added that can be turned into attriutes, add them here
