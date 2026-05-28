@@ -9,7 +9,7 @@ no_duping_custom_items:
             - stop
         - if <player.gamemode> != creative:
             - stop
-        - if <context.item.material.advanced_matches[note_block|iron_sword].if_null[true]> && <context.cursor_item.material.advanced_matches[note_block|iron_sword].if_null[true]>:
+        - if <context.item.material.advanced_matches[note_block|iron_horse_armor|iron_sword].if_null[true]> && <context.cursor_item.material.advanced_matches[note_block|iron_horse_armor|iron_sword].if_null[true]>:
             - stop
         - if <context.item.has_custom_model_data.if_null[false]> || <context.cursor_item.has_custom_model_data.if_null[false]>:
             - determine cancelled passively
@@ -20,7 +20,7 @@ no_duping_custom_items:
             - stop
         - if <player.gamemode> != creative:
             - stop
-        - if <context.item.material.advanced_matches[note_block|iron_sword].if_null[true]> && <context.cursor_item.material.advanced_matches[note_block|iron_sword].if_null[true]>:
+        - if <context.item.material.advanced_matches[note_block|iron_horse_armor|iron_sword].if_null[true]> && <context.cursor_item.material.advanced_matches[note_block|iron_horse_armor|iron_sword].if_null[true]>:
             - stop
         - if <context.item.has_custom_model_data.if_null[false]> || <context.cursor_item.has_custom_model_data.if_null[false]>:
             - determine cancelled passively
