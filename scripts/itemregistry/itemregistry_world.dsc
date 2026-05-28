@@ -23,10 +23,15 @@ itemregistry_world:
                         - announce to_ops <[message]>
                         - debug error <[message]>
                     - else:
+                        - if <player.gamemode> == creative:
+                            - determine cancelled passively
+                            - adjust <player> item_on_cursor:air
+                            - inventory update
+                            - stop
                         - if <player.open_inventory> == <player.inventory>:
                             - stop
                         - determine cancelled passively
-                        - if <context.open_inventory.location.if_null[null]> == null:
+                        - if <player.open_inventory.location.if_null[null]> == null:
                             - stop
                         - if <context.clicked_inventory> == <player.inventory>:
                             - define new_inventory <context.inventory>
@@ -51,6 +56,11 @@ itemregistry_world:
                         - define message "<&6>[<&2>Item Registry<&6>] <&4>[WARN] <&c>Removed item <context.cursor_item> from player <player> because of state mismatch! (on player clicks in inventory - on hover click mismatch state)"
                         - announce to_ops <[message]>
                         - debug error <[message]>
+                    - else:
+                        - if <player.gamemode> == creative:
+                            - determine cancelled passively
+                            - adjust <player> item_on_cursor:air
+                            - inventory update
         on player drags in inventory:
         - if <context.item.material.advanced_matches[<proc[itemregistry_registered_items_pattern]>]>:
             - if <context.item.custom_model_data.if_null[0]> != 0:

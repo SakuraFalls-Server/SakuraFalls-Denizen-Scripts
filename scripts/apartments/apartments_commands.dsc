@@ -25,7 +25,7 @@ apartments_command_apartmentaddmember:
     - if <context.args.size> <= 0:
         - narrate "<&c>Invalid use. Please try /<context.alias> (player)"
         - stop
-    - define target <server.match_offline_player[<context.args.get[1]>].if_null[null]>
+    - define target <server.match_player[<context.args.get[1]>].if_null[<server.match_offline_player[<context.args.get[1]>].if_null[null]>]>
     - if <[target]> == null:
         - narrate "<&c>A player with the username <context.args.get[1]> could not be found."
         - stop
@@ -61,7 +61,7 @@ apartments_command_apartmentaddmoderator:
     - if <context.args.size> <= 0:
         - narrate "<&c>Invalid use. Please try /<context.alias> (player)"
         - stop
-    - define target <server.match_offline_player[<context.args.get[1]>].if_null[null]>
+    - define target <server.match_player[<context.args.get[1]>].if_null[<server.match_offline_player[<context.args.get[1]>].if_null[null]>]>
     - if <[target]> == null:
         - narrate "<&c>A player with the username <context.args.get[1]> could not be found."
         - stop
@@ -98,7 +98,7 @@ apartments_command_apartmentremoveaccess:
     - if <context.args.size> <= 0:
         - narrate "<&c>Invalid use. Please try /<context.alias> (player)"
         - stop
-    - define target <server.match_offline_player[<context.args.get[1]>].if_null[null]>
+    - define target <server.match_player[<context.args.get[1]>].if_null[<server.match_offline_player[<context.args.get[1]>].if_null[null]>]>
     - if <[target]> == null:
         - narrate "<&c>A player with the username <context.args.get[1]> could not be found."
         - stop

@@ -76,3 +76,23 @@ itemregistry_adjust_actual_item:
     - define data <[data].with[item].as[<[new_item]>]>
     - flag server itemregistry:<server.flag[itemregistry].if_null[<map[]>].with[<[uuid]>].as[<[data]>]>
     - adjust server save
+
+itemregistry_print_licenses:
+    debug: false
+    type: task
+    definitions: inventory
+    script:
+    - foreach <[inventory].map_slots> key:slot as:item:
+        - if <[item].has_flag[itemregistry]>:
+            - narrate "<&6>License at slot=<[slot]>, item is <&f>'<[item].display.if_null[<[item].material.name>]><&f>'"
+            - narrate "<&e>== <[item].flag[itemregistry]>"
+        - else:
+            - narrate "<&7>None for slot=<[slot]>, item is <[item].display.if_null[<[item].material.name>]>"
+
+itemregistry_revoke_license:
+    debug: false
+    type: task
+    definitions: uuid
+    script:
+    - flag server itemregistry:<server.flag[itemregistry].exclude[<[uuid]>]>
+    - adjust server save
