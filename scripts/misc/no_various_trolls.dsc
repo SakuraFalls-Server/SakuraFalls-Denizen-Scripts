@@ -26,6 +26,9 @@ no_spawn_eggs:
         - determine cancelled
         on entity spawns because BEEHIVE:
         - determine cancelled
+        on entity spawns:
+        - if <context.entity.boat_type.if_null[null]> != null:
+            - determine cancelled
         on splash_potion spawns:
         - determine cancelled
         on lingering_potion spawns:
@@ -38,11 +41,42 @@ no_spawn_eggs:
         - determine cancelled
         on snow_golem spawns:
         - determine cancelled
+        on end_crystal spawns:
+        - determine cancelled
+        on entity explodes:
+        - determine cancelled
+        on block explodes:
+        - determine cancelled
+        on block grows:
+        - if <context.material.advanced_matches[sniffer_egg]>:
+            - determine cancelled
+        on player places block:
+        - if <player.is_op>:
+            - stop
+        - if <context.material.advanced_matches[bedrock|spawner|trial_spawner|decorated_pot|cake|ender_chest|sculk_shrieker|dragon_egg|sculk_sensor|pointed_dripstone|dried_ghast]>:
+            - determine cancelled
+        on player opens inventory:
+        - if <player.is_op>:
+            - stop
+        - if <context.inventory.inventory_type> == ender_chest:
+            - determine cancelled
         on player right clicks block:
         - if <player.item_in_hand.advanced_matches[*firework*]> || <player.item_in_offhand.advanced_matches[*firework*]>:
             - if <util.current_time_millis.sub[<player.flag[no_firework_spam].if_null[0]>]> < 2000:
                 - determine cancelled
             - flag <player> no_firework_spam:<util.current_time_millis>
+        - if <player.is_op>:
+            - stop
+        - if <context.location.material.advanced_matches[*_shelf].if_null[false]>:
+            - determine cancelled
+        on player places hanging:
+        - if <player.is_op>:
+            - stop
+        - determine cancelled
+        on command bukkit_priority:lowest:
+        - if <context.source_type> == player:
+            - if <player.open_inventory> != <player.inventory>:
+                - determine cancelled
         on inventory picks up item:
         - determine cancelled
         on item moves from inventory to inventory:

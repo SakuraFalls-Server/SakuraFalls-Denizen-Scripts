@@ -96,3 +96,24 @@ itemregistry_revoke_license:
     script:
     - flag server itemregistry:<server.flag[itemregistry].exclude[<[uuid]>]>
     - adjust server save
+
+itemregistry_resync:
+    debug: false
+    type: task
+    speed: 1
+    script:
+    - define message "<&6>[<&2>Item Registry<&6>] <&e>Resynchronizing Item Registry. <tern[<player.if_null[null].equals[null].not>].pass[(started by <player.name>)].fail[<empty>]>"
+    - announce to_ops <[message]>
+    - debug log <[message]>
+    - foreach <server.flag[itemregistry].if_null[<map[]>]> key:uuid as:data:
+        - define item <[data].get[item]>
+        - define inventory <[data].get[inventory]>
+        - if <[inventory].inventory_type> != player:
+            - if <[inventory].location.if_null[null]> != null:
+                - ~chunkload <[inventory].location.chunk> duration:10s
+        - if !<[inventory].contains_item[<[item]>]>:
+            - if <[inventory].can_fit[<[item]>]>:
+                - give <[item]> quantity:1 to:<[inventory]>
+                - define message "<&6>[<&2>Item Registry<&6>] <&e>Resynced item <[item]> for <[inventory]>."
+                - announce to_ops <[message]>
+                - debug log <[message]>

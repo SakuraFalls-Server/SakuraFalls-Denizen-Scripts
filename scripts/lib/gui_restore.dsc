@@ -65,3 +65,6 @@ gui_restore_world:
         on player closes inventory bukkit_priority:lowest:
         - if <player.has_flag[gui_restore]>:
             - run gui_restore_load def.player:<player>
+        on player changes gamemode:
+        - if <player.open_inventory.title.starts_with[<script[gui_restore_config].data_key[special_chars].parsed>]>:
+            - determine cancelled
