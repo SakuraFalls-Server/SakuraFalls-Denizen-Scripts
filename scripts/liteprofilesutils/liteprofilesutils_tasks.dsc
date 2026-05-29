@@ -102,7 +102,7 @@ liteprofiles_legacy_menus_open:
         - inventory set origin:<item[liteprofiles_legacy_menus_button_next]> destination:<[inventory]> slot:15
     - flag <[player]> liteprofiles_legacy_menu:<map[].with[id].as[<[id]>].with[page].as[<[page]>].with[contents].as[<[contents]>]>
     - define profilelimit <proc[liteprofilesutils_get_profile_limit].context[<[player]>]>
-    - inventory set origin:<item[paper[display=<&6>How to use;lore=<&7>Your master profile is your original UUID (your main account).|<&7>You will see your other profiles in the menu. Click on any button|<&7>to change to that profile.|<&f>|<&7>You may also create new profiles if you have free slots.|<&7>You currently own <&e><[profilelimit]> profiles<&7>. You may obtain more|<&7>with donation ranks or for animal characters.]]> destination:<[inventory]> slot:10
+    - inventory set origin:<item[paper[display=<&6>How to use;lore=<&7>Your master profile is your original UUID (your main account).|<&7>You will see your other profiles in the menu. Click on any button|<&7>to change to that profile.|<&f>|<&7>You may also create new profiles if you have free slots.|<&7>You currently own <&e><[profilelimit].sub[1]> profiles<&7>. You may obtain more|<&7>with donation ranks or for animal characters.]]> destination:<[inventory]> slot:10
     - inventory open player:<[player]> destination:<[inventory]>
 
 # menu button handler

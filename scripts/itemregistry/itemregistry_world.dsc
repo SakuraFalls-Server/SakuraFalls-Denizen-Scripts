@@ -2,10 +2,15 @@ itemregistry_world:
     debug: false
     type: world
     events:
-        on player clicks in inventory:
-        # clicked item
+        on player clicks in inventory bukkit_priority:lowest:
+        - if <context.hotbar_button> != 0:
+            - determine cancelled
+            - stop
         - if <context.item.material.advanced_matches[<proc[itemregistry_registered_items_pattern]>]>:
             - if <context.item.custom_model_data.if_null[0]> != 0:
+                - if <context.click> != left || <context.is_shift_click> || <player.has_flag[itemregistry_mid_transaction]>:
+                    - determine cancelled
+                    - stop
                 - if !<context.item.has_flag[itemregistry]>:
                     - determine cancelled passively
                     - inventory set slot:<context.slot> origin:air
@@ -39,9 +44,11 @@ itemregistry_world:
                             - define new_inventory <player.inventory>
                         - if !<[new_inventory].can_fit[<context.item>]>:
                             - stop
+                        - flag <player> itemregistry_mid_transaction:true expire:1s
                         - inventory set destination:<context.clicked_inventory> slot:<context.slot> origin:air
                         - ~run itemregistry_update_tracker def.item:<context.item> def.new_inventory:<[new_inventory]>
                         - give <context.item> quantity:1 to:<[new_inventory]>
+                        - flag <player> itemregistry_mid_transaction:!
         # hover item
         - if <context.cursor_item.material.advanced_matches[<proc[itemregistry_registered_items_pattern]>]>:
             - if <context.cursor_item.custom_model_data.if_null[0]> != 0:
@@ -61,7 +68,7 @@ itemregistry_world:
                             - determine cancelled passively
                             - adjust <player> item_on_cursor:air
                             - inventory update
-        on player drags in inventory:
+        on player drags in inventory bukkit_priority:lowest:
         - if <context.item.material.advanced_matches[<proc[itemregistry_registered_items_pattern]>]>:
             - if <context.item.custom_model_data.if_null[0]> != 0:
                 - determine cancelled passively
@@ -86,15 +93,19 @@ itemregistry_world:
         - if <[item].material.advanced_matches[<proc[itemregistry_registered_items_pattern]>]>:
             - if <[item].custom_model_data.if_null[0]> != 0:
                 - determine cancelled passively
+                - if <player.has_flag[itemregistry_mid_transaction]>:
+                    - stop
                 - define target <player.target.if_null[null]>
                 - if <[target]> != null:
                     - if <[target].is_player>:
                         - if <[target].inventory.can_fit[<[item]>]>:
                             - if <player.flag[itemregistry_target].if_null[null]> == <[target]>:
                                 - wait 1t
+                                - flag <player> itemregistry_mid_transaction:true expire:1s
                                 - take item:<[item]> from:<player.inventory>
                                 - ~run itemregistry_update_tracker def.item:<[item]> def.new_inventory:<[target].inventory>
                                 - give <[item]> quantity:1 to:<[target].inventory>
+                                - flag <player> itemregistry_mid_transaction:!
                                 - narrate "<&6>[<&2>Item Registry<&6>] <&e>Item successfully transfered to player <&6><[target].name><&e>."
                             - else:
                                 - flag <player> itemregistry_target:<[target]> expire:10s

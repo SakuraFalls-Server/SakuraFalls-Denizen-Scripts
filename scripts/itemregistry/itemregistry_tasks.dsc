@@ -110,10 +110,13 @@ itemregistry_resync:
         - define inventory <[data].get[inventory]>
         - if <[inventory].inventory_type> != player:
             - if <[inventory].location.if_null[null]> != null:
-                - ~chunkload <[inventory].location.chunk> duration:10s
+                - chunkload <[inventory].location.chunk> duration:10s
+                - wait 1t
+                - define inventory <[inventory].location.inventory>
         - if !<[inventory].contains_item[<[item]>]>:
             - if <[inventory].can_fit[<[item]>]>:
-                - give <[item]> quantity:1 to:<[inventory]>
-                - define message "<&6>[<&2>Item Registry<&6>] <&e>Resynced item <[item]> for <[inventory]>."
-                - announce to_ops <[message]>
-                - debug log <[message]>
+                - if <[inventory].find_empty_slots.size> > 0:
+                    - give <[item]> to:<[inventory]>
+                    - define message "<&6>[<&2>Item Registry<&6>] <&e>Resynced item <[item]> for <[inventory]>."
+                    - announce to_ops <[message]>
+                    - debug log <[message]>

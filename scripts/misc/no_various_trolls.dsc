@@ -53,7 +53,7 @@ no_spawn_eggs:
         on player places block:
         - if <player.is_op>:
             - stop
-        - if <context.material.advanced_matches[bedrock|spawner|trial_spawner|decorated_pot|cake|ender_chest|sculk_shrieker|dragon_egg|sculk_sensor|pointed_dripstone|dried_ghast]>:
+        - if <context.material.advanced_matches[bedrock|spawner|trial_spawner|decorated_pot|cake|ender_chest|sculk_shrieker|dragon_egg|sculk_sensor|pointed_dripstone|dried_ghast|test_block|command_block|chain_command_block|repeating_command_block|jigsaw|structure_block]>:
             - determine cancelled
         on player opens inventory:
         - if <player.is_op>:
@@ -76,8 +76,11 @@ no_spawn_eggs:
         on command bukkit_priority:lowest:
         - if <context.source_type> == player:
             - if <player.open_inventory> != <player.inventory>:
-                - determine cancelled
+                - if !<player.open_inventory.title.equals[<&f>邑邑邑邑鄈]> && !<player.has_flag[anvil_input]>:
+                    - determine cancelled
         on inventory picks up item:
         - determine cancelled
         on item moves from inventory to inventory:
+        - determine cancelled
+        on player uses recipe book:
         - determine cancelled

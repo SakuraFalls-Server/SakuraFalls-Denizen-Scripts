@@ -45,8 +45,8 @@ itemdb_menu:
         - else:
             - narrate targets:<[player]> "<&c>The database is empty!"
         - stop
-    - define sublist <[itemdb].get[<[page].mul[45].add[1]>].to[<[page].add[1].mul[45]>].if_null[<list[]>]>
-    - if <[page].add[1].mul[45]> < <[itemdb].size>:
+    - define sublist <[itemdb].get[<[page].mul[18].add[1]>].to[<[page].add[1].mul[18]>].if_null[<list[]>]>
+    - if <[page].add[1].mul[18]> < <[itemdb].size>:
         - define next_button <item[ender_eye[display=<&2><&gt><&gt>]]>
         - definemap content_entry:
             51:
@@ -70,7 +70,7 @@ itemdb_menu:
         - define contents <[contents].include[<[content_entry]>]>
     - foreach <[sublist]> as:item:
         - define item_button <[item]>
-        - define contents <[contents].with[<[loop_index]>].as[<map[].with[item].as[<[item_button]>].with[script].as[itemdb_give].with[definitions].as[<map[].with[player].as[<[player]>].with[item].as[<[item]>]>]>]>
+        - define contents <[contents].with[<[loop_index].add[9]>].as[<map[].with[item].as[<[item_button]>].with[script].as[itemdb_give].with[definitions].as[<map[].with[player].as[<[player]>].with[item].as[<[item]>]>]>]>
     - run menu_open def.player:<[player]> def.title:<&f>邑<&sp>邑邑邑邑酕<&a><&sp><&b><&sp><&e><&sp> def.size:54 def.contents:<[contents]>
 
 itemdb_give:

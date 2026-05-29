@@ -24,7 +24,11 @@ wardrobe_world:
                 - wait 1t
                 - run wardrobe_menu def.player:<player>
             - else:
+                - if <player.vehicle.if_null[null]> != null:
+                    - stop
                 - run wardrobe_apply def.player:<player> def.skin_blob:<context.item.flag[wardrobe]>
                 - inventory close
         - else if <context.item.advanced_matches[warped_trapdoor]>:
+            - if <player.vehicle.if_null[null]> != null:
+                - stop
             - run wardrobe_clear def.player:<player>
