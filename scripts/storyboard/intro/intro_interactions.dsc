@@ -115,13 +115,13 @@ intro_interact_laptop_task_role_menu:
         1:
             item: <item[paper[display=<&6><&l>» <&e>Choose your starting role;lore=<&7>Your role gives you different roleplay opportunities and gameplay.|<&7>You can make a new character after the tutorial if you are unsure.]]>
         4:
-            item: <item[book[display=<&f>鐀;lore=<&7><&o>A new student at Tatsuru Academy, ready to learn|<&7><&o>and live a highschooler's life.]]>
+            item: <item[book[display=<&f><&6>[<&c>Grade-10<&6>];lore=<&7><&o>A new student at Tatsuru Academy, ready to learn|<&7><&o>and live a highschooler's life.]]>
             script: intro_interact_laptop_task_role_callback
             definitions:
                 player: <[player]>
                 input: no
         6:
-            item: <item[book[display=<&f>鐃;lore=<&7><&o>Freshly moved into Atarashikibo, on your way to|<&7><&o>find a job and a meaning.]]>
+            item: <item[book[display=<&f><&6>[<&2>Adult<&6>];lore=<&7><&o>Freshly moved into Atarashikibo, on your way to|<&7><&o>find a job and a meaning.]]>
             script: intro_interact_laptop_task_role_callback
             definitions:
                 player: <[player]>

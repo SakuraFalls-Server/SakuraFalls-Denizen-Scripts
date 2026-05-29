@@ -9,15 +9,13 @@ attributes_cardio_world:
             - stop
         - if <player.has_flag[stroll_speed]>:
             - stop
-        - ratelimit <player> <script[attribute_cardio_data].data_key[ratelimit]>s
-        - define distance <proc[attribute_cardio_total_distance].context[<player>]>
-        - if <[distance]> > <script[attribute_cardio_data].data_key[max]>:
-            - adjust <player> walk_speed:0.4
+        - ratelimit <player> <script[attribute_cardio_data].data_key[ratelimit]>t
+        - define cardio_stat <proc[attribute_percent_cardio_getter].context[<player>]>
+        - if <[cardio_stat]> > 100:
+            - adjust <player> walk_speed:<script[attribute_cardio_data].data_key[at_max_percent]>
         - else:
-            - adjust <player> walk_speed:<element[0.2].add[<element[0.2].mul[<[distance].div[10000]>]>]>
+            - adjust <player> walk_speed:<element[0.2].add[<script[attribute_cardio_data].data_key[at_max_percent].mul[<[cardio_stat].div[100]>]>]>
 
-
-# When someone crawls it also increases the swimming stat. Although not by much so I doubt it's problematic
 attributes_swim_world:
     type: world
     debug: false
@@ -31,19 +29,16 @@ attributes_swim_world:
             - else if <[swim_stat]> >= 50:
                 - cast dolphins_grace duration:1 amplifier:<script[attribute_swim_data].data_key[at_fifty_precent]> <player> hide_particles no_ambient no_icon
 
-
 attributes_acro_world:
     type: world
     debug: false
     events:
         on player jumps:
             # Rate limit so spam jumping under a block doesn't work
-            - ratelimit <player> <script[attribute_acro_data].data_key[ratelimit]>s
+            - ratelimit <player> <script[attribute_acro_data].data_key[ratelimit]>t
             - if <player.flag[attribute_jump].if_null[0]> >= <script[attribute_acro_data].data_key[max]>:
-                - cast jump duration:99999 amplifier:<script[attribute_acro_data].data_key[at_max_precent]> <player>
+                - cast jump duration:99999 amplifier:<script[attribute_acro_data].data_key[at_max_precent]> <player> hide_particles no_ambient
                 - stop
             - flag <player> attribute_jump:<player.flag[attribute_jump].if_null[0].add[1]>
             - if <player.flag[attribute_jump].if_null[0]> >= <script[attribute_acro_data].data_key[max].div[2]>:
-                - cast jump duration:99999 amplifier:<script[attribute_acro_data].data_key[at_fifty_precent]> <player>
-
-# When more mechanics are added that can be turned into attriutes, add them here
+                - cast jump duration:99999 amplifier:<script[attribute_acro_data].data_key[at_fifty_precent]> <player> hide_particles no_ambient

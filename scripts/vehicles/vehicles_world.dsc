@@ -29,6 +29,8 @@ vehicles_world:
             - determine cancelled
         # add passenger on click or pickup vehicle
         on player right clicks armor_stand bukkit_priority:lowest:
+        - if <player.vehicle.type.if_null[null]> != armor_stand:
+            - stop
         - if !<context.entity.has_flag[vehicles]>:
             - stop
         - determine cancelled passively

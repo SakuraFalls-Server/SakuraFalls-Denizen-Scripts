@@ -30,6 +30,9 @@ anvil_input_world:
     debug: false
     type: world
     events:
+        on player changes gamemode:
+        - if <player.open_inventory.inventory_type> == anvil:
+            - determine cancelled
         on player prepares anvil craft item:
         - if !<player.has_flag[anvil_input]>:
             - stop

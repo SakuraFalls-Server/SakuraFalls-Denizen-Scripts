@@ -15,10 +15,18 @@ apartments_world:
             - stop
         - if <context.location.if_null[null]> == null:
             - stop
-        - if <proc[apartments_at].context[<context.location>]> == null:
+        - define apartment <proc[apartments_at].context[<context.location>]>
+        - if <[apartment]> == null:
             - stop
-        - if <proc[apartments_access].context[<player>|<context.location>]> == none:
+        - define access <proc[apartments_access].context[<player>|<context.location>]>
+        - if <[access]> == none:
             - determine cancelled
+        - else:
+            - define level <proc[apartments_access_level].context[<player>|<context.location>]>
+            - if <[level]> == moderator:
+                - if !<[apartment].owners.contains[<player>]>:
+                    # dirty hack
+                    - execute as_server "rg addowner -w <[apartment].world.name> <[apartment].id> <player.name>"
         ##
         ## complex creative safety cases
         ##
@@ -75,10 +83,16 @@ apartments_world:
             - foreach <context.location.find_entities[dropped_item].within[1]> as:entity:
                 - remove <[entity]>
         # forbid block update and physics for half blocks
-        on player breaks block:
+        on player breaks block bukkit_priority:lowest:
         # // careful: == null here; everywhere else it's != null
-        - if <proc[apartments_at].context[<context.location>]> == null:
+        - define apartment <proc[apartments_at].context[<context.location>]>
+        - if <[apartment]> == null:
             - stop
+        - define access <proc[apartments_access_level].context[<player>|<context.location>]>
+        - if <[access]> == moderator:
+            - if !<[apartment].owners.contains[<player>]>:
+                # dirty hack
+                - execute as_server "rg addowner -w <[apartment].world.name> <[apartment].id> <player.name>"
         - define half <context.location.material.half.if_null[null]>
         - if <[half]> != null && !<context.location.material.advanced_matches[*trapdoor|*stairs]>:
             - if <context.new_material.name.if_null[air]> == air:

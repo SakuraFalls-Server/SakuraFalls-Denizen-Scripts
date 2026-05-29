@@ -107,6 +107,7 @@ liteprofilesutils_world:
             - inventory close
             - execute as_player "profile use <[value]>"
         - else if <[data].get[type]> == free:
+            - announce to_ops "i clicked"
             - execute as_player "profile add"
             - run liteprofilesutils_show_menu def.player:<player>
         ## patch whitelisting

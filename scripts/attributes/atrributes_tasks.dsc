@@ -10,10 +10,10 @@ attribute_percent_cardio_getter:
     debug: false
     definitions: player
     script:
-    - define distance <proc[attribute_cardio_total_distance].context[<player>].div[<script[attribute_cardio_data].data_key[max]>]>
-    - if <[distance]> > 100:
+    - define percent <proc[attribute_cardio_total_distance].context[<player>].div[<script[attribute_cardio_data].data_key[max]>]>
+    - if <[percent]> > 100:
         - determine 100
-    - determine <[distance]>
+    - determine <[percent]>
 
 attribute_percent_acro_getter:
     type: procedure
@@ -30,7 +30,7 @@ attribute_percent_swim_getter:
     debug: false
     definitions: player
     script:
-    - define distance <player.statistic[swim_one_cm].div[<script[attribute_swim_data].data_key[max]>].mul[100]>
-    - if <[distance]> > 100:
+    - define percent <player.statistic[swim_one_cm].div[<script[attribute_swim_data].data_key[max]>].mul[100]>
+    - if <[percent]> > 100:
         - determine 100
-    - determine <[distance]>
+    - determine <[percent]>
