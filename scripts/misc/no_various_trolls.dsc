@@ -26,9 +26,8 @@ no_spawn_eggs:
         - determine cancelled
         on entity spawns because BEEHIVE:
         - determine cancelled
-        on entity spawns:
-        - if <context.entity.boat_type.if_null[null]> != null:
-            - determine cancelled
+        on player starts gliding:
+        - determine cancelled
         on splash_potion spawns:
         - determine cancelled
         on lingering_potion spawns:
@@ -62,9 +61,13 @@ no_spawn_eggs:
             - determine cancelled
         on player right clicks block:
         - if <player.item_in_hand.advanced_matches[*firework*]> || <player.item_in_offhand.advanced_matches[*firework*]>:
-            - if <util.current_time_millis.sub[<player.flag[no_firework_spam].if_null[0]>]> < 2000:
-                - determine cancelled
-            - flag <player> no_firework_spam:<util.current_time_millis>
+            - determine cancelled
+        - if <player.item_in_hand.advanced_matches[*_boat]> || <player.item_in_offhand.advanced_matches[*_boat]>:
+            - determine cancelled
+        - if <player.item_in_hand.advanced_matches[*minecart]> || <player.item_in_offhand.advanced_matches[*minecart]>:
+            - determine cancelled
+        - if <player.item_in_hand.advanced_matches[ender_eye]> || <player.item_in_offhand.advanced_matches[ender_eye]>:
+            - determine cancelled
         - if <player.is_op>:
             - stop
         - if <context.location.material.advanced_matches[*_shelf].if_null[false]>:
@@ -83,4 +86,6 @@ no_spawn_eggs:
         on item moves from inventory to inventory:
         - determine cancelled
         on player uses recipe book:
+        - determine cancelled
+        on item recipe formed:
         - determine cancelled

@@ -37,8 +37,10 @@ attributes_acro_world:
             # Rate limit so spam jumping under a block doesn't work
             - ratelimit <player> <script[attribute_acro_data].data_key[ratelimit]>t
             - if <player.flag[attribute_jump].if_null[0]> >= <script[attribute_acro_data].data_key[max]>:
-                - cast jump duration:99999 amplifier:<script[attribute_acro_data].data_key[at_max_precent]> <player> hide_particles no_ambient
+                - cast jump duration:99999 amplifier:<script[attribute_acro_data].data_key[at_max_precent]> <player> hide_particles no_ambient no_icon
                 - stop
             - flag <player> attribute_jump:<player.flag[attribute_jump].if_null[0].add[1]>
             - if <player.flag[attribute_jump].if_null[0]> >= <script[attribute_acro_data].data_key[max].div[2]>:
-                - cast jump duration:99999 amplifier:<script[attribute_acro_data].data_key[at_fifty_precent]> <player> hide_particles no_ambient
+                - cast jump duration:99999 amplifier:<script[attribute_acro_data].data_key[at_fifty_precent]> <player> hide_particles no_ambient no_icon
+            - else:
+                - cast jump remove <player>

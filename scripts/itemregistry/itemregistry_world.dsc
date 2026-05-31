@@ -3,6 +3,8 @@ itemregistry_world:
     type: world
     events:
         on player clicks in inventory bukkit_priority:lowest:
+        - if <player.is_op>:
+            - stop
         - if <context.hotbar_button> != 0:
             - determine cancelled
             - stop
@@ -69,6 +71,8 @@ itemregistry_world:
                             - adjust <player> item_on_cursor:air
                             - inventory update
         on player drags in inventory bukkit_priority:lowest:
+        - if <player.is_op>:
+            - stop
         - if <context.item.material.advanced_matches[<proc[itemregistry_registered_items_pattern]>]>:
             - if <context.item.custom_model_data.if_null[0]> != 0:
                 - determine cancelled passively
@@ -78,6 +82,8 @@ itemregistry_world:
                     - define message "<&6>[<&2>Item Registry<&6>] <&4>[WARN] <&c>Removed item <context.item> from player <player> because of state mismatch! (on player drags in inventory)"
                     - announce to_ops <[message]>
         on player scrolls their hotbar:
+        - if <player.is_op>:
+            - stop
         - define item <player.inventory.slot[<context.new_slot>]>
         - if <[item].material.advanced_matches[<proc[itemregistry_registered_items_pattern]>]>:
             - if <[item].custom_model_data.if_null[0]> != 0:
@@ -89,6 +95,8 @@ itemregistry_world:
                     - define message "<&6>[<&2>Item Registry<&6>] <&4>[WARN] <&c>Removed item <[item]> from player <player> because of state mismatch! (on player scrolls their hotbar)"
                     - announce to_ops <[message]>
         on player drops item:
+        - if <player.is_op>:
+            - stop
         - define item <context.item>
         - if <[item].material.advanced_matches[<proc[itemregistry_registered_items_pattern]>]>:
             - if <[item].custom_model_data.if_null[0]> != 0:
@@ -113,11 +121,15 @@ itemregistry_world:
                         - else:
                             - narrate "<&6>[<&2>Item Registry<&6>] <&e>To transfer your registered item to player <&6><[target].name><&e>, they must first have enough space in their inventory."
         on player picks up item:
+        - if <player.is_op>:
+            - stop
         - define item <context.item>
         - if <[item].material.advanced_matches[<proc[itemregistry_registered_items_pattern]>]>:
             - if <[item].custom_model_data.if_null[0]> != 0:
                 - determine cancelled
         on player swaps items:
+        - if <player.is_op>:
+            - stop
         - define item <context.main>
         - if <[item].material.advanced_matches[<proc[itemregistry_registered_items_pattern]>]>:
             - if <[item].custom_model_data.if_null[0]> != 0:
