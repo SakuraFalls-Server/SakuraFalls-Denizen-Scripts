@@ -29,8 +29,6 @@ vehicles_world:
             - determine cancelled
         # add passenger on click or pickup vehicle
         on player right clicks armor_stand bukkit_priority:lowest:
-        - if <player.vehicle.type.if_null[null]> != armor_stand:
-            - stop
         - if !<context.entity.has_flag[vehicles]>:
             - stop
         - determine cancelled passively
@@ -101,11 +99,10 @@ vehicles_world:
                     - run vehicle_pickup def.vehicle_entity:<[vehicle]>
                 - narrate <&e><underline><element[Pick up].on_click[<entry[pickup].command>]>
                 - stop
-            - ~run vehicle_create def.vehicle_id:<player.item_in_hand.flag[vehicles]> def.owner:<player> def.location:<player.location> save:result
+            - ~run vehicle_create def.vehicle_id:<player.item_in_hand.flag[vehicles]> def.vehicle_item:<player.item_in_hand> def.owner:<player> def.location:<player.location> save:result
             - define vehicle <entry[result].created_queue.determination.get[1]>
             - flag <player> vehicles:<[vehicle]>
-            - if <player.gamemode> != creative:
-                - take iteminhand
+            - take iteminhand
 
 vehicle_world_parallel_loop:
     debug: false

@@ -75,7 +75,7 @@ menu_click_handler:
     debug: false
     type: world
     events:
-        on player clicks item in inventory:
+        on player clicks item in inventory bukkit_priority:lowest:
         # ignore non-gui clicks
         ## as of 1.20.4
         - if <context.inventory.inventory_type> != CHEST:

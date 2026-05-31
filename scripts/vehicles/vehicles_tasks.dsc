@@ -12,7 +12,7 @@ vehicle_relative_location:
 vehicle_create:
     debug: false
     type: task
-    definitions: vehicle_id|owner|location
+    definitions: vehicle_id|vehicle_item|owner|location
     script:
     - define location <[location].with_pitch[0]>
     #
@@ -25,7 +25,6 @@ vehicle_create:
     - define vehicle <[vehicle].with[max_speed].as[<[vehicle_data].get[max-speed]>]>
     - define vehicle <[vehicle].with[turn_speed_percentage].as[<[vehicle_data].get[turn-speed-percentage]>]>
     #
-    - define vehicle_item <item[<[vehicle_data].get[material]>[custom_model_data=<[vehicle_data].get[custom-model-data]>]]>
     - define vehicle <[vehicle].with[name].as[<[vehicle_data].get[name].parsed>]>
     - define vehicle <[vehicle].with[item].as[<[vehicle_item]>]>
     #
@@ -101,8 +100,6 @@ vehicle_pickup:
     script:
     - define owner <[vehicle_entity].flag[vehicles_data].get[owner]>
     - define item <[vehicle_entity].flag[vehicles_data].get[item]>
-    - adjust def:item display:<[vehicle_entity].flag[vehicles_data].get[name]>
-    - flag <[item]> vehicles:<[vehicle_entity].flag[vehicles_data].get[id]>
     - if <[owner].inventory.can_fit[<[item]>]>:
         - give <[item]> player:<[owner]>
         - run vehicle_destroy def.vehicle_entity:<[vehicle_entity]>

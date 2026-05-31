@@ -10,7 +10,7 @@ attribute_percent_cardio_getter:
     debug: false
     definitions: player
     script:
-    - define percent <proc[attribute_cardio_total_distance].context[<player>].div[<script[attribute_cardio_data].data_key[max]>]>
+    - define percent <proc[attribute_cardio_total_distance].context[<player>].div[100].div[<script[attribute_cardio_data].data_key[max]>].mul[100]>
     - if <[percent]> > 100:
         - determine 100
     - determine <[percent]>
@@ -30,7 +30,7 @@ attribute_percent_swim_getter:
     debug: false
     definitions: player
     script:
-    - define percent <player.statistic[swim_one_cm].div[<script[attribute_swim_data].data_key[max]>].mul[100]>
+    - define percent <player.statistic[swim_one_cm].div[100].div[<script[attribute_swim_data].data_key[max]>].mul[100]>
     - if <[percent]> > 100:
         - determine 100
     - determine <[percent]>
