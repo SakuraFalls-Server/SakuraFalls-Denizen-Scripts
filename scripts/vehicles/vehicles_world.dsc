@@ -57,22 +57,11 @@ vehicles_world:
         - else if <context.entity.flag[vehicles]> == passenger:
             - adjust <context.entity> passenger:<player>
         # vehicle control
-        on player steers armor_stand:
-        - if <player.vehicle.type.if_null[null]> != armor_stand:
-            - stop
-        - if <player.viaversion_protocol> >= 767:
-            # >=1.21 uses player input event instead
-            - stop
-        - if <context.entity.flag[vehicles].if_null[null]> != driver:
-            - stop
-        - define vehicle <context.entity.flag[vehicles_data]>
-        - flag <[vehicle]> vehicles_player_input:<map[].with[forward].as[<context.forward>].with[sideways].as[<context.sideways>]>
-        # place vehicle down
         on player input:
+        - if <player.vehicle.flag[vehicles].if_null[null]> != driver:
+            - stop
         - if <player.viaversion_protocol> < 767:
             # <1.21 uses player steers event instead
-            - stop
-        - if <player.vehicle.flag[vehicles].if_null[null]> != driver:
             - stop
         - define forward_backward 0
         - if <context.forward>:
