@@ -108,7 +108,7 @@ itemregistry_revoke_license:
     - define data <server.flag[itemregistry].get[<[uuid]>].if_null[null]>
     - if <[data]> == null:
         - define attached_player <player.if_null[none]>
-        - define message "<&6>[<&2>Item Registry<&6>] <&4>[ERROR] Quitting <queue.script.name> early. <&c>This item is not registered - <[new_item]>; attached player: <[attached_player]>."
+        - define message "<&6>[<&2>Item Registry<&6>] <&4>[ERROR] Quitting <queue.script.name> early. <&c>This item is not registered - <[uuid]>; attached player: <[attached_player]>."
         - announce to_ops <[message]>
         - debug error <[message]>
         - stop
