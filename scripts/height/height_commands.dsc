@@ -30,7 +30,7 @@ height_commands_height:
     - define max <script[height_data].data_key[max]>
     - define min <script[height_data].data_key[min]>
     - if <[h]> < <[min]> or <[h]> > <[max]>:
-        - narrate "<&c>Please enter an allowed height<&nl>Anything from 4'5<&7> (145cm)<&c> to 6'5<&7> (195cm)<&c>!"
+        - narrate "<&c>Please enter an allowed height<&nl>Anything from 4'5<&7> (135cm)<&c> to 6'5<&7> (195cm)<&c>!"
         - stop
     - ~run height_update_height def.player:<player> def.height:<[h]>
     - flag <player> height_last_change:<util.time_now>
