@@ -73,11 +73,7 @@ character_command_viewdescription:
     - if <context.source_type> != player:
         - narrate "<&c>Please run this command as a player."
         - stop
-    - define name <proc[character_get_name].context[<player>]>
-    - define description <proc[character_get_description].context[<player>]>
-    - narrate format:formats_prefix "<&e><player.name> <&7>Character Info"
-    - narrate "<&7>Your name<&c>: <&f><[name]>"
-    - narrate "<&7>Your description<&c>: <&f><[description]>"
+    - run character_print_description def.player:<player> def.target:<player>
 
 character_command_findname:
     debug: false
