@@ -24,7 +24,7 @@ height_update_height:
     script:
     - define multiplier <script[height_data].data_key[multiplier]>
     - flag <[player]> height:<[height]>
-    - adjust <[player]> attribute_base_values:<map[].with[generic_scale].as[<[height].div[171.4].mul[<[multiplier]>]>]>
+    - adjust <[player]> attribute_base_values:<map[].with[generic_scale].as[<[height].div[171.4]>]>
     - adjust server save
 
 height_nice_format:
