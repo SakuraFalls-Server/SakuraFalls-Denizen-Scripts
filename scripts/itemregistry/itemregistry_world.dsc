@@ -95,8 +95,6 @@ itemregistry_world:
                     - define message "<&6>[<&2>Item Registry<&6>] <&4>[WARN] <&c>Removed item <[item]> from player <player> because of state mismatch! (on player scrolls their hotbar)"
                     - announce to_ops <[message]>
         on player drops item:
-        - if <player.is_op>:
-            - stop
         - define item <context.item>
         - if <[item].material.advanced_matches[<proc[itemregistry_registered_items_pattern]>]>:
             - if <[item].custom_model_data.if_null[0]> != 0:
@@ -121,8 +119,6 @@ itemregistry_world:
                         - else:
                             - narrate "<&6>[<&2>Item Registry<&6>] <&e>To transfer your registered item to player <&6><[target].name><&e>, they must first have enough space in their inventory."
         on player picks up item:
-        - if <player.is_op>:
-            - stop
         - define item <context.item>
         - if <[item].material.advanced_matches[<proc[itemregistry_registered_items_pattern]>]>:
             - if <[item].custom_model_data.if_null[0]> != 0:
