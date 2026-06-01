@@ -81,3 +81,67 @@ tabcomplete_config:
             - profiles
             - settings
             - dailyreward
+        builder:
+            permission: group.builder
+            commands:
+            - fly
+            - gamemode
+            - item
+            - ptime
+            - speed
+            - tpa
+            - tpaccept
+            - tpdeny
+        media:
+            permission: group.media
+            commands:
+            - fly
+            - ptime
+            - tpa
+            - tpaccept
+        dev:
+            permission: group.dev
+            commands:
+            - fly
+            - tpa
+            - ptime
+            - tpaccept
+        lore:
+            permission: group.lore
+            commands:
+            - fly
+            - ptime
+            - tpa
+            - tpaccept
+        event:
+            permission: group.event
+            commands:
+            - gamemode
+            - fly
+            - tpa
+            - tpaccept
+        moderator:
+            permission: group.moderator
+            commands:
+            - gamemode
+            - invsee
+            - tp
+            - tphere
+            - ban
+            - dupeip
+            - history
+            - ipban
+            - kick
+            - tempban
+        admin:
+            permission: group.admin
+            commands:
+            - gamemode
+            - invsee
+            - tp
+            - ban
+            - banlist
+            - dupeip
+            - history
+            - ipban
+            - kick
