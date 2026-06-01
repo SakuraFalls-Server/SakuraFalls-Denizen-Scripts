@@ -74,6 +74,9 @@ phones_commands_phonecall:
             - define relative <proc[phones_nicer_format].context[<player.flag[phones].get[number]>]>
             - narrate targets:<[targets].filter_tag[<proc[phones_has_phone].context[<[filter_value]>]>]> "<&6>*** <&c><&l>[HOTLINE] <&e>Call from <&e><[relative]><&7>."
             - narrate targets:<[targets].filter_tag[<proc[phones_has_phone].context[<[filter_value]>]>]> <&hover[<&a>Click to connect to <[relative]>...]><element[<&a><&l>[ ACCEPT ]].on_click[<entry[accept].command>]><&end_hover>
+            # discord interop
+            - if <discord[phones_emergency].if_null[null]> != null:
+                - discordmessage id:phones_emergency channel:<script[phones_config].data_key[phones_emergency_discord_channel_id]> <element[<&gt> <[emergency_type].to_sentence_case> **[HOTLINE]** Call from <[relative]>.].strip_color>
             # wait...
             - flag <player> phones_call:110_<[emergency_type]>
             - flag <player> phones_call_clickable:<entry[accept].id>

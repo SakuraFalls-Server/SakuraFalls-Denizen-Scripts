@@ -27,11 +27,11 @@ Enjoy!
 
 ## Extra dependencies
 
-The scripts here may depend on the following plugins, some of which may need to be purchased:
+The scripts here may depend on the following plugins:
 1. **Depenizen** (build 882)  
 https://ci.citizensnpcs.co/job/Depenizen/
-2. **LiteBans**  (latest)  
-https://www.spigotmc.org/resources/litebans.3715/
+1. **dDiscordBot** (build 305)  
+https://ci.citizensnpcs.co/job/dDiscordBot/
 3. **LiteProfiles** (latest)  
 https://github.com/fishydarwin/LiteProfiles
 4. **PlaceholderAPI**  (latest)  
