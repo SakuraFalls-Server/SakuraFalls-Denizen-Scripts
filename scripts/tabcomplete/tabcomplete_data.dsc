@@ -8,6 +8,7 @@ tabcomplete_config:
             - plugins
             - denizenclickable
             # anything else
+            - attributes
             - sit
             - lay
             - crawl
