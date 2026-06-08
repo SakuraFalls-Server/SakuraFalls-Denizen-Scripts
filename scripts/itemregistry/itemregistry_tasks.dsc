@@ -174,22 +174,20 @@ itemregistry_menu:
         - definemap content_entry:
             51:
                 item: <[next_button]>
-                script: itemdb_menu
+                script: itemregistry_menu
                 definitions:
                     player: <[player]>
                     page: <[page].add[1]>
-                    filter: <[filter]>
         - define contents <[contents].include[<[content_entry]>]>
     - if <[page]> > 0:
         - define previous_button <item[ender_pearl[display=<&2><&lt><&lt>]]>
         - definemap content_entry:
             49:
                 item: <[previous_button]>
-                script: itemdb_menu
+                script: itemregistry_menu
                 definitions:
                     player: <[player]>
                     page: <[page].sub[1]>
-                    filter: <[filter]>
         - define contents <[contents].include[<[content_entry]>]>
     - foreach <[sublist]> as:data:
         - define item_button <[data].get[item]>
@@ -220,6 +218,31 @@ itemregistry_menu_actions:
     - narrate targets:<[player]> <&f>
     - if <[player].has_permission[itemregistry.update]>:
         #
+        - clickable save:revoke_confirm usages:1 until:1m:
+            - clickable save:revoke usages:1 until:1m:
+                - ~run itemregistry_revoke_license def.uuid:<[data].get[uuid]>
+                - narrate targets:<[player]> format:formats_prefix "Revoked license <[data].get[uuid]>."
+            - narrate targets:<[player]> "<&c>Are you sure? There is <&4>no way to undo this<&c>."
+            - narrate targets:<[player]> <element[<&4><&l>[ I UNDERSTAND ]].on_click[<entry[revoke].command>]>
+        - narrate targets:<[player]> <element[<&c><&l>[ REVOKE LICENSE ]].on_click[<entry[revoke_confirm].command>]>
+    - if <[player].is_op>:
+        #
+        - clickable save:duplicate usages:1 until:1m:
+            - ~run itemregistry_generate_item def.initial_holder:<[player]> def.item:<[data].get[item].material.name> def.cmd:<[data].get[item].custom_model_data> save:item
+            - define item <entry[item].created_queue.determination.get[1]>
+            - define new_item <[data].get[item]>
+            - flag <[new_item]> itemregistry:<[item].flag[itemregistry]>
+            - take item:<[item]> player:<[player]>
+            - ~run itemregistry_adjust_actual_item def.uuid:<[item].flag[itemregistry]> def.new_item:<[new_item]>
+            - give <[new_item]> player:<[player]>
+            - narrate targets:<[player]> format:formats_prefix "Duplicated item <&f>'<[data].get[item].display.if_null[<[data].get[item].material.name>]><&f>'<&7>."
+        - narrate targets:<[player]> <element[<&c><&l>[ DUPLICATE ITEM ] <&4>OP only].on_click[<entry[duplicate].command>]>
+        #
+        - clickable save:give usages:1 until:1m:
+            - give <[data].get[item]> player:<[player]>
+            - narrate targets:<[player]> format:formats_prefix "Gave you <&f>'<[data].get[item].display.if_null[<[data].get[item].material.name>]><&f>'<&7>."
+        - narrate targets:<[player]> <element[<&c><&l>[ GIVE ITEM ] <&4>OP only].on_click[<entry[give].command>]>
+        #
         - clickable save:update_confirm usages:1 until:1m:
             - if <[player].item_in_hand.flag[itemregistry].equals[<[data].get[uuid]>].not.if_null[true]>:
                 - narrate targets:<[player]> "<&c>You are not updating this item correctly! First, obtain the licensed item from the current holder, change what you want, and while holding it re-use this operation."
@@ -230,14 +253,7 @@ itemregistry_menu_actions:
                     - stop
                 - ~run itemregistry_adjust_actual_item def.uuid:<[data].get[uuid]> def.new_item:<[player].item_in_hand>
                 - narrate targets:<[player]> format:formats_prefix "Adjusted licensed item <[data].get[uuid]>."
-            - narrate targets:<[player]> "<&c>Are you sure? There is <&4>no way to undo this<&c>.<&nl><element[<&4>[ I UNDERSTAND ]].on_click[<entry[update].command>]>"
-        - narrate targets:<[player]> <element[<&c><&l>[ UPDATE ITEM ]].on_click[<entry[update_confirm].command>]>
-        #
-        - clickable save:revoke_confirm usages:1 until:1m:
-            - clickable save:revoke usages:1 until:1m:
-                - ~run itemregistry_revoke_license def.uuid:<[data].get[uuid]>
-                - narrate targets:<[player]> format:formats_prefix "Revoked license <[data].get[uuid]>."
-            - narrate targets:<[player]> "<&c>Are you sure? There is <&4>no way to undo this<&c>.<&nl><element[<&4>[ I UNDERSTAND ]].on_click[<entry[revoke].command>]>"
-        - narrate targets:<[player]> <element[<&c><&l>[ REVOKE LICENSE ]].on_click[<entry[revoke_confirm].command>]>
-        - stop
+            - narrate targets:<[player]> "<&c>Are you sure? There is <&4>no way to undo this<&c>."
+            - narrate targets:<[player]> <element[<&4><&l>[ I UNDERSTAND ]].on_click[<entry[update].command>]>
+        - narrate targets:<[player]> <element[<&c><&l>[ UPDATE ITEM ] <&4>OP only].on_click[<entry[update_confirm].command>]>
     - narrate targets:<[player]> <&f>
