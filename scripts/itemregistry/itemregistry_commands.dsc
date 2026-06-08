@@ -28,11 +28,11 @@ itemregistry_command_verblicense:
             - narrate "<&c>Please run this command as a player."
             - stop
         - define cursor <player.cursor_on_solid>
-        - define inventory <[cursor].inventory>
+        - define inventory <[cursor].inventory.if_null[null]>
     - else:
         - define target <server.match_player[<context.args.get[1]>].if_null[null]>
-        - define inventory <[target].inventory>
-    - if <[inventory].if_null[null]> == null:
+        - define inventory <[target].inventory.if_null[null]>
+    - if <[inventory]> == null:
         - narrate "<&c>No inventory was found. If you are looking up a player, is the player online?"
         - stop
     - run itemregistry_print_licenses def.player:<player> def.inventory:<[inventory]>

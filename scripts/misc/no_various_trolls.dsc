@@ -89,3 +89,10 @@ no_spawn_eggs:
         - determine cancelled
         on item recipe formed:
         - determine cancelled
+        on player clicks in inventory:
+        - if <player.is_op>:
+            - stop
+        - if <context.item.material.advanced_matches[*bundle]> || <context.cursor_item.material.advanced_matches[*bundle]>:
+            - determine cancelled
+        on portal created:
+        - determine cancelled
