@@ -134,6 +134,7 @@ tabcomplete_config:
             - fly
             - tpa
             - tpaccept
+            - addtime
         moderator:
             permission: group.moderator
             commands:
@@ -147,6 +148,7 @@ tabcomplete_config:
             - ipban
             - kick
             - tempban
+            - addtime
         admin:
             permission: group.admin
             commands:
@@ -159,3 +161,4 @@ tabcomplete_config:
             - history
             - ipban
             - kick
+            - addtime
