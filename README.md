@@ -28,15 +28,15 @@ Enjoy!
 ## Extra dependencies
 
 The scripts here may depend on the following plugins:
-1. **Depenizen** (build 882)  
+1. **Depenizen** (build 7286-DEV)  
 https://ci.citizensnpcs.co/job/Depenizen/
-1. **dDiscordBot** (build 305)  
+1. **dDiscordBot** (build 307)  
 https://ci.citizensnpcs.co/job/dDiscordBot/
 3. **LiteProfiles** (latest)  
 https://github.com/fishydarwin/LiteProfiles
-4. **PlaceholderAPI**  (latest)  
+4. **PlaceholderAPI** (latest)
 https://www.spigotmc.org/resources/placeholderapi.6245/
-5. **AreaShop** (2.9.1) *(md5sha256 variant)*  
-https://www.github.com/md5sha256/AreaShop
+5. **AreaShop** (2.6.1) *(JLyne Fork, Manually Built for 26.1.2)*  
+https://github.com/JLyne/AreaShop
 6. **ProtocolLib** (5.4.0)  
 https://www.spigotmc.org/resources/protocollib.1997/
