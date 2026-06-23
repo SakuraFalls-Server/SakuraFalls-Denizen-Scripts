@@ -20,17 +20,17 @@ A summary can be found here: https://www.tldrlegal.com/license/gnu-general-publi
 
 ## How to use
 You should just be able to drag & drop this into your `plugins/Denizen` folder on your server.  
-Server software: **PaperMC 1.21.10-117**  
-*Denizen* version: **1.3.1-SNAPSHOT (build 7235-DEV)**.  
+Server software: **PaperMC 26.1.2 version 72**  
+*Denizen* version: **1.3.2-SNAPSHOT (build 7286-DEV)**.  
 
 Enjoy! 
 
 ## Extra dependencies
 
 The scripts here may depend on the following plugins:
-1. **Depenizen** (build 7286-DEV)  
+1. **Depenizen** (2.1.1 build 885)  
 https://ci.citizensnpcs.co/job/Depenizen/
-1. **dDiscordBot** (build 307)  
+1. **dDiscordBot** (0.7.1 build 307)  
 https://ci.citizensnpcs.co/job/dDiscordBot/
 3. **LiteProfiles** (latest)  
 https://github.com/fishydarwin/LiteProfiles
