@@ -82,6 +82,19 @@ tabcomplete_config:
             - profiles
             - settings
             - dailyreward
+        intercom:
+            permission: group.intercom
+            commands:
+            - intercom
+            - collegeintercom
+        advert:
+            permission: group.advert
+            commands:
+            - advert
+        news:
+            permission: group.news
+            commands:
+            - news
         builder:
             permission: group.builder
             commands:
@@ -121,6 +134,7 @@ tabcomplete_config:
             - fly
             - tpa
             - tpaccept
+            - addtime
         moderator:
             permission: group.moderator
             commands:
@@ -134,6 +148,7 @@ tabcomplete_config:
             - ipban
             - kick
             - tempban
+            - addtime
         admin:
             permission: group.admin
             commands:
@@ -146,3 +161,4 @@ tabcomplete_config:
             - history
             - ipban
             - kick
+            - addtime

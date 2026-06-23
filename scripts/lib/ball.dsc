@@ -101,6 +101,9 @@ ball_internal_physics_update_ball:
     type: task
     definitions: ball
     script:
+    - if <[ball].flag[ball_display].entity_type.if_null[null]> == null:
+    	- run ball_remove def.id:<[ball].flag[ball]>
+        - stop
     - define velocity <[ball].flag[ball_velocity]>
     - define gravity <[ball].flag[ball_gravity].mul[0.035]>
     - define now <[ball].location>

@@ -166,7 +166,8 @@ apartments_world:
         # prevent redstone in apartments
         after redstone recalculated:
         - if <proc[apartments_at].context[<context.location>]> != null:
-            - adjustblock <context.location> power:0 no_physics
+            - if <context.location.material.power.if_null[null]> != null:
+                - adjustblock <context.location> power:0 no_physics
         # prevent piston use in apartments
         on piston extends:
         - if <proc[apartments_at].context[<context.location>]> != null:

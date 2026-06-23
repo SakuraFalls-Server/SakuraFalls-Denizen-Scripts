@@ -152,7 +152,8 @@ vehicle_world_parallel_loop:
             - flag <[vehicle]> vehicles_speed:<[speed]>
     - if <[vehicle].flag[vehicles_data].get[driver_entity].has_passenger>:
         - foreach <[vehicle].location.find_players_within[15]> as:listener:
-            - playsound <[new_location]> <[listener]> custom sound:vehicle.engine pitch:<element[0.5].add[<[speed].abs.mul[32].mod[24].round_down.div[18]>]> volume:<proc[settings_get].context[<[listener]>|sound_vehicles_volume].div[200]>
+            - define sound <tern[<[speed].abs.is_more_than[0.1]>].pass[vehicle.engine.rev].fail[vehicle.engine]>
+            - playsound <[new_location]> <[listener]> custom sound:<[sound]> pitch:<element[<tern[<[speed].is_more_than[0]>].pass[1.1].fail[0.75]>].add[<[speed].abs.mul[32].mod[24].round_down.div[36]>]> volume:<proc[settings_get].context[<[listener]>|sound_vehicles_volume].div[<tern[<[speed].abs.is_more_than[0.1]>].pass[200].fail[300]>]>
     - if <[vehicle].flag[vehicles_last_location]> == <[new_location]>:
         - stop
     - define driver_entity <[vehicle].flag[vehicles_data].get[driver_entity]>

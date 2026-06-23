@@ -3,6 +3,8 @@ chat_name_ooc:
     type: procedure
     definitions: player
     script:
+    - if <[player].has_flag[hidden_name_in_ooc]>:
+    	- determine Hidden
     - determine <placeholder[luckperms_prefix_element_highest_on_track_color].player[<[player]>].if_null[<&7>].parse_color><[player].name>
 
 chat_special_group:
@@ -10,7 +12,7 @@ chat_special_group:
     type: procedure
     definitions: player
     script:
-    - define result <placeholder[luckperms_prefix_element_highest_on_track_special].player[<[player]>].if_null[<&f>].parse_color>
+    - define result <placeholder[luckperms_prefix_element_highest_on_track_special].player[<[player]>].if_null[<&f>].parse_color> 
     - if <[result].strip_color.length> > 0:
         - define result <[result]><&sp>
     - determine <[result]>

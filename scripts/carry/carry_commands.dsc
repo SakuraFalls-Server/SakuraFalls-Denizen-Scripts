@@ -27,6 +27,9 @@ carry_command_carry:
     - if <[target].is_npc>:
         - narrate "<&c>Please look at the player to carry or specify their username."
         - stop
+    - if <[target].has_flag[spirit]>:
+        - narrate "<&c>Please look at the player to carry or specify their username."
+        - stop
     - if <[target]> == <player>:
         - narrate "<&c>You cannot carry yourself!"
         - stop

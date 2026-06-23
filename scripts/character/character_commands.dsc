@@ -97,4 +97,7 @@ character_command_findname:
         - stop
     - else:
         - define found_player <player[<[found_player]>]>
+        - if <[found_player].has_flag[spirit]>:
+        	- narrate format:formats_prefix "No player with this RP name could be found."
+        	- stop
         - narrate format:formats_prefix "The actual name of <[query]> is <&e><[found_player].name>"

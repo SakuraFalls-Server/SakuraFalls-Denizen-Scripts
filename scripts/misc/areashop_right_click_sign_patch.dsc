@@ -18,9 +18,9 @@ areashop_right_click_sign_patch:
         - narrate targets:<[player]> "<&7>Currently <&a>available<&7>."
         - clickable save:purchase:
             - if <[is_rent]>:
-                - execute as_player "as rent --region <[region]>"
+                - execute as_player "as rent <[region]>"
             - else:
-                - execute as_player "as buy --region <[region]>"
+                - execute as_player "as buy <[region]>"
             - execute as_server "as reload"
         - narrate targets:<[player]> <element[<&a><&l>[ <tern[<[is_rent]>].pass[RENT].fail[BUY]> ]].on_click[<entry[purchase].command>]>
     - else if <[buyer]> != null:
@@ -29,7 +29,7 @@ areashop_right_click_sign_patch:
         - narrate targets:<[player]> "<&7>This region is <&6>purchased<&7> by <&e><[buyer_player].name>"
         - if <[player].equals[<[buyer_player]>]>:
             - clickable save:sell:
-                - execute as_player "as sell --region <[region]>"
+                - execute as_player "as sell <[region]>"
                 - execute as_server "as reload"
             - narrate targets:<[player]> <element[<&c><&l>[ CANCEL PURCHASE ]].on_click[<entry[sell].command>]>
     - else:
@@ -38,7 +38,7 @@ areashop_right_click_sign_patch:
         - narrate targets:<[player]> "<&7>This region is <&e>rented<&7> by <&e><[renter_player].name>"
         - if <[player].equals[<[renter_player]>]>:
             - clickable save:unrent:
-                - execute as_player "as unrent --region <[region]>"
+                - execute as_player "as unrent <[region]>"
                 - execute as_server "as reload"
             - narrate targets:<[player]> <element[<&c><&l>[ CANCEL YOUR RENT ]].on_click[<entry[unrent].command>]>
     - narrate targets:<[player]> <&f>

@@ -6,7 +6,9 @@ height_feet_to_cm:
     - define h <[height].split[']>
     - if <[h].size> != 2:
         - determine null
-    - determine <[h].get[1].mul[30.48].add[<[h].get[2].mul[2.54]>]>
+    - if <[h].get[1].is_decimal> && <[h].get[2].is_decimal>:
+        - determine <[h].get[1].mul[30.48].add[<[h].get[2].mul[2.54]>]>
+    - determine null
 
 height_cm_to_feet:
     type: procedure
