@@ -5,6 +5,8 @@ timebar_commands_add_time:
     name: addtime
     usage: /addtime [time]
     permissions: timebar.command.addtime
+    tab_complete:
+        1: <empty>
     script:
         - define input_time <context.args.get[1]>
         - if <duration[<[input_time]>].if_null[null]> != null:
