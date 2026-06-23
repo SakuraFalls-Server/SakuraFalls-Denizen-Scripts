@@ -39,8 +39,8 @@ liteprofilesutils_command_findprofiles:
         - narrate "<&c>Run this command as a player"
         - stop
     - clickable save:accept usages:1 until:30s:
-        - flag <[player]> liteprofiles_legacy_menu:!
-        - run liteprofilesutils_show_menu def.player:<[player]>
+        - flag <player> liteprofiles_legacy_menu:!
+        - run liteprofilesutils_show_menu def.player:<player>
     - narrate <empty>
     - narrate format:formats_prefix "Our profile system lets you own multiple 'unique accounts' by tricking the server to hand you new unique IDs, which may cause the server to incorrectly save your inventory, ranks, or other data."
     - narrate <empty>

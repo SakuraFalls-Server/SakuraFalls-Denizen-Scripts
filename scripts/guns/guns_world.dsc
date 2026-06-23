@@ -22,7 +22,7 @@ guns_world_gun:
         - if !<[target].is_player>:
             - stop
         - if <[target].has_flag[spirit]>:
-        	- stop
+            - stop
         - cast slow amplifier:10 duration:3s <[target]> no_ambient no_clear no_icon hide_particles
         - narrate format:formats_prefix "You shot <proc[character_get_name].context[<[target]>]>"
         - narrate format:formats_prefix "You have been shot by <proc[character_get_name].context[<player>]>" targets:<[target]>
@@ -45,7 +45,7 @@ guns_world_taser:
         - if !<[target].is_player>:
             - stop
         - if <[target].has_flag[spirit]>:
-        	- stop
+            - stop
         - if <[target].has_flag[guns_frozen]>:
             - stop
         - playeffect effect:redstone at:<player.location.above[1].points_between[<[target].location.above[1]>].distance[0.1]> special_data:0.5|white visibility:16 quantity:6 offset:0,0,0

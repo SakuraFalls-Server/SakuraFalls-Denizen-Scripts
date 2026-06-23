@@ -7,7 +7,7 @@ character_world:
         - if <[target].is_npc>:
             - stop
         - if <[target].has_flag[spirit]>:
-        	- stop
+            - stop
         - determine cancelled passively
         - ratelimit <player> 1s
         - run character_print_description def.player:<player> def.target:<[target]>

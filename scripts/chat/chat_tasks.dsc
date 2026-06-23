@@ -4,7 +4,7 @@ chat_name_ooc:
     definitions: player
     script:
     - if <[player].has_flag[hidden_name_in_ooc]>:
-    	- determine Hidden
+        - determine Hidden
     - determine <placeholder[luckperms_prefix_element_highest_on_track_color].player[<[player]>].if_null[<&7>].parse_color><[player].name>
 
 chat_special_group:
