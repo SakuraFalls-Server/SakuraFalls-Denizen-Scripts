@@ -47,8 +47,7 @@ no_spawn_eggs:
         on block explodes:
         - determine cancelled
         on block grows:
-        - if <context.material.advanced_matches[sniffer_egg]>:
-            - determine cancelled
+        - determine cancelled
         on player places block:
         - if <player.is_op>:
             - stop
@@ -95,4 +94,8 @@ no_spawn_eggs:
         - if <context.item.material.advanced_matches[*bundle]> || <context.cursor_item.material.advanced_matches[*bundle]>:
             - determine cancelled
         on portal created:
+        - determine cancelled
+        on structure grows naturally:
+        - determine cancelled
+        on plant grows naturally:
         - determine cancelled

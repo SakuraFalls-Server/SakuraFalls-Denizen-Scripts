@@ -69,11 +69,14 @@ phones_world:
             - ~discordconnect id:phones_emergency token:<secret[phones_emergency_discord_secret]>
             - announce to_ops "<&6>Connected to the Phones Emergency Discord Bot inteop."
             - announce to_console "[PHONES] <&6>Connected to the Phones Emergency Discord Bot inteop."
-        on delta time minutely every:10:
+        after delta time minutely every:10:
         - if <discord[phones_emergency].if_null[null]> == null:
             - ~discordconnect id:phones_emergency token:<secret[phones_emergency_discord_secret]>
             - announce to_ops "<&6>Connected to the Phones Emergency Discord Bot inteop."
             - announce to_console "[PHONES] <&6>Connected to the Phones Emergency Discord Bot inteop."
+        on shutdown bukkit_priority:lowest:
+        - if <discord[phones_emergency].if_null[null]> != null:
+            - ~discord id:phones_emergency disconnect
 
 # used in ending a call because code repeats a lot
 phones_inject_end_call:

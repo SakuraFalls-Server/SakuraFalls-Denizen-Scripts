@@ -125,7 +125,10 @@ apartments_world:
             - determine cancelled
         # forbid water flow in apartment regions
         on liquid spreads:
-        - if <proc[apartments_at].context[<context.location>]> != null:
+        - define apartment <proc[apartments_at].context[<context.location>]>
+        - if <[apartment]> != null:
+            - if <server.flag[apartments_allow_liquids].if_null[<list[]>].contains[<[apartment].id>]>:
+                - stop
             - determine cancelled
         # forbid sapling/other growing things in apartment regions
         on structure grows:

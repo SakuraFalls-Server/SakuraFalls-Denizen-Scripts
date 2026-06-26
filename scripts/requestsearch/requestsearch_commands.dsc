@@ -25,7 +25,10 @@ requestsearch_command_requestsearch:
     - narrate format:formats_prefix "<&e>Sent an inventory search request to <placeholder[essentials_nickname].player[<[target]>]>"
     - clickable usages:1 save:yes:
         - narrate targets:<[target]> format:formats_prefix "Your inventory is being searched..."
-        - inventory player:<[player]> open destination:<[target].inventory>
+        - define contents <map[]>
+        - foreach <[target].inventory.map_slots> key:slot as:item:
+            - define contents <[contents].with[<[slot]>].as[<map[].with[item].as[<[item]>]>]>
+        - run menu_open def.player:<[player]> def.title:<&f>邑<&sp>邑邑邑邑邑鄄<&f><&sp><&9><&sp><&9><&sp> def.size:36 def.contents:<[contents]>
     - clickable usages:1 save:no:
         - narrate targets:<[player]> format:formats_prefix "Your inventory search request was denied."
         - narrate targets:<[target]> "You denied the inventory search request."

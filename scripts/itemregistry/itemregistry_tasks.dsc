@@ -194,7 +194,11 @@ itemregistry_menu:
         - define inventory <[data].get[inventory]>
         - define player_maybe <player[<[inventory].escaped.substring[28,63].if_null[null]>].if_null[null]>
         - define location <tern[<[inventory].inventory_type.equals[PLAYER]>].pass[Held by <[player_maybe].name>].fail[At <[inventory].location.simple>]>
-        - adjust def:item_button lore:<list[<&6>License ID: <&f><[data].get[uuid]>|<&6>Item: <&f><[data].get[item].material.name>,<[data].get[item].custom_model_data>|<&6>Location: <&f><[location]>]>
+        - define lore <list[<&6>License ID: <&f><[data].get[uuid]>|<&6>Item: <&f><[data].get[item].material.name>,<[data].get[item].custom_model_data>|<&6>Location: <&f><[location]>]>
+        - define is_nuked <[inventory].contains_item[<[data].get[item]>].not>
+        - if <[is_nuked]>:
+            - define lore <[lore].include[<&c>NUKED]>
+        - adjust def:item_button lore:<[lore]>
         - define contents <[contents].with[<[loop_index].add[9]>].as[<map[].with[item].as[<[item_button]>].with[script].as[itemregistry_menu_actions].with[definitions].as[<map[].with[player].as[<[player]>].with[item].as[<[data].get[item]>]>]>]>
     - run menu_open def.player:<[player]> def.title:<&f>邑<&sp>邑邑邑邑酕<&a><&sp><&b><&sp><&e><&sp> def.size:54 def.contents:<[contents]>
 
