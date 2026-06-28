@@ -42,7 +42,7 @@ storyboard_npc_memalloc:
         - chunkload <[at].chunk> duration:10s
         - create <[type]> <[npc_id]> <[at]> registry:<[registry]> save:npc
         - define npc <entry[npc].created_npc>
-        - playeffect at:<[npc].location.above[1]> offset:0.35,1,0.35 effect:SOUL_FIRE_FLAME quantity:20
+        - playeffect at:<[npc].location.above[1]> offset:0.35,1,0.35 effect:SOUL_FIRE_FLAME quantity:20 targets:<[player]>
         - define npc_state <map[]>
         - define assignment null
         - if <[npcs].contains[<[name]>]>:
@@ -241,7 +241,7 @@ storyboard_npc_internal_auto_memory_management:
                 - define type <[data].get[type]>
                 - define at <[data].get[at]>
                 - run storyboard_npc_memalloc def.player:<player> def.name:<[name]> def.type:<[type]> def.at:<[at]>
-        on player quits:
+        after player quits:
         - define registry registry_<player.uuid>
         - define npcs <server.npcs[<[registry]>].if_null[<list[]>]>
         - define substr_length <element[npc_<player.uuid>_].length.add[1]>
@@ -260,12 +260,25 @@ storyboard_npc_internal_show_to_player:
         - adjust <[hologram]> hide_from_players
         - adjust <[player]> show_entity:<[hologram]>
 
+storyboard_npc_garbage_collect:
+    debug: false
+    type: task
+    script:
+    - foreach <server.offline_players> as:target:
+        - define substr_length <element[npc_<[target].uuid>_].length.add[1]>
+        - define registry registry_<[target].uuid>
+        - define npcs <server.npcs[<[registry]>].if_null[<list[]>]>
+        - foreach <[npcs]> as:npc:
+            - narrate "[Storyboard] Garbage collecting NPC <[npc].name> for player <[target].name>;<[target].uuid>"
+            - if !<[npc].is_spawned>:
+                - foreach next
+            - run storyboard_npc_memfree def.player:<[target]> def.name:<[npc].name.substring[<[substr_length]>]> def.reallocate:reallocate
+
 storyboard_npc_internal_auto_display_entities:
     debug: false
     type: world
     events:
-        after player joins bukkit_priority:high:
-        - wait 1t
+        after player joins:
         - foreach <server.online_players.exclude[<player>]> as:target:
             - define registry registry_<[target].uuid>
             - define npcs <server.npcs[<[registry]>].if_null[<list[]>]>
@@ -275,3 +288,5 @@ storyboard_npc_internal_auto_display_entities:
                 - adjust <player> hide_entity:<[npc]>
                 - foreach <[npc].hologram_npcs.if_null[<list[]>]> as:hologram:
                     - adjust <player> hide_entity:<[hologram]>
+        after server start:
+        - run storyboard_npc_garbage_collect
