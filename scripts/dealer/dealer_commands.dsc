@@ -16,6 +16,7 @@ order:
         - define y <[locationMap].random[2]>
         - define z <[locationMap].random[3]>
         - define world <[locationMap].random[4]>
-    - narrate ""
+    - narrate "<&7>[Supplier]<&f> Give me 5 minutes to drop off your items"
     - wait 5m
     - note <[location]> as:dealer_Location
+    - narrate "<&7>[Supplier]<&f> Dropped the items, Tell your boss to pay me"
