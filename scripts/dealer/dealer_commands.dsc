@@ -31,6 +31,9 @@ order:
         - define allowed <list[flip phone|hammer|baseball bat|metal bat|hunting knife|mechete|spiked baseball bat|katana|sledgehammer|riot helmet]>
         - define item <context.args.get[2].if_null[]>
         - define qty <context.args.get[3].if_null[1]>
+        - define price <script[dealer_data].data_key[<[item]>].if_null[0]>
+        - define weap_cost <[price].mul[<[qty]>]>
+        - flag player order_total:+:<[weap_cost]>
         - if <[item]> == <empty>:
             - narrate "<&7>[Supplier]<&f> Specify an item. Usage: /order add [item] [amount]"
             - stop
@@ -42,7 +45,7 @@ order:
             - stop
         - define current <player.flag[order_session]>
         - flag player order_session:<[current].include[<[item]>:<[qty]>]>
-        - narrate "<&7>[Supplier]<&f> Added <[qty]>x <[item]> to your order."
+        - narrate "<&7>[Supplier]<&f> Added <[qty]>x <[item]> to your order. Total cost so far is <player.flag[order_total].if_null[0]>."
         - stop
 
     # order finish
@@ -55,13 +58,21 @@ order:
             - flag player order_session:!
             - stop
         - flag server order_cooldown expire:5m
+        - define total_cost 0
         - define location_list <list[415,2,-140,world|370,2,-43,world|336,2,84,world|246,2,-521,world|239,2,-498,world]>
         - flag server dealer_loc:<[location_list].random>
         - flag server dealer_order:<player.flag[order_session]>
+        - money take players:<[player]> quantity:<player.flag[order_total].if_null[0]>
+        - flag server supplier_account:+:<player.flag[order_total].if_null[0]>
+        - flag player order_total:!
         - flag player order_session:!
         - narrate "<&7>[Supplier]<&f> Give me 5 minutes to drop off your items."
         - wait 5s
-        - narrate "<&7>[Supplier]<&f> Dropped the items, tell your boss to pay me."
+        - narrate "<&7>[Supplier]<&f> Dropped the items."
         - stop
 
     - narrate "<&7>[Supplier]<&f> Usage: /order <start|add|finish>"
+
+
+
+
