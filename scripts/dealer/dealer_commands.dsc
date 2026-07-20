@@ -75,7 +75,7 @@ order:
 
 supplier_account_withdraw:
     type: command
-    permission: dealer.command.withdraw
+    permission: dealer.admin.withdraw
     name: withdraw
     debug: false
     description: Withdraw money from the supplier account
