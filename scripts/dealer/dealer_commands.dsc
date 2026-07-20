@@ -2,7 +2,7 @@ order:
     type: command
     permission: dealer.command.order
     name: order
-    debug: true
+    debug: false
     description: Place an order for stock
     usage: /order [start|add|finish]
     script:
@@ -62,17 +62,36 @@ order:
         - define location_list <list[415,2,-140,world|370,2,-43,world|336,2,84,world|246,2,-521,world|239,2,-498,world]>
         - flag server dealer_loc:<[location_list].random>
         - flag server dealer_order:<player.flag[order_session]>
-        - money take players:<[player]> quantity:<player.flag[order_total].if_null[0]>
+        - money take players:<context.source> quantity:<player.flag[order_total].if_null[0]>
         - flag server supplier_account:+:<player.flag[order_total].if_null[0]>
         - flag player order_total:!
         - flag player order_session:!
         - narrate "<&7>[Supplier]<&f> Give me 5 minutes to drop off your items."
-        - wait 5s
+        - wait 5m
         - narrate "<&7>[Supplier]<&f> Dropped the items."
         - stop
 
     - narrate "<&7>[Supplier]<&f> Usage: /order <start|add|finish>"
 
-
-
-
+supplier_account_withdraw:
+    type: command
+    permission: dealer.command.withdraw
+    name: withdraw
+    debug: false
+    description: Withdraw money from the supplier account
+    usage: /withdraw [amount]
+    script:
+    - if <context.source_type> != player:
+        - narrate "This command can only be used by players."
+        - stop
+    - define amount <context.args.get[1].if_null[0]>
+    - if !<[amount].is_integer>:
+        - narrate "<&2>[Bank]<&f> That's not a valid amount."
+        - stop
+    - define current_balance <server.flag[supplier_account].if_null[0]>
+    - if <[amount].is_more_than[<[current_balance]>]>:
+        - narrate "<&2>[Bank]<&f> You don't have enough funds in the supplier account."
+        - stop
+    - money give players:<context.source> quantity:<[amount]>
+    - flag server supplier_account:-:<[amount]>
+    - narrate "<&2>[Bank]<&f> Withdrawn <[amount]> from the supplier account. Current balance is <server.flag[supplier_account].if_null[0]>."

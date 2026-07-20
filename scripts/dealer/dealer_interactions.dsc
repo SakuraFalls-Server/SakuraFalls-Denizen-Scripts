@@ -1,5 +1,5 @@
 dealer_interact_dropbox:
-    debug: true
+    debug: false
     type: world
     events:
         on player right clicks player_head:
