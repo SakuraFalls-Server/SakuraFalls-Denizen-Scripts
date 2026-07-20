@@ -5,16 +5,6 @@ order:
     debug: true
     description: Place an order for stock
     usage: /order [start|add|finish]
-    tab completions:
-    - define args <context.args>
-    - define sub <[args].get[1].if_null[]>
-    - if <[args].size> == 1:
-        - determine <list[start|add|finish].filter[starts_with[<[sub]>]]>
-    - else if <[args].size> == 2 && <[sub]> == add:
-        - define allowed <list[hammer|baseball bat|metal bat|hunting knife|mechete|spiked baseball bat|katana|sledgehammer|riot helmet]>
-        - determine <[allowed].filter[starts_with[<[args].get[2].if_null[]>]]>
-    - else if <[args].size> == 3 && <[sub]> == add:
-        - determine <list[1|2|3|4|5|6|7|8|9|10]>
     script:
     - if <context.source_type> != player:
         - narrate "This command can only be used by players."
@@ -30,7 +20,7 @@ order:
             - narrate "<&7>[Supplier]<&f> You already have an order open. Use /order add or /order finish."
             - stop
         - flag player order_session:<list[]>
-        - narrate "<&7>[Supplier]<&f> Alright, what do you need? Use /order add <item> <amount>."
+        - narrate "<&7>[Supplier]<&f> Alright, what do you need? <&7>Use /order add <item> <amount>."
         - stop
 
     # order add
