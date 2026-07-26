@@ -99,6 +99,15 @@ settings_config:
             min: 0
             max: 100
             increment: 5
+        sound_shooting_volume:
+            tab: Sounds
+            name: Shooting volume
+            description: Changes the volume of shooting, such as tasers.
+            type: number
+            default: 80
+            min: 0
+            max: 100
+            increment: 5
         ##
         accessibility_chat_disable_colors:
             tab: Accessibility

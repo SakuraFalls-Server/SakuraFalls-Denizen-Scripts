@@ -13,7 +13,7 @@ furniture_world_noteblock:
         - adjustblock <context.location> instrument:piano
         - adjustblock <context.location> switched:false
         on player right clicks note_block:
-        - if !<player.is_sneaking>:
+        - if !<player.is_op> || !<player.is_sneaking>:
             - determine cancelled
         on player breaks block:
         - if <context.location.below.material.advanced_matches[note_block]>:
