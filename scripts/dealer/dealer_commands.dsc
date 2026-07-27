@@ -93,6 +93,8 @@ dealer_command_withdraw:
     - if !<[amount].is_integer>:
         - narrate "<&2>[Bank]<&f> That's not a valid amount."
         - stop
+    - if <[amount]> <= 0:
+        - narrate "<&4>You cannot withdrawn a negative amount"
     - define current_balance <server.flag[supplier_account].if_null[0]>
     - if <[amount].is_more_than[<[current_balance]>]>:
         - narrate "<&2>[Bank]<&f> You don't have enough funds in the supplier account."
