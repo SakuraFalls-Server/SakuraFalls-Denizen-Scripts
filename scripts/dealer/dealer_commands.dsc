@@ -28,10 +28,10 @@ order:
         - if !<player.has_flag[order_session]>:
             - narrate "<&7>[Supplier]<&f> Start an order first with /order start."
             - stop
-        - define allowed <list[flip phone|hammer|baseball bat|metal bat|hunting knife|mechete|spiked baseball bat|katana|sledgehammer|riot helmet]>
+        - define allowed <script[dealer_data].data_key[items]>
         - define item <context.args.get[2].if_null[]>
         - define qty <context.args.get[3].if_null[1]>
-        - define price <script[dealer_data].data_key[<[item]>].if_null[0]>
+        - define price <script[dealer_data].data_key[items].get[<[item]>]>
         - define weap_cost <[price].mul[<[qty]>]>
         - flag player order_total:+:<[weap_cost]>
         - if <[item]> == <empty>:
@@ -58,7 +58,6 @@ order:
             - flag player order_session:!
             - stop
         - flag server order_cooldown expire:5m
-        - define total_cost 0
         - define location_list <list[415,2,-140,world|370,2,-43,world|336,2,84,world|246,2,-521,world|239,2,-498,world]>
         - flag server dealer_loc:<[location_list].random>
         - flag server dealer_order:<player.flag[order_session]>
