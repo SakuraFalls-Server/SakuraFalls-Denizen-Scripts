@@ -78,9 +78,9 @@ dealer_command_order:
 
     - narrate "<&7>[Supplier]<&f> Usage: /order <start|add|finish>"
 
-supplier_account_withdraw:
+dealer_command_withdraw:
     type: command
-    permission: dealer.admin.withdraw
+    permission: dealer.command.withdraw
     name: withdraw
     debug: false
     description: Withdraw money from the supplier account
