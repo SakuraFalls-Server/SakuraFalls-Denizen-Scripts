@@ -1,4 +1,4 @@
-order:
+dealer_command_order:
     type: command
     permission: dealer.command.order
     name: order
