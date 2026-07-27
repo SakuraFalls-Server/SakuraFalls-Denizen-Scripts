@@ -64,6 +64,9 @@ order:
         - define location_list <script[dealer_data].data_key[locations]>
         - flag server dealer_loc:<[location_list].random>
         - flag server dealer_order:<player.flag[order_session]>
+        - if <player.money> != <player.flag[order_total]>:
+            - narrate "<&7>[Supplier]<&f> You can't afford the drop"
+            - stop
         - money take players:<context.source> quantity:<player.flag[order_total].if_null[0]>
         - flag server supplier_account:+:<player.flag[order_total].if_null[0]>
         - flag player order_total:!
