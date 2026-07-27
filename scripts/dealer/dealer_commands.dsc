@@ -61,17 +61,17 @@ dealer_command_order:
         - if <player.flag[dealer_order_session].is_empty>:
             - narrate "<&7>[Supplier]<&f> Your order is empty, add some items first."
             - stop
-        - if <player.money> < <player.flag[order_total]>:
+        - if <player.money> < <player.flag[dealer_order_total]>:
             - narrate "<&7>[Supplier]<&f> You can't afford the drop"
             - stop
         #
         - flag server dealer_order_cooldown:true expire:5m
         - flag server dealer_loc:<script[dealer_data].data_key[locations].random>
-        - flag server dealer_order:<player.flag[order_session]>
+        - flag server dealer_order:<player.flag[dealer_order_session]>
         - flag server dealer_order_total_quantity:<player.flag[dealer_order_total_quantity]>
-        - flag server dealer_supplier_account:+:<player.flag[order_total].if_null[0]>|
+        - flag server dealer_supplier_account:<server.flag[dealer_supplier_account].if_null[0].add[<player.flag[dealer_order_total].if_null[0]>]>
         #
-        - money take players:<player> quantity:<player.flag[order_total].if_null[0]>
+        - money take players:<player> quantity:<player.flag[dealer_order_total].if_null[0]>
         - flag <player> dealer_order_session:!
         - flag <player> dealer_order_total:!
         - flag <player> dealer_order_total_quantity:!
@@ -116,11 +116,11 @@ dealer_command_withdraw:
         - stop
     - if <[amount]> <= 0:
         - narrate "<&2>[Bank]<&f> You cannot withdraw a negative amount"
-    - define current_balance <server.flag[supplier_account].if_null[0]>
+    - define current_balance <server.flag[dealer_supplier_account].if_null[0]>
     - if <[amount].is_more_than[<[current_balance]>]>:
-        - narrate "<&2>[Bank]<&f> Not enough funds in the supplier account."
+        - narrate "<&2>[Bank]<&f> Not enough funds in the supplier account. <&7>(max is <[current_balance].as_money>)"
         - stop
     - money give players:<player> quantity:<[amount]>
-    - flag server supplier_account:-:<[amount]>
+    - flag server dealer_supplier_account:-:<[amount]>
     - adjust server save
-    - narrate "<&2>[Bank]<&f> Withdrew <[amount]> from the supplier account. Current balance is <server.flag[supplier_account].if_null[0]>."
+    - narrate "<&2>[Bank]<&f> Withdrew <[amount]> from the supplier account. Current balance is <server.flag[dealer_supplier_account].if_null[0].as_money>."

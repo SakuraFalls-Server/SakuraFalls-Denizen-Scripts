@@ -48,5 +48,5 @@ timebar_sync_sun:
     # calculate as floor((hour - 6) * 1000 + minute * (1000 / 60) + second * (1000 / 60 / 60))
     - define thousanddivsixty <element[1000].div[60]>
     - define total_ticks <[hour].sub[6].mul[1000].add[<[minute].mul[<[thousanddivsixty]>]>].add[<[second].mul[<[thousanddivsixty].div[60]>]>].round_down>
-    - foreach <server.worlds> as:world:
+    - foreach <server.worlds.filter_tag[<[filter_value].ends_with[nether].not.and[<[filter_value].ends_with[the_end].not>]>]> as:world:
         - adjust <[world]> time:<[total_ticks]>

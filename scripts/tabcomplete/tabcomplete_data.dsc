@@ -95,6 +95,10 @@ tabcomplete_config:
             permission: group.news
             commands:
             - news
+        rakuzaichi:
+            permission: group.rakuzaichi
+            commands:
+            - order
         builder:
             permission: group.builder
             commands:
