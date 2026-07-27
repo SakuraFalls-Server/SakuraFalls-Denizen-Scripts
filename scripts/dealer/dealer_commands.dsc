@@ -51,21 +51,21 @@ dealer_command_order:
         - flag <player> dealer_order_session:<player.flag[dealer_order_session].if_null[<list[]>].include[<[item]>:<[qty]>]>
         - flag <player> dealer_order_total_quantity:<[new_total_quantity]>
         - adjust server save
-        - narrate "<&7>[Supplier]<&f> Added <[qty]>x <[item]> to your order. Total cost so far is <player.flag[order_total].if_null[0]>."
+        - narrate "<&7>[Supplier]<&f> Added <[qty]>x <[item]> to your order. Total cost so far is <player.flag[dealer_order_total].if_null[0]>."
         - stop
     # order finish
     - if <[sub]> == finish:
-        - if !<player.has_flag[order_session]>:
+        - if !<player.has_flag[dealer_order_session]>:
             - narrate "<&7>[Supplier]<&f> You don't have an open order."
             - stop
-        - if <player.flag[order_session].is_empty>:
+        - if <player.flag[dealer_order_session].is_empty>:
             - narrate "<&7>[Supplier]<&f> Your order is empty, add some items first."
             - stop
-        - if <player.money> != <player.flag[order_total]>:
+        - if <player.money> < <player.flag[order_total]>:
             - narrate "<&7>[Supplier]<&f> You can't afford the drop"
             - stop
         #
-        - flag server order_cooldown expire:5m
+        - flag server dealer_order_cooldown:true expire:5m
         - flag server dealer_loc:<script[dealer_data].data_key[locations].random>
         - flag server dealer_order:<player.flag[order_session]>
         - flag server dealer_order_total_quantity:<player.flag[dealer_order_total_quantity]>
@@ -91,8 +91,11 @@ dealer_command_order:
             - narrate "<&7>[Supplier]<&f> Your order is empty, add some items first."
             - stop
         - flag <player> dealer_order_session:!
+        - flag <player> dealer_order_total:!
+        - flag <player> dealer_order_total_quantity:!
         - adjust server save
         - narrate "<&7>[Supplier]<&f> Order was cancelled."
+        - stop
     #
     - narrate "<&7>[Supplier]<&f> Usage: /order (start|add|finish|cancel)"
 
