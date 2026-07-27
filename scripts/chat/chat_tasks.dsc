@@ -41,7 +41,7 @@ chat_channel_looc:
     definitions: player|message
     script:
     - define message <[message].strip_color.replace[&\].with[&].unescaped>
-    - define final "<&8>[<&7>LOOC<&8>] <proc[chat_special_group].context[<[player]>]><&7><proc[character_get_name].context[<[player]>]> <proc[chat_name_ooc].context[<[player]>]><&7>: <[message]>"
+    - define final "<&8>[<&7>LOOC<&8>] <&f><proc[chat_special_group].context[<[player]>]><&8><proc[character_get_name].context[<[player]>]> | <proc[chat_name_ooc].context[<[player]>]><&7>: <[message]>"
     - define targets <[player].location.find_players_within[10]>
     - narrate targets:<[targets]> <[final]>
     - announce to_console <[final]>
@@ -241,7 +241,7 @@ chat_channel_ic_my:
         - define possession_name <[possession_name]><&sq>
     - else:
         - define possession_name <[possession_name]><&sq>s
-    - define final "<&e>*** <&f><placeholder[essentials_nickname].player[<[player]>]> <proc[chat_special_group].context[<[player]>]><proc[chat_roles_group].context[<[player]>]> <[possession_name]> <&f><[message]>"
+    - define final "<&e>*** <&f><placeholder[essentials_nickname].player[<[player]>]> <proc[chat_special_group].context[<[player]>]><proc[chat_roles_group].context[<[player]>]> <[possession_name]> <element[&<color[<proc[settings_get].context[<[player]>|text_rp_chat_color]>].hex>].parse_color><[message]>"
     - define targets <[player].location.find_players_within[10]>
     - inject chat_accessibility_space_message_inject_define
     - inject chat_accessibility_space_message_inject_apply

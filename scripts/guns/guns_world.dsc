@@ -40,7 +40,7 @@ guns_world_taser:
         - if !<player.item_in_hand.has_flag[guns_taser]>:
             - stop
         - ratelimit <player> 1s
-        - define target <player.precise_target[7]||null>
+        - define target <player.precise_target[7].if_null[null]>
         - if <[target]> == null:
             - stop
         - if !<[target].is_player>:
