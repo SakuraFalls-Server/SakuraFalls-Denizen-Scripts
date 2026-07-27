@@ -43,6 +43,9 @@ order:
         - if !<[qty].is_integer>:
             - narrate "<&7>[Supplier]<&f> That's not a valid amount."
             - stop
+        - if <[qty]> <= 0:
+            - narrate "<&7>[Supplier]<&f> You can't sell to me"
+            - stop
         - define current <player.flag[order_session]>
         - flag player order_session:<[current].include[<[item]>:<[qty]>]>
         - narrate "<&7>[Supplier]<&f> Added <[qty]>x <[item]> to your order. Total cost so far is <player.flag[order_total].if_null[0]>."
