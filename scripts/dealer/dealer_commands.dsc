@@ -4,36 +4,33 @@ dealer_command_order:
     name: order
     debug: false
     description: Place an order for stock
-    usage: /order [start|add|finish]
+    usage: /order (start|add|finish|cancel)
     script:
     - if <context.source_type> != player:
         - narrate "This command can only be used by players."
         - stop
     - define sub <context.args.get[1].if_null[]>
-
     # order start
     - if <[sub]> == start:
-        - if <server.has_flag[order_cooldown]>:
-            - narrate "<&7>[Supplier]<&f> I'm already on my way, be patient."
+        - if <server.has_flag[dealer_order_cooldown]>:
+            - narrate "<&7>[Supplier]<&f> I'm already on my way delivering, be patient."
             - stop
-        - if <player.has_flag[order_session]>:
+        - if <player.has_flag[dealer_order_session]>:
             - narrate "<&7>[Supplier]<&f> You already have an order open. Use /order add or /order finish."
             - stop
-        - flag player order_session:<list[]>
-        - narrate "<&7>[Supplier]<&f> Alright, what do you need? <&7>Use /order add <item> <amount>."
+        - flag <player> dealer_order_session:<list[]>
+        - narrate "<&7>[Supplier]<&f> Alright, what do you need? <&7>Use /order add (item) (amount)."
         - stop
-
     # order add
     - if <[sub]> == add:
-        - if !<player.has_flag[order_session]>:
+        - if !<player.has_flag[dealer_order_session]>:
             - narrate "<&7>[Supplier]<&f> Start an order first with /order start."
             - stop
         - define allowed <script[dealer_data].data_key[items]>
         - define item <context.args.get[2].if_null[]>
         - define qty <context.args.get[3].if_null[1]>
-        - define price <script[dealer_data].data_key[items].get[<[item]>]>
+        - define price <script[dealer_data].data_key[items].get[<[item]>].get[price]>
         - define weap_cost <[price].mul[<[qty]>]>
-        - flag player order_total:+:<[weap_cost]>
         - if <[item]> == <empty>:
             - narrate "<&7>[Supplier]<&f> Specify an item. Usage: /order add [item] [amount]"
             - stop
@@ -44,13 +41,18 @@ dealer_command_order:
             - narrate "<&7>[Supplier]<&f> That's not a valid amount."
             - stop
         - if <[qty]> <= 0:
-            - narrate "<&7>[Supplier]<&f> You can't sell to me"
+            - narrate "<&7>[Supplier]<&f> You can't sell to me!"
             - stop
-        - define current <player.flag[order_session]>
-        - flag player order_session:<[current].include[<[item]>:<[qty]>]>
+        - define new_total_quantity <player.flag[dealer_order_total_quantity].if_null[0].add[<[qty]>]>
+        - if <[new_total_quantity]> > 5:
+            - narrate "<&7>[Supplier]<&f> Sorry, only 5 items max."
+            - stop
+        - flag <player> dealer_order_total:+:<[weap_cost]>
+        - flag <player> dealer_order_session:<player.flag[dealer_order_session].if_null[<list[]>].include[<[item]>:<[qty]>]>
+        - flag <player> dealer_order_total_quantity:<[new_total_quantity]>
+        - adjust server save
         - narrate "<&7>[Supplier]<&f> Added <[qty]>x <[item]> to your order. Total cost so far is <player.flag[order_total].if_null[0]>."
         - stop
-
     # order finish
     - if <[sub]> == finish:
         - if !<player.has_flag[order_session]>:
@@ -58,25 +60,41 @@ dealer_command_order:
             - stop
         - if <player.flag[order_session].is_empty>:
             - narrate "<&7>[Supplier]<&f> Your order is empty, add some items first."
-            - flag player order_session:!
             - stop
-        - flag server order_cooldown expire:5m
-        - define location_list <script[dealer_data].data_key[locations]>
-        - flag server dealer_loc:<[location_list].random>
-        - flag server dealer_order:<player.flag[order_session]>
         - if <player.money> != <player.flag[order_total]>:
             - narrate "<&7>[Supplier]<&f> You can't afford the drop"
             - stop
-        - money take players:<context.source> quantity:<player.flag[order_total].if_null[0]>
-        - flag server supplier_account:+:<player.flag[order_total].if_null[0]>
-        - flag player order_total:!
-        - flag player order_session:!
+        #
+        - flag server order_cooldown expire:5m
+        - flag server dealer_loc:<script[dealer_data].data_key[locations].random>
+        - flag server dealer_order:<player.flag[order_session]>
+        - flag server dealer_order_total_quantity:<player.flag[dealer_order_total_quantity]>
+        - flag server dealer_supplier_account:+:<player.flag[order_total].if_null[0]>|
+        #
+        - money take players:<player> quantity:<player.flag[order_total].if_null[0]>
+        - flag <player> dealer_order_session:!
+        - flag <player> dealer_order_total:!
+        - flag <player> dealer_order_total_quantity:!
+        #
+        - adjust server save
+        #
         - narrate "<&7>[Supplier]<&f> Give me 5 minutes to drop off your items."
         - wait 5m
         - narrate "<&7>[Supplier]<&f> Dropped the items."
         - stop
-
-    - narrate "<&7>[Supplier]<&f> Usage: /order <start|add|finish>"
+    # cancel
+    - if <[sub]> == cancel:
+        - if !<player.has_flag[dealer_order_session]>:
+            - narrate "<&7>[Supplier]<&f> You don't have an open order."
+            - stop
+        - if <player.flag[dealer_order_session].is_empty>:
+            - narrate "<&7>[Supplier]<&f> Your order is empty, add some items first."
+            - stop
+        - flag <player> dealer_order_session:!
+        - adjust server save
+        - narrate "<&7>[Supplier]<&f> Order was cancelled."
+    #
+    - narrate "<&7>[Supplier]<&f> Usage: /order (start|add|finish|cancel)"
 
 dealer_command_withdraw:
     type: command
@@ -94,11 +112,12 @@ dealer_command_withdraw:
         - narrate "<&2>[Bank]<&f> That's not a valid amount."
         - stop
     - if <[amount]> <= 0:
-        - narrate "<&4>You cannot withdrawn a negative amount"
+        - narrate "<&2>[Bank]<&f> You cannot withdraw a negative amount"
     - define current_balance <server.flag[supplier_account].if_null[0]>
     - if <[amount].is_more_than[<[current_balance]>]>:
-        - narrate "<&2>[Bank]<&f> You don't have enough funds in the supplier account."
+        - narrate "<&2>[Bank]<&f> Not enough funds in the supplier account."
         - stop
-    - money give players:<context.source> quantity:<[amount]>
+    - money give players:<player> quantity:<[amount]>
     - flag server supplier_account:-:<[amount]>
-    - narrate "<&2>[Bank]<&f> Withdrawn <[amount]> from the supplier account. Current balance is <server.flag[supplier_account].if_null[0]>."
+    - adjust server save
+    - narrate "<&2>[Bank]<&f> Withdrew <[amount]> from the supplier account. Current balance is <server.flag[supplier_account].if_null[0]>."
