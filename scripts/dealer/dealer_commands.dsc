@@ -58,7 +58,7 @@ order:
             - flag player order_session:!
             - stop
         - flag server order_cooldown expire:5m
-        - define location_list <list[415,2,-140,world|370,2,-43,world|336,2,84,world|246,2,-521,world|239,2,-498,world]>
+        - define location_list <script[dealer_data].data_key[locations]>
         - flag server dealer_loc:<[location_list].random>
         - flag server dealer_order:<player.flag[order_session]>
         - money take players:<context.source> quantity:<player.flag[order_total].if_null[0]>

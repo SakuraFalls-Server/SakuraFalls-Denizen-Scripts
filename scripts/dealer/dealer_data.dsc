@@ -12,4 +12,8 @@ dealer_data:
         sledgehammer: 35000
         riot helmet: 20000
     locations:
-    
+    - 415,2,-140,world
+    - 370,2,-43,world
+    - 336,2,84,world
+    - 246,2,-521,world
+    - 239,2,-498,world
