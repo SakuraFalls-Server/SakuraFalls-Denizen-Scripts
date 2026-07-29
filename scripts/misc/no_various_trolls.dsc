@@ -67,6 +67,8 @@ no_spawn_eggs:
             - determine cancelled
         - if <player.item_in_hand.advanced_matches[ender_eye]> || <player.item_in_offhand.advanced_matches[ender_eye]>:
             - determine cancelled
+        - if <player.item_in_hand.advanced_matches[armor_stand]>:
+            - determine cancelled
         - if <player.is_op>:
             - stop
         - if <context.location.material.advanced_matches[*_shelf].if_null[false]>:

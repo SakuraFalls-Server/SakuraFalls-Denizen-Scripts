@@ -59,8 +59,10 @@ gui_restore_world:
             - run gui_restore_load def.player:<player>
         on player opens inventory bukkit_priority:lowest:
         - if <context.inventory.title.starts_with[<script[gui_restore_config].data_key[special_chars].parsed>]>:
+            - inject gui_restore_rate_limit
             - run gui_restore_save def.player:<player>
         - if <context.inventory.inventory_type> == anvil:
+            - inject gui_restore_rate_limit
             - run gui_restore_save def.player:<player>
         on player closes inventory bukkit_priority:lowest:
         - if <player.has_flag[gui_restore]>:
@@ -68,3 +70,14 @@ gui_restore_world:
         on player changes gamemode:
         - if <player.open_inventory.title.starts_with[<script[gui_restore_config].data_key[special_chars].parsed>]>:
             - determine cancelled
+
+gui_restore_rate_limit:
+    debug: false
+    type: task
+    script:
+    - if <util.time_now.duration_since[<player.flag[gui_restore_time].if_null[<time[2000/01/01]>]>].is_less_than[<duration[0.75s]>]>:
+        - determine cancelled passively
+        - narrate "<&c>You are trying to open this inventory GUI too quickly!"
+        - stop
+    - flag <player> gui_restore_time:<util.time_now>
+    - adjust server save
