@@ -64,6 +64,9 @@ dealer_command_order:
         - if <player.money> < <player.flag[dealer_order_total]>:
             - narrate "<&7>[Supplier]<&f> You can't afford the drop"
             - stop
+        - if <server.has_flag[dealer_order_cooldown]>:
+            - narrate "<&7>[Supplier]<&f> I'm already on my way delivering, be patient."
+            - stop
         #
         - flag server dealer_order_cooldown:true expire:5m
         - flag server dealer_loc:<script[dealer_data].data_key[locations].random>
