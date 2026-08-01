@@ -116,3 +116,20 @@ liteprofilesutils_world:
         - if <[master]> == <[uuid]>:
             - stop
         - adjust <player[<[uuid]>]> whitelisted:<player[<[master]>].whitelisted>
+
+## patch LuckPerms commands
+liteprofilesutils_world_luckperms:
+    debug: false
+    type: world
+    events:
+        on command:
+        - if <list[luckperms|lp|perm|perms|permission|permissions].contains[<context.command>]>:
+            - if <context.args.get[1].to_lowercase.if_null[null]> == user:
+                - define username <context.args.get[2].if_null[<empty>]>
+                - if <[username].contains[.]>:
+                    - define maybe_player <server.match_offline_player[<[username]>].if_null[null]>
+                    - if <[maybe_player]> != null:
+                        - determine cancelled passively
+                        - define replaced_args <context.args>
+                        - define replaced_args <[replaced_args].overwrite[<[maybe_player].uuid>].at[2]>
+                        - execute as_player "<context.command> <[replaced_args].space_separated>"

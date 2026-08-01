@@ -65,7 +65,7 @@ apartments_add_member:
     - define access_all <[access_all].exclude[<[filter]>]>
     #
     - flag <[owner]> apartments_access:<[owner].flag[apartments_access].if_null[<map[]>].with[<[apartment]>].as[<[access_all]>]>
-    - execute player:<[owner]> as_op "as addfriend <[member].name> --region <[apartment].id>"
+    - execute player:<[owner]> as_op "as addfriend <[member].name> <[apartment].id>"
     - adjust server save
 
 apartments_add_moderator:
@@ -101,7 +101,7 @@ apartments_remove_access:
     - define access_all <[access_all].exclude[<[filter]>]>
     #
     - flag <[owner]> apartments_access:<[owner].flag[apartments_access].if_null[<map[]>].with[<[apartment]>].as[<[access_all]>]>
-    - execute as_server "as delfriend <[member].name> --region <[apartment].id>"
+    - execute as_server "as delfriend <[member].name> <[apartment].id>"
     - adjust server save
 
 apartments_begin_edit:
