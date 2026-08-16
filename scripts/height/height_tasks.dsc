@@ -26,8 +26,9 @@ height_update_height:
     script:
     - define multiplier <script[height_data].data_key[multiplier]>
     - flag <[player]> height:<[height]>
-    - adjust <[player]> attribute_base_values:<map[].with[generic_scale].as[<[height].div[171.4]>]>
+    - adjust <[player]> attribute_base_values:<map[].with[generic_scale].as[<[height].sub[10].div[171.4]>]>
     - adjust server save
+    - teleport <player> <player.location.center.with_y[<player.location.y>].with_pitch[<player.location.pitch>].with_yaw[<player.location.yaw>]>
 
 height_nice_format:
     debug: false

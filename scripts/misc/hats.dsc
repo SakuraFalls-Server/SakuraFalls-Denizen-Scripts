@@ -9,7 +9,9 @@ hats_world:
             - if !<player.inventory.can_fit[<player.equipment_map.get[helmet]>].if_null[true]>:
                 - stop
         - define helmet <player.equipment_map.get[helmet].if_null[<item[air]>]>
-        - inventory set slot:helmet origin:<player.item_in_hand>
+        - define new_hat <player.item_in_hand>
+        - adjust def:new_hat quantity:1
+        - inventory set slot:helmet origin:<[new_hat]>
         - take iteminhand quantity:1
         - if !<[helmet].material.advanced_matches[air]>:
-            - give <[helmet]>
+            - give <[helmet]> quantity:1

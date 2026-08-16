@@ -27,6 +27,9 @@ height_commands_height:
     - else:
         - narrate "<&c>Something went wrong! Did you enter a valid height? The height should be in cm or feet."
         - stop
+    - if !<[h].is_decimal>:
+        - narrate "<&c>Something went wrong! Did you enter a valid height? The height should be in cm or feet."
+        - stop
     - define max <script[height_data].data_key[max]>
     - define min <script[height_data].data_key[min]>
     - if <[h]> < <[min]> or <[h]> > <[max]>:
