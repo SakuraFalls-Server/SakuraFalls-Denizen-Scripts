@@ -76,7 +76,14 @@ gui_restore_rate_limit:
     debug: false
     type: task
     script:
-    - if <util.delta_time_since_start.sub[<player.flag[gui_restore_time].if_null[<duration[0s]>]>].is_less_than[<duration[0.75s]>].if_null[false]>:
+    - if <player.has_flag[gui_restore_time]>:
+        - if <player.flag[gui_restore_time].day_of_week_name.if_null[null]> != null:
+            - flag <player> gui_restore_time:!
+    - define delta <util.delta_time_since_start.sub[<player.flag[gui_restore_time].if_null[<duration[0s]>]>]>
+    - if <[delta].is_less_than[<duration[-10s]>]>:
+        - define delta <duration[9999s]>
+        - flag <player> gui_restore_time:!
+    - if <[delta].is_less_than[<duration[0.75s]>].if_null[false]>:
         - if !<player.has_flag[gui_restore]>:
             - determine cancelled passively
             - narrate "<&c>You are trying to open this inventory GUI too quickly!"
