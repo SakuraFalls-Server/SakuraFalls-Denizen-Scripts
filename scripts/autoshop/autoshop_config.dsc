@@ -93,6 +93,28 @@ autoshop_config:
 
         drinks:
             size: 9
+            items:
+                2:
+                    item: <proc[itemdb_get].context[chocolate milk]>
+                    price: 350
+                3:
+                    item: <proc[itemdb_get].context[almond milk]>
+                    price: 400
+                4:
+                    item: <proc[itemdb_get.].context[black coffee mug]>
+                    price: 100
+                5:
+                    item: <proc[itemdb_get.].context[white coffee mug]>
+                    price: 100
+                6:
+                    item: <proc[itemdb_get].context[skimmed milk]>
+                    price: 150
+                7:
+                    item: <proc[itemdb_get].context[low-fat milk]>
+                    price: 200
+                8:
+                    item: <proc[itemdb_get].context[whole milk]>
+                    price: 225
 
 
 
