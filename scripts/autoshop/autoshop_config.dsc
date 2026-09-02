@@ -116,7 +116,3 @@ autoshop_config:
                     item: <proc[itemdb_get].context[whole milk]>
                     price: 225
 
-
-
-        cosmetics:
-            size: 18
