@@ -33,7 +33,7 @@ autoshop_interaction_grocery:
                 - if <player.flag[textbox_state].if_null[null]> != null:
                     - stop
                 - engage player
-                - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:Hi, Welcome in, $$nlhow can we help you today"
+                - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:Hey, welcome!$$nlHow can we help you today"
                 - wait 1s
                 - disengage player
                 - run storyboard_player_end_atomic_sequence def.queue:<queue> def.player:<player>
@@ -59,7 +59,7 @@ autoshop_interaction_drinks:
                 - if <player.flag[textbox_state].if_null[null]> != null:
                     - stop
                 - engage player
-                - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:Hi, Welcome in, $$nlhow can we help you today"
+                - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:Hey, welcome!$$nlHow can we help you today"
                 - wait 1s
                 - disengage player
                 - run storyboard_player_end_atomic_sequence def.queue:<queue> def.player:<player>
