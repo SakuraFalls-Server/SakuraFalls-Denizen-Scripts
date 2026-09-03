@@ -126,7 +126,7 @@ apartments_end_edit:
     - inventory clear player:<[player]>
     - foreach <[apartments_edit_data].get[inventory]> key:slot as:item:
         - inventory set origin:<[item]> slot:<[slot]> player:<[player]>
-    - adjust <[player]> gamemode:survival
+    - adjust <[player]> gamemode:adventure
     - flag <[player]> apartments_edit:!
     - adjust server save
 
