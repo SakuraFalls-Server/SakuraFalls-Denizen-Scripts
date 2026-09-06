@@ -84,6 +84,9 @@ vehicles_world:
             - if <player.location.above[0.5].material.is_solid>:
                 - narrate "<&c>You should stand on the road when spawning your car."
                 - stop
+            - if !<player.location.below[0.15].material.is_solid>:
+                - narrate "<&c>You should stand on the road when spawning your car."
+                - stop
             - if <proc[apartments_at].context[<player.location>]> != null:
                 - narrate "<&c>You should stand on the road when spawning your car."
                 - stop

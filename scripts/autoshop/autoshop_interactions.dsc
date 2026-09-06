@@ -13,6 +13,7 @@ autoshop_interaction_vending:
                 - stop
             - run autoshop_open def.player:<player> def.shop:vending
             - stop
+
 autoshop_interaction_grocery_assign:
     debug: false
     type: assignment
@@ -33,12 +34,14 @@ autoshop_interaction_grocery:
                 - if <player.flag[textbox_state].if_null[null]> != null:
                     - stop
                 - engage player
-                - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:Hey, welcome!$$nlHow can we help you today"
-                - wait 1s
+                - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:Hey, welcome!$$nlHow can we help you today?"
+                - waituntil <player.flag[textbox_state].if_null[null]> == null max:10s
                 - disengage player
+                - run textbox_flush def.player:<player>
                 - run storyboard_player_end_atomic_sequence def.queue:<queue> def.player:<player>
                 - run autoshop_open def.player:<player> def.shop:grocery
                 - stop
+
 autoshop_interaction_drinks_assign:
     debug: false
     type: assignment
@@ -59,10 +62,10 @@ autoshop_interaction_drinks:
                 - if <player.flag[textbox_state].if_null[null]> != null:
                     - stop
                 - engage player
-                - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:Hey, welcome!$$nlHow can we help you today"
-                - wait 1s
+                - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:Hey, welcome!$$nlHow can we help you today?"
+                - waituntil <player.flag[textbox_state].if_null[null]> == null max:10s
                 - disengage player
+                - run textbox_flush def.player:<player>
                 - run storyboard_player_end_atomic_sequence def.queue:<queue> def.player:<player>
                 - run autoshop_open def.player:<player> def.shop:drinks
                 - stop
-

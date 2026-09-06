@@ -59,9 +59,6 @@ autoshop_config:
                 17:
                     item: <proc[itemdb_get].context[cheddar cheese wheel]>
                     price: 450
-                19:
-                    item: <proc[itemdb_get].context[gouda cheese wheel]>
-                    price: 450
                 20:
                     item: <proc[itemdb_get].context[nacho cheese]>
                     price: 150
@@ -89,8 +86,9 @@ autoshop_config:
                 30:
                     item: <proc[itemdb_get].context[whole ham]>
                     price: 450
-
-
+                31:
+                    item: <proc[itemdb_get].context[gouda cheese wheel]>
+                    price: 450
         drinks:
             size: 9
             items:
@@ -115,4 +113,3 @@ autoshop_config:
                 8:
                     item: <proc[itemdb_get].context[whole milk]>
                     price: 225
-

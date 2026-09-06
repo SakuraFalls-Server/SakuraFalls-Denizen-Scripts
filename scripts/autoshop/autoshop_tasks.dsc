@@ -32,6 +32,8 @@ autoshop_open:
         - define item_button <[actual_item]>
         - adjust def:item_button lore:<[item_button].lore.if_null[<list[]>].include[<&f>|<&f>Buy for <&e>¥<[price]>]>
         - define contents <[contents].with[<[slot]>].as[<map[].with[item].as[<[item_button]>].with[script].as[autoshop_buy].with[definitions].as[<map[].with[player].as[<[player]>].with[price].as[<[price]>].with[item].as[<[actual_item]>]>]>]>
+        - if <[loop_index].mod[18]> == 0:
+            - wait 1t
     - define title <proc[autoshop_title_by_size].context[<[size]>]>
     - run menu_open def.player:<[player]> def.title:<&a>邑邑邑<&f>邑<[title]><&a><&sp><&b><&sp><&f><&sp> def.size:<[size]> def.contents:<[contents]>
 
