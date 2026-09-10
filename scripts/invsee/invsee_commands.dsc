@@ -11,11 +11,14 @@ invsee_command_invsee:
     - if <context.source_type> != player:
         - narrate "<&c>Please run this command as a player."
         - stop
-    - if <context.args> < 1:
+    - if <context.args.size> < 1:
         - narrate "<&c>Please specify a player"
         - stop
-    - define target <server.match_offline_player[<context.args.get[1]>].if_null[null]>
+    - define target <server.match_player[<context.args.get[1]>].if_null[<server.match_offline_player[<context.args.get[1]>].if_null[null]>]>
     - if <[target]> == null:
-        - narrate "<&c>Player not found or not online."
+        - narrate "<&c>Player not found. Has this player played here yet?"
+        - stop
+    - if <[target]> == <player>:
+        - narrate "<&c>Open your inventory yourself!"
         - stop
     - ~run invsee_open def.player:<player> def.target:<[target]>
