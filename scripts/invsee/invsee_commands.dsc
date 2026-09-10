@@ -6,7 +6,7 @@ invsee_command_invsee:
     usage: /invsee [player]
     permission: invsee.admin
     tab completions:
-        1: <server.online_players.parse[name]>
+        1: <server.offline_players.parse[name]>
     script:
     - if <context.source_type> != player:
         - narrate "<&c>Please run this command as a player."
@@ -14,7 +14,7 @@ invsee_command_invsee:
     - if <context.args> < 1:
         - narrate "<&c>Please specify a player"
         - stop
-    - define target <server.match_player[<context.args.get[1]>].if_null[null]>
+    - define target <server.match_offline_player[<context.args.get[1]>].if_null[null]>
     - if <[target]> == null:
         - narrate "<&c>Player not found or not online."
         - stop
