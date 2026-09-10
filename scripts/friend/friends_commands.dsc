@@ -3,172 +3,188 @@ friends_command:
     type: command
     name: friend
     description: Manage your friends.
-    usage: /friend [help|add|accept|deny|remove|list|msg|reply]
+    usage: /friend
     permission: friend.command.friend
     aliases:
     - f
-    tab completions:
-        1: help|add|accept|deny|remove|list|msg|reply|r
-        2: <server.online_players.parse[name]>
     script:
-    - if <context.source_type> != player:
-        - narrate "<&c>Please run this command as a player."
-        - stop
+        - if <context.source_type> != player:
+            - narrate format:formats_prefix "<&c>Please run this command as a player."
+            - stop
 
-    - if <context.args.size> <= 1:
-        - run friends_command_help def.player:<player>
-        - stop
+        - if <context.args.is_empty>:
+            - run friends_command_help
+            - stop
 
-    - choose <context.args.get[1].to_lowercase>:
+        - choose <context.args.first.to_lowercase>:
 
-        - case help:
-            - run friends_command_help def.player:<player>
+            - case help:
+                - run friends_command_help
 
-        - case add:
-            - if <context.args.size> <= 2:
-                - narrate "<&c>Usage: /friend add <player>"
-                - stop
-
-            - define target <server.match_player[<context.args.get[2]>].if_null[null]>
-
-            - if <[target]> == null:
-                - narrate "<&c>Player not found."
-                - stop
-
-            - if <[target]> == <player>:
-                - narrate "<&c>You cannot add yourself."
-                - stop
-
-            - if <proc[friends_has].context[<player>|<[target]>]>:
-                - narrate "<&c>You are already friends with <[target].name>."
-                - stop
-
-            - if <[target].has_flag[friend_request]>:
-                - define master_player_uuid <proc[liteprofilesutils_get_master_uuid].context[<player>]>
-
-                - if <[target].flag[friend_request]> == <[master_player_uuid]>:
-                    - narrate "<&c>You already have a pending friend request with <[target].name>."
+            - case add:
+                - if <context.args.size> < 2:
+                    - narrate format:formats_prefix "<&c>Usage: /friend add <&lt>IGN<&gt>"
                     - stop
 
-                - narrate "<&c><[target].name> already has a pending friend request."
-                - stop
+                - define target <server.match_player[<context.args.get[2]>].if_null[null]>
 
-            - run friends_send_request def.player:<player> def.target:<[target]>
+                - if <[target]> == null:
+                    - narrate format:formats_prefix "<&c>Player not found."
+                    - stop
 
-        - case accept:
-            - if <context.args.size> <= 2:
-                - narrate "<&c>Usage: /friend accept <player>"
-                - stop
+                - if <[target]> == <player>:
+                    - narrate format:formats_prefix "<&c>You cannot add yourself as a friend."
+                    - stop
 
-            - define requester <server.match_player[<context.args.get[2]>].if_null[null]>
+                - if <proc[friends_has].context[<player>|<[target]>]>:
+                    - narrate format:formats_prefix "<&c>You are already friends with <[target].name>."
+                    - stop
 
-            - if <[requester]> == null:
-                - narrate "<&c>That player is not online."
-                - stop
+                - if <[target].has_flag[friend_request]>:
+                    - define player_master_uuid <proc[liteprofilesutils_get_master_uuid].context[<player>]>
 
-            - run friends_accept_request def.player:<player> def.requester:<[requester]>
+                    - if <[target].flag[friend_request]> == <[player_master_uuid]>:
+                        - narrate format:formats_prefix "<&c>You already sent <[target].name> a friend request."
+                        - stop
 
-        - case deny:
-            - if <context.args.size> <= 2:
-                - narrate "<&c>Usage: /friend deny <player>"
-                - stop
+                    - narrate format:formats_prefix "<&c><[target].name> already has a pending friend request."
+                    - stop
 
-            - define requester <server.match_player[<context.args.get[2]>].if_null[null]>
+                - define message ""
 
-            - if <[requester]> == null:
-                - narrate "<&c>That player is not online."
-                - stop
+                - if <context.args.size> >= 3:
+                    - define message <context.args.get[3].to[last].space_separated>
 
-            - run friends_deny_request def.player:<player> def.requester:<[requester]>
+                - run friends_send_request def.player:<player> def.target:<[target]> def.message:"<[message]>"
 
-        - case remove:
-            - if <context.args.size> <= 2:
-                - narrate "<&c>Usage: /friend remove <player>"
-                - stop
 
-            - define target <server.match_player[<context.args.get[2]>].if_null[null]>
+            - case accept:
+                - if <context.args.size> < 2:
+                    - narrate format:formats_prefix "<&c>Usage: /friend accept <&lt>IGN<&gt>"
+                    - stop
 
-            - if <[target]> == null:
-                - narrate "<&c>That player is not online."
-                - stop
+                - define target <server.match_player[<context.args.get[2]>].if_null[null]>
 
-            - if !<proc[friends_has].context[<player>|<[target]>]>:
-                - narrate "<&c>You are not friends with <[target].name>."
-                - stop
+                - if <[target]> == null:
+                    - narrate format:formats_prefix "<&c>Player not found."
+                    - stop
 
-            - run friends_remove def.player:<player> def.target:<[target]>
+                - run friends_accept_request def.player:<player> def.target:<[target]>
 
-            - narrate "<&e>You removed <[target].name> from your friends."
-            - narrate "<&e><player.name> removed you from their friends." targets:<[target]>
 
-        - case list:
-            - run friends_list_online def.player:<player>
+            - case deny:
+                - if <context.args.size> < 2:
+                    - narrate format:formats_prefix "<&c>Usage: /friend deny <&lt>IGN<&gt>"
+                    - stop
 
-        - case msg:
-            - if <context.args.size> <= 2:
-                - narrate "<&c>Usage: /friend msg <player> <message>"
-                - stop
+                - define target <server.match_player[<context.args.get[2]>].if_null[null]>
 
-            - if <context.args.size> <= 3:
-                - narrate "<&c>Usage: /friend msg <player> <message>"
-                - stop
+                - if <[target]> == null:
+                    - narrate format:formats_prefix "<&c>Player not found."
+                    - stop
 
-            - define target <server.match_player[<context.args.get[2]>].if_null[null]>
+                - run friends_deny_request def.player:<player> def.target:<[target]>
 
-            - if <[target]> == null:
-                - narrate "<&c>That player is not online."
-                - stop
 
-            - define message <context.raw_args.after[<context.args.get[2]>].trim>
+            - case remove:
+                - if <context.args.size> < 2:
+                    - narrate format:formats_prefix "<&c>Usage: /friend remove <&lt>IGN<&gt>"
+                    - stop
 
-            - if <[message].is_empty>:
-                - narrate "<&c>Please enter a message."
-                - stop
+                - define target <server.match_player[<context.args.get[2]>].if_null[null]>
 
-            - run friends_message def.player:<player> def.target:<[target]> def.message:<[message]>
+                - if <[target]> == null:
+                    - narrate format:formats_prefix "<&c>Player not found."
+                    - stop
 
-        - case reply:
-            - if <context.args.size> <= 2:
-                - narrate "<&c>Usage: /friend reply <message>"
-                - stop
+                - if !<proc[friends_has].context[<player>|<[target]>]>:
+                    - narrate format:formats_prefix "<&c>You are not friends with <[target].name>."
+                    - stop
 
-            - define message <context.raw_args.after[<context.args.get[1]>].trim>
+                - run friends_remove def.player:<player> def.target:<[target]>
 
-            - if <[message].is_empty>:
-                - narrate "<&c>Please enter a message."
-                - stop
+                - narrate format:formats_prefix "<&e>You removed <[target].name> from your friends."
+                - narrate "<&e><player.name> removed you from their friends." targets:<[target]>
 
-            - run friends_reply def.player:<player> def.message:<[message]>
 
-        - case r:
-            - if <context.args.size> <= 2:
-                - narrate "<&c>Usage: /friend r <message>"
-                - stop
+            - case list:
+                - run friends_list def.player:<player>
 
-            - define message <context.raw_args.after[<context.args.get[1]>].trim>
 
-            - if <[message].is_empty>:
-                - narrate "<&c>Please enter a message."
-                - stop
+            - case msg:
+                - if <context.args.size> < 3:
+                    - narrate format:formats_prefix "<&c>Usage: /friend msg <&lt>IGN<&gt> <&lt>message<&gt>"
+                    - stop
 
-            - run friends_reply def.player:<player> def.message:<[message]>
+                - define target <server.match_player[<context.args.get[2]>].if_null[null]>
 
-        - default:
-            - run friends_command_help def.player:<player>
+                - if <[target]> == null:
+                    - narrate format:formats_prefix "<&c>Player not found."
+                    - stop
+
+                - define message <context.args.get[3].to[last].space_separated>
+
+                - run friends_message def.player:<player> def.target:<[target]> def.message:"<[message]>"
+
+
+            - case reply:
+                - if <context.args.size> < 2:
+                    - narrate format:formats_prefix "<&c>Usage: /friend reply <&lt>message<&gt>"
+                    - stop
+
+                - define message <context.args.get[2].to[last].space_separated>
+
+                - run friends_reply def.player:<player> def.message:"<[message]>"
+
+
+            - case r:
+                - if <context.args.size> < 2:
+                    - narrate format:formats_prefix "<&c>Usage: /friend r <&lt>message<&gt>"
+                    - stop
+
+                - define message <context.args.get[2].to[last].space_separated>
+
+                - run friends_reply def.player:<player> def.message:"<[message]>"
+
+
+            - case wipe:
+                - if <player.has_flag[friend_wipe_confirm]>:
+                    - narrate format:formats_prefix "<&e>You already have a pending friends-list wipe."
+                    - narrate "<&7>Use <&f>/f confirm<&7> to continue."
+                    - stop
+
+                - flag <player> friend_wipe_confirm:true expire:30s
+
+                - narrate format:formats_prefix "<&c>This will permanently remove everyone from your friends list."
+                - narrate "<&7>Use <&f>/f confirm<&7> within 30 seconds to confirm."
+
+
+            - case confirm:
+                - if !<player.has_flag[friend_wipe_confirm]>:
+                    - narrate format:formats_prefix "<&c>You do not have a pending friends-list wipe."
+                    - stop
+
+                - flag <player> friend_wipe_confirm:!
+
+                - run friends_wipe def.player:<player>
+
+
+            - default:
+                - run friends_command_help
 
 
 friends_command_help:
     debug: false
     type: task
-    definitions: player
     script:
-    - narrate "<&6>---------- Friends ----------" targets:<[player]>
-    - narrate "<&e>/friend add <player> <&7>- Send a friend request." targets:<[player]>
-    - narrate "<&e>/friend accept <player> <&7>- Accept a friend request." targets:<[player]>
-    - narrate "<&e>/friend deny <player> <&7>- Deny a friend request." targets:<[player]>
-    - narrate "<&e>/friend remove <player> <&7>- Remove a friend." targets:<[player]>
-    - narrate "<&e>/friend list <&7>- View your friends." targets:<[player]>
-    - narrate "<&e>/friend msg <player> <message> <&7>- Message a friend." targets:<[player]>
-    - narrate "<&e>/friend reply <message> <&7>- Reply to your last friend message." targets:<[player]>
-    - narrate "<&e>/friend r <message> <&7>- Shortcut for reply." targets:<[player]>
-    - narrate "<&6>-----------------------------" targets:<[player]>
+        - narrate format:formats_prefix "<&d>Friend Commands"
+        - narrate "<&7>/friend add <&lt>IGN<&gt><&8>— <&f>Send a friend request."
+        - narrate "<&7>/friend accept <&lt>IGN<&gt> <&8>— <&f>Accept a friend request."
+        - narrate "<&7>/friend deny <&lt>IGN<&gt> <&8>— <&f>Deny a friend request."
+        - narrate "<&7>/friend remove <&lt>IGN<&gt> <&8>— <&f>Remove a friend."
+        - narrate "<&7>/friend list <&8>— <&f>View your friends."
+        - narrate "<&7>/friend msg <&lt>IGN<&gt> <&lt>message<&gt> <&8>— <&f>Message a friend."
+        - narrate "<&7>/friend reply <&lt>message<&gt> <&8>— <&f>Reply to your last friend."
+        - narrate "<&7>/friend r <&lt>message<&gt> <&8>— <&f>Shortcut for reply."
+        - narrate "<&7>/friend wipe <&8>— <&f>Prepare to wipe your friends list."
+        - narrate "<&7>/friend confirm <&8>— <&f>Confirm the friends-list wipe."

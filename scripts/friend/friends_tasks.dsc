@@ -5,15 +5,8 @@ friends_has:
     script:
     - define master_target_uuid <proc[liteprofilesutils_get_master_uuid].context[<[target]>]>
     - define friends <[player].flag[friends].if_null[<list[]>]>
-    - determine <[friends].contains_single[<[master_target_uuid]>]>
 
-
-friends_get_list:
-    debug: false
-    type: procedure
-    definitions: player
-    script:
-    - determine <[player].flag[friends].if_null[<list[]>]>
+    - determine <[friends].filter_tag[<[filter_value].equals[<[master_target_uuid]>]>].is_empty.not>
 
 
 friends_add:
@@ -21,20 +14,17 @@ friends_add:
     type: task
     definitions: player|target
     script:
-    - define master_player_uuid <proc[liteprofilesutils_get_master_uuid].context[<[player]>]>
-    - define master_target_uuid <proc[liteprofilesutils_get_master_uuid].context[<[target]>]>
+    - define player_master_uuid <proc[liteprofilesutils_get_master_uuid].context[<[player]>]>
+    - define target_master_uuid <proc[liteprofilesutils_get_master_uuid].context[<[target]>]>
 
     - define player_friends <[player].flag[friends].if_null[<list[]>]>
     - define target_friends <[target].flag[friends].if_null[<list[]>]>
 
-    - if !<[player_friends].contains_single[<[master_target_uuid]>]>:
-        - define player_friends <[player_friends].include[<[master_target_uuid]>]>
+    - if <[player_friends].filter_tag[<[filter_value].equals[<[target_master_uuid]>]>].is_empty>:
+        - flag <[player]> friends:->:<[target_master_uuid]>
 
-    - if !<[target_friends].contains_single[<[master_player_uuid]>]>:
-        - define target_friends <[target_friends].include[<[master_player_uuid]>]>
-
-    - flag <[player]> friends:<[player_friends]>
-    - flag <[target]> friends:<[target_friends]>
+    - if <[target_friends].filter_tag[<[filter_value].equals[<[player_master_uuid]>]>].is_empty>:
+        - flag <[target]> friends:->:<[player_master_uuid]>
 
 
 friends_remove:
@@ -42,97 +32,95 @@ friends_remove:
     type: task
     definitions: player|target
     script:
-    - define master_player_uuid <proc[liteprofilesutils_get_master_uuid].context[<[player]>]>
-    - define master_target_uuid <proc[liteprofilesutils_get_master_uuid].context[<[target]>]>
+    - define player_master_uuid <proc[liteprofilesutils_get_master_uuid].context[<[player]>]>
+    - define target_master_uuid <proc[liteprofilesutils_get_master_uuid].context[<[target]>]>
 
     - define player_friends <[player].flag[friends].if_null[<list[]>]>
     - define target_friends <[target].flag[friends].if_null[<list[]>]>
 
-    - define player_friends <[player_friends].exclude[<[master_target_uuid]>]>
-    - define target_friends <[target_friends].exclude[<[master_player_uuid]>]>
+    - define new_player_friends <[player_friends].filter_tag[<[filter_value].equals[<[target_master_uuid]>].not>]>
+    - define new_target_friends <[target_friends].filter_tag[<[filter_value].equals[<[player_master_uuid]>].not>]>
 
-    - flag <[player]> friends:<[player_friends]>
-    - flag <[target]> friends:<[target_friends]>
+    - if <[new_player_friends].is_empty>:
+        - flag <[player]> friends:!
+    - else:
+        - flag <[player]> friends:<[new_player_friends]>
+
+    - if <[new_target_friends].is_empty>:
+        - flag <[target]> friends:!
+    - else:
+        - flag <[target]> friends:<[new_target_friends]>
 
 
 friends_send_request:
     debug: false
     type: task
-    definitions: player|target
+    definitions: player|target|message
     script:
-    - define master_player_uuid <proc[liteprofilesutils_get_master_uuid].context[<[player]>]>
-    - flag <[target]> friend_request:<[master_player_uuid]>
+    - define player_master_uuid <proc[liteprofilesutils_get_master_uuid].context[<[player]>]>
 
-    - flag <[player]> friend_reply:<proc[liteprofilesutils_get_master_uuid].context[<[target]>]>
-    - flag <[target]> friend_reply:<[master_player_uuid]>
+    - flag <[target]> friend_request:<[player_master_uuid]>
 
-    - narrate "<&a>Friend request sent to <[target].name>." targets:<[player]>
-    - narrate "<&e><[player].name> has sent you a friend request. Use <&f>/friend accept <[player].name><&e> to accept it, or <&f>/friend deny <[player].name><&e> to deny it." targets:<[target]>
+    - narrate format:formats_prefix "<&a>Friend request sent to <[target].name>."
+
+    - if <[message].is_empty>:
+        - narrate "<&e><player.name> has sent you a friend request." targets:<[target]>
+        - narrate "<&7>Use <&f>/friend accept <player.name><&7> to accept." targets:<[target]>
+        - narrate "<&7>Use <&f>/friend deny <player.name><&7> to deny it." targets:<[target]>
+        - stop
+
+    - narrate "<&e><player.name> has sent you a friend request." targets:<[target]>
+    - narrate "<&7>Message: <&f><[message]>" targets:<[target]>
+    - narrate "<&7>Use <&f>/friend accept <player.name><&7> to accept." targets:<[target]>
+    - narrate "<&7>Use <&f>/friend deny <player.name><&7> to deny it." targets:<[target]>
 
 
 friends_accept_request:
     debug: false
     type: task
-    definitions: player|requester
+    definitions: player|target
     script:
-    - define master_player_uuid <proc[liteprofilesutils_get_master_uuid].context[<[player]>]>
-    - define master_requester_uuid <proc[liteprofilesutils_get_master_uuid].context[<[requester]>]>
-
     - if !<[player].has_flag[friend_request]>:
-        - narrate "<&c>You do not have a pending friend request." targets:<[player]>
+        - narrate format:formats_prefix "<&c>You do not have a pending friend request."
         - stop
 
-    - if <[player].flag[friend_request]> != <[master_requester_uuid]>:
-        - narrate "<&c>You do not have a pending friend request from <[requester].name>." targets:<[player]>
+    - define target_master_uuid <proc[liteprofilesutils_get_master_uuid].context[<[target]>]>
+
+    - if <[player].flag[friend_request]> != <[target_master_uuid]>:
+        - narrate format:formats_prefix "<&c>You do not have a pending friend request from <[target].name>."
         - stop
 
-    - run friends_add def.player:<[player]> def.target:<[requester]>
+    - if <proc[friends_has].context[<[player]>|<[target]>]>:
+        - flag <[player]> friend_request:!
+        - narrate format:formats_prefix "<&c>You are already friends with <[target].name>."
+        - stop
 
+    - run friends_add def.player:<[player]> def.target:<[target]>
     - flag <[player]> friend_request:!
-    - flag <[player]> friend_reply:<[master_requester_uuid]>
-    - flag <[requester]> friend_reply:<[master_player_uuid]>
 
-    - narrate "<&a>You are now friends with <[requester].name>." targets:<[player]>
-    - narrate "<&a><[player].name> accepted your friend request." targets:<[requester]>
+    - narrate format:formats_prefix "<&a>You are now friends with <[target].name>."
+    - narrate "<&a><player.name> accepted your friend request." targets:<[target]>
 
 
 friends_deny_request:
     debug: false
     type: task
-    definitions: player|requester
+    definitions: player|target
     script:
-    - define master_requester_uuid <proc[liteprofilesutils_get_master_uuid].context[<[requester]>]>
-
     - if !<[player].has_flag[friend_request]>:
-        - narrate "<&c>You do not have a pending friend request." targets:<[player]>
+        - narrate format:formats_prefix "<&c>You do not have a pending friend request."
         - stop
 
-    - if <[player].flag[friend_request]> != <[master_requester_uuid]>:
-        - narrate "<&c>You do not have a pending friend request from <[requester].name>." targets:<[player]>
+    - define target_master_uuid <proc[liteprofilesutils_get_master_uuid].context[<[target]>]>
+
+    - if <[player].flag[friend_request]> != <[target_master_uuid]>:
+        - narrate format:formats_prefix "<&c>You do not have a pending friend request from <[target].name>."
         - stop
 
     - flag <[player]> friend_request:!
 
-    - narrate "<&e>You denied <[requester].name>'s friend request." targets:<[player]>
-    - narrate "<&e><[player].name> denied your friend request." targets:<[requester]>
-
-
-friends_clear_request:
-    debug: false
-    type: task
-    definitions: player
-    script:
-    - if <[player].has_flag[friend_request]>:
-        - flag <[player]> friend_request:!
-
-
-friends_set_reply:
-    debug: false
-    type: task
-    definitions: player|target
-    script:
-    - define master_target_uuid <proc[liteprofilesutils_get_master_uuid].context[<[target]>]>
-    - flag <[player]> friend_reply:<[master_target_uuid]>
+    - narrate format:formats_prefix "<&e>You denied <[target].name>'s friend request."
+    - narrate "<&e><player.name> denied your friend request." targets:<[target]>
 
 
 friends_message:
@@ -141,18 +129,35 @@ friends_message:
     definitions: player|target|message
     script:
     - if <[player]> == <[target]>:
-        - narrate "<&c>You cannot message yourself." targets:<[player]>
+        - narrate format:formats_prefix "<&c>You cannot message yourself."
         - stop
 
     - if !<proc[friends_has].context[<[player]>|<[target]>]>:
-        - narrate "<&c>You are not friends with <[target].name>." targets:<[player]>
+        - narrate format:formats_prefix "<&c>You are not friends with <[target].name>."
         - stop
 
-    - narrate "<&d>[Friend] <&f>You<&7>: <[message]>" targets:<[player]>
-    - narrate "<&d>[Friend] <&f><[player].name><&7>: <[message]>" targets:<[target]>
+    - narrate format:formats_prefix "<&d>YOU <&8>-> <&f><[target].name><&7>: <&f><[message]>"
+    - narrate format:formats_prefix "<&d><[player].name> <&8>-> <&f>YOU<&7>: <&f><[message]>" targets:<[target]>
 
-    - run friends_set_reply def.player:<[player]> def.target:<[target]>
-    - run friends_set_reply def.player:<[target]> def.target:<[player]>
+    - define player_master_uuid <proc[liteprofilesutils_get_master_uuid].context[<[player]>]>
+    - define target_master_uuid <proc[liteprofilesutils_get_master_uuid].context[<[target]>]>
+
+    - flag <[player]> friend_reply:<[target_master_uuid]>
+    - flag <[target]> friend_reply:<[player_master_uuid]>
+
+
+friends_find_online:
+    debug: false
+    type: procedure
+    definitions: master_uuid
+    script:
+    - foreach <server.online_players> as:possible:
+        - define possible_master_uuid <proc[liteprofilesutils_get_master_uuid].context[<[possible]>]>
+
+        - if <[possible_master_uuid]> == <[master_uuid]>:
+            - determine <[possible]>
+
+    - determine null
 
 
 friends_reply:
@@ -161,26 +166,25 @@ friends_reply:
     definitions: player|message
     script:
     - if !<[player].has_flag[friend_reply]>:
-        - narrate "<&c>You have nobody to reply to." targets:<[player]>
+        - narrate format:formats_prefix "<&c>You have nobody to reply to."
         - stop
 
-    - define master_target_uuid <[player].flag[friend_reply]>
-    - define target_list <server.online_players.filter_tag[<proc[liteprofilesutils_get_master_uuid].context[<[filter_value]>].equals[<[master_target_uuid]>]>]>
+    - define target_master_uuid <[player].flag[friend_reply]>
+    - define target <proc[friends_find_online].context[<[target_master_uuid]>]>
 
-    - if <[target_list].is_empty>:
-        - narrate "<&c>Your last friend is not online." targets:<[player]>
+    - if <[target]> == null:
+        - narrate format:formats_prefix "<&c>Your last friend is not online."
         - stop
-
-    - define target <[target_list].first>
 
     - if !<proc[friends_has].context[<[player]>|<[target]>]>:
-        - narrate "<&c>You are no longer friends with <[target].name>." targets:<[player]>
+        - flag <[player]> friend_reply:!
+        - narrate format:formats_prefix "<&c>You are no longer friends with <[target].name>."
         - stop
 
-    - run friends_message def.player:<[player]> def.target:<[target]> def.message:<[message]>
+    - run friends_message def.player:<[player]> def.target:<[target]> def.message:"<[message]>"
 
 
-friends_list_online:
+friends_list:
     debug: false
     type: task
     definitions: player
@@ -188,26 +192,55 @@ friends_list_online:
     - define friends <[player].flag[friends].if_null[<list[]>]>
 
     - if <[friends].is_empty>:
-        - narrate "<&7>You currently have no friends." targets:<[player]>
+        - narrate format:formats_prefix "<&7>You have no friends."
         - stop
 
-    - narrate "<&6>---------- Friends ----------" targets:<[player]>
+    - narrate format:formats_prefix "<&d>Friends"
 
-    - foreach <[friends]> as:friend_uuid:
-        - define friend <[friend_uuid].as[player]>
-        - if <[friend].has_played_before>:
-            - if <[friend].is_online>:
-                - narrate "<&a><[friend].name> <&7>(Online)" targets:<[player]>
-            - else:
-                - narrate "<&7><[friend].name> <&7>(Offline)" targets:<[player]>
+    - foreach <[friends]> as:friend_master_uuid:
+        - define friend <proc[friends_find_online].context[<[friend_master_uuid]>]>
 
-    - narrate "<&6>-----------------------------" targets:<[player]>
+        - if <[friend]> != null:
+            - narrate "<&a><[friend].name> <&8>• <&7>Online"
+            - foreach next
+
+        - define offline_friend <[friend_master_uuid].as[player]>
+
+        - if <[offline_friend].exists>:
+            - narrate "<&7><[offline_friend].name> <&8>• <&7>Offline"
+        - else:
+            - narrate "<&7>Unknown Player <&8>• <&7>Offline"
 
 
-friends_cleanup:
+friends_wipe:
     debug: false
     type: task
     definitions: player
     script:
-    - if <[player].has_flag[friend_request]>:
-        - flag <[player]> friend_request:!
+        - define player_master_uuid <proc[liteprofilesutils_get_master_uuid].context[<[player]>]>
+        - define friends <[player].flag[friends].if_null[<list[]>]>
+
+        - foreach <server.players> as:friend:
+            - if !<[friend].has_flag[friends]>:
+                - foreach next
+
+            - define friend_list <[friend].flag[friends].if_null[<list[]>]>
+
+            - if !<[friend_list].contains[<[player_master_uuid]>]>:
+                - foreach next
+
+            - define new_friend_list <[friend_list].filter_tag[<[filter_value].equals[<[player_master_uuid]>].not>]>
+
+            - if <[new_friend_list].is_empty>:
+                - flag <[friend]> friends:!
+            - else:
+                - flag <[friend]> friends:<[new_friend_list]>
+
+            - if <[friend].is_online>:
+                - narrate format:formats_prefix "<&c>You have been /f wiped by <[player].name>." targets:<[friend]>
+
+        - flag <[player]> friend_reply:!
+        - flag <[player]> friend_wipe_confirm:!
+        - flag <[player]> friends:!
+
+        - narrate format:formats_prefix "<&a>Your friends list has been wiped."
