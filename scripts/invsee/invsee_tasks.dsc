@@ -23,3 +23,5 @@ invsee_take:
     - give item:<[item]> to:<[player].inventory>
     - if <[itemregistry]>:
         - flag <[player]> itemregistry_mid_transaction:!
+    - inventory close
+    - run invsee_open def.player:<[player]> def.target<[target]>
