@@ -12,7 +12,7 @@ chat_special_group:
     type: procedure
     definitions: player
     script:
-    - define result <placeholder[luckperms_prefix_element_highest_on_track_special].player[<[player]>].if_null[<&f>].parse_color> 
+    - define result <placeholder[luckperms_prefix_element_highest_on_track_special].player[<[player]>].if_null[<&f>].parse_color>
     - if <[result].strip_color.length> > 0:
         - define result <[result]><&sp>
     - determine <[result]>
@@ -51,6 +51,38 @@ chat_allowed_colors:
     type: procedure
     script:
     - determine <util.color_names.exclude[black].exclude[transparent].exclude[white]>
+
+chat_auto_capitalize_apply:
+    debug: false
+    type: task
+    script:
+    - if <proc[settings_get].context[<[player]>|text_rp_chat_auto_capitalize]>:
+        - define copy <[message]>
+        - define output <empty>
+        - define replaced false
+        - while <[copy].length> > 0:
+            - define char <[copy].substring[1,1]>
+            - if <[replaced]>:
+                - if <[char]> == . || <[char]> == ? || <[char]> == !:
+                    - define replaced false
+                - define output <[output]><[char]>
+            - else:
+                - if <[char].to_uppercase> != <[char]>:
+                    - define output <[output]><[char].to_uppercase>
+                    - define replaced true
+                - else:
+                    - define output <[output]><[char]>
+            - define copy <[copy].substring[2]>
+        - define message <[output]>
+
+chat_replace_abbreviations_apply:
+    debug: false
+    type: task
+    script:
+    - if <proc[settings_get].context[<[player]>|text_rp_chat_replace_abbreviations]>:
+        - define split <[message].split[regex:[^a-zA-Z0-9_.]|\.[^a-zA-Z0-9_.]]>
+        - # TODO: somehow keep the split components but keep the split char too in O(n)
+        - define message <[message]>
 
 chat_tokenize_actions:
     debug: false
@@ -112,7 +144,7 @@ chat_accessibility_space_message_inject_apply:
 chat_channel_ic:
     debug: false
     type: task
-    definitions: player|message
+    definitions: player|message/JavaFX frame
     script:
     - if <[message].starts_with[*]> && <[message].split[*].size> == 2:
         - if <[message].ends_with[*]>:
@@ -122,6 +154,8 @@ chat_channel_ic:
         - stop
     - if !<[player].has_permission[chat.colors]>:
         - define message <[message].strip_color>
+    - inject chat_auto_capitalize_apply
+    - inject chat_replace_abbreviations_apply
     - define tokenized <proc[chat_tokenize_actions].context[<[message]>|<element[&<color[<proc[settings_get].context[<[player]>|text_rp_chat_color]>].hex>].parse_color>says<&7>:|<element[&<color[<proc[settings_get].context[<[player]>|text_rp_chat_color]>].hex>].parse_color>|<&f>|<&f><&dq><&f>|false].replace[&\].with[&].unescaped>
     - define final "<&color[#b8b9ba]><placeholder[essentials_nickname].player[<[player]>]> <&f><proc[chat_special_group].context[<[player]>]><proc[chat_roles_group].context[<[player]>]> <proc[character_get_name].context[<[player]>]> <[tokenized]>"
     - define targets <[player].location.find_players_within[10]>

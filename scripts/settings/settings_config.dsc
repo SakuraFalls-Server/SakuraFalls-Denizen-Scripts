@@ -80,6 +80,18 @@ settings_config:
             min: 1
             max: 3
             increment: 1
+        text_rp_chat_auto_capitalize:
+            tab: Text
+            name: Auto capitalize in character messages
+            description: If enabled, in character chat channel messages will automatically capitalize the first letter of a sentence.
+            type: boolean
+            default: true
+        text_rp_chat_replace_abbreviations:
+            tab: Text
+            name: Replace abbreviations for in character chat channels
+            description: If enabled, in character chat messages that you send will replace some common abbreviations with their full length variant.
+            type: boolean
+            default: true
         ##
         sound_textbox_volume:
             tab: Sounds

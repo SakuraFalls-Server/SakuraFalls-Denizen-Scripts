@@ -140,3 +140,10 @@ chat_data_languages:
     - Yiddish
     - Yoruba
     - Zulu
+
+chat_data_abbreviations:
+    debug: false
+    type: data
+    # keep all abbreviations lowercase, the code handles uppercase
+    abbreviations:
+        ttyl: talk to you later
