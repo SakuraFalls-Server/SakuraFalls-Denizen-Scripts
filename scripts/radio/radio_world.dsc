@@ -5,7 +5,7 @@ radio_world:
         on player animates:
             - if <context.animation> != ARM_SWING:
                 - stop
-            - ratelimit <player> 1t
+            - ratelimit <player> 60t
             - if !<player.item_in_hand.has_flag[radio_item]>:
                 - stop
             - if <player.item_in_hand.has_flag[radio_enabled]>:
