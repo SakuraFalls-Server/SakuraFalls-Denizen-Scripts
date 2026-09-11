@@ -2,7 +2,6 @@ friends_world:
     debug: false
     type: world
     events:
-
         on player joins:
             - wait 1s
             - define joining_master_uuid <proc[liteprofilesutils_get_master_uuid].context[<player>]>

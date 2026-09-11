@@ -3,4 +3,6 @@ staffmessage_world:
     type: world
     events:
         on player quits:
-            - flag <player> staffmessage_reply:!
+            - flag <player> staffmessage_last_staff:!
+        on player joins:
+            - flag <player> staffmessage_last_staff:!
