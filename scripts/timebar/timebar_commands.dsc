@@ -1,5 +1,5 @@
 timebar_commands_add_time:
-    debug: true
+    debug: false
     type: command
     description: Adds time to the current timebar time.
     name: addtime
