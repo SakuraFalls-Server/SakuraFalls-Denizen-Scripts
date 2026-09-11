@@ -13,15 +13,19 @@ invsee_open:
 invsee_take:
     debug: false
     type: task
-    definitions: player|item
+    definitions: player|item|slot
     script:
+    - flag <[item]> _menu_script:!
+    - flag <[item]> _menu_definitions:!
     - define itemregistry <[item].has_flag[itemregistry].if_null[false]>
+    - define target <[player].flag[invsee_open]>
     - if <[itemregistry]>:
         - flag <[player]> itemregistry_mid_transaction:true expire:1s
-    - define target <[player].flag[invsee_open]>
-    - take item:<[item]> from:<[target].inventory>
-    - give item:<[item]> to:<[player].inventory>
+    - take slot:<[slot]> from:<[target].inventory> quantity:1
+    - if <[itemregistry]>:
+        - ~run itemregistry_update_tracker def.item:<[item]> def.new_inventory:<[player].inventory>
+    - give item:<[item]> to:<[player].inventory> quantity:1
     - if <[itemregistry]>:
         - flag <[player]> itemregistry_mid_transaction:!
     - inventory close
-    - run invsee_open def.player:<[player]> def.target<[target]>
+    - run invsee_open def.player:<[player]> def.target:<[target]> path:script
