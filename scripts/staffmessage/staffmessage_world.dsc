@@ -1,0 +1,6 @@
+staffmessage_world:
+    debug: false
+    type: world
+    events:
+        on player quits:
+            - flag <player> staffmessage_reply:!
