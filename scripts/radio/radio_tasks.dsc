@@ -50,19 +50,24 @@ radio_get_channel:
         - if <[player].has_flag[radio_channel]>:
             - define override <[player].flag[radio_channel]>
             - if <[override]> == emergency:
-                - if <[player].has_permission[radio.category.emergency]>:
+                - if <[player].has_permission[radio.category.police]> || <[player].has_permission[radio.category.hospital]>:
                     - determine emergency
                 - flag <[player]> radio_channel:!
-            - else if <[override]> == police:
-                - determine police
-            - else if <[override]> == hospital:
-                - determine hospital
-            - else if <[override]> == school:
-                - determine school
-            - else if <[override]> == town:
-                - determine town
-            - else:
+            - if <[override]> == police:
+                - if <[player].has_permission[radio.category.police]>:
+                    - determine police
                 - flag <[player]> radio_channel:!
+            - if <[override]> == hospital:
+                - if <[player].has_permission[radio.category.hospital]>:
+                    - determine hospital
+                - flag <[player]> radio_channel:!
+            - if <[override]> == school:
+                - if <[player].has_permission[radio.category.school]>:
+                    - determine school
+                - flag <[player]> radio_channel:!
+            - if <[override]> == town:
+                - determine town
+            - flag <[player]> radio_channel:!
         - determine <[default]>
 
 radio_channel_label:
@@ -161,7 +166,7 @@ radio_make_item:
     type: procedure
     script:
         - define radio i@glistering_melon_slice
-        - adjust def:radio "<&7>Radio| <&c>Off"
+        - adjust def:radio "display:<&7>Radio| <&c>Off"
         - adjust def:radio "lore:<&b>Left click <&f>to turn on/off.|<&7>|<&7><&o>Use with care."
         - define radio <[radio].with_flag[radio_item]>
         - determine <[radio]>

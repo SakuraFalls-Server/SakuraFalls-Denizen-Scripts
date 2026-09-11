@@ -105,36 +105,67 @@ radioswap_command:
         - if <context.source_type> != player:
             - narrate "<&c>This command can only be used by a player."
             - stop
-        - define has_police <player.has_permission[radio.category.police]>
-        - define has_hospital <player.has_permission[radio.category.hospital]>
-        - if !<[has_police]> && !<[has_hospital]>:
-            - narrate "<&c>You do not have access to a faction radio."
+        - define is_police <player.has_permission[radio.category.police]>
+        - define is_hospital <player.has_permission[radio.category.hospital]>
+        - if !<[is_police]> && !<[is_hospital]>:
+            - narrate "<&c>You do not have access to the Police or Hospital radio."
             - stop
         - define current <proc[radio_get_channel].context[<player>]>
         - if <[current]> == emergency:
-            - if <[has_hospital]> && !<[has_police]>:
+            - if <[is_hospital]> && !<[is_police]>:
                 - flag player radio_channel:hospital
                 - narrate "<&7>Radio switched to <&1>[R-HOSPITAL]<&7>."
                 - stop
-            - if <[has_police]>:
+            - if <[is_police]> && !<[is_hospital]>:
+                - flag player radio_channel:police
+                - narrate "<&7>Radio switched to <&b>[R-POLICE]<&7>."
+                - stop
+            - if <[is_police]> && <[is_hospital]>:
+                - if <player.has_flag[radio_return_channel]>:
+                    - define return_channel <player.flag[radio_return_channel]>
+                    - if <[return_channel]> == hospital:
+                        - flag player radio_channel:hospital
+                        - narrate "<&7>Radio switched to <&1>[R-HOSPITAL]<&7>."
+                        - stop
+                    - if <[return_channel]> == police:
+                        - flag player radio_channel:police
+                        - narrate "<&7>Radio switched to <&b>[R-POLICE]<&7>."
+                        - stop
                 - flag player radio_channel:police
                 - narrate "<&7>Radio switched to <&b>[R-POLICE]<&7>."
                 - stop
         - if <[current]> == hospital:
-            - if <[has_hospital]>:
-                - flag player radio_channel:emergency
-                - narrate "<&7>Radio switched to <&c>[R-EMERGENCY]<&7>."
-                - stop
-        - if <[current]> == police:
-            - if <[has_police]>:
-                - flag player radio_channel:emergency
-                - narrate "<&7>Radio switched to <&c>[R-EMERGENCY]<&7>."
-                - stop
-        - if <[has_hospital]> && !<[has_police]>:
+            - flag player radio_return_channel:hospital
             - flag player radio_channel:emergency
             - narrate "<&7>Radio switched to <&c>[R-EMERGENCY]<&7>."
             - stop
-        - if <[has_police]>:
+        - if <[current]> == police:
+            - flag player radio_return_channel:police
+            - flag player radio_channel:emergency
+            - narrate "<&7>Radio switched to <&c>[R-EMERGENCY]<&7>."
+            - stop
+        - if <[is_hospital]> && !<[is_police]>:
+            - flag player radio_return_channel:hospital
+            - flag player radio_channel:emergency
+            - narrate "<&7>Radio switched to <&c>[R-EMERGENCY]<&7>."
+            - stop
+        - if <[is_police]> && !<[is_hospital]>:
+            - flag player radio_return_channel:police
+            - flag player radio_channel:emergency
+            - narrate "<&7>Radio switched to <&c>[R-EMERGENCY]<&7>."
+            - stop
+        - if <[is_police]> && <[is_hospital]>:
+            - if <player.has_flag[radio_return_channel]>:
+                - define return_channel <player.flag[radio_return_channel]>
+                - if <[return_channel]> == hospital:
+                    - flag player radio_channel:emergency
+                    - narrate "<&7>Radio switched to <&c>[R-EMERGENCY]<&7>."
+                    - stop
+                - if <[return_channel]> == police:
+                    - flag player radio_channel:emergency
+                    - narrate "<&7>Radio switched to <&c>[R-EMERGENCY]<&7>."
+                    - stop
+            - flag player radio_return_channel:police
             - flag player radio_channel:emergency
             - narrate "<&7>Radio switched to <&c>[R-EMERGENCY]<&7>."
             - stop
