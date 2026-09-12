@@ -55,7 +55,7 @@ friends_send_request:
     - define player_master_uuid <proc[liteprofilesutils_get_master_uuid].context[<[player]>]>
     - define target_master_uuid <proc[liteprofilesutils_get_master_uuid].context[<[target]>]>
     - define target_master <player[<[target_master_uuid]>]>
-    - flag <[target_master]> friend_requests:->:<[player_master_uuid]>
+    - flag <[target_master]> friends_requests:->:<[player_master_uuid]>
     - adjust server save
     - narrate format:formats_prefix "<&a>Friend request sent to <[target].name>."
     - narrate "<&e><[player].name> has sent you a friend request." targets:<[target]>
@@ -71,16 +71,16 @@ friends_accept_request:
     script:
     - define player_master_uuid <proc[liteprofilesutils_get_master_uuid].context[<[player]>]>
     - define player_master <player[<[player_master_uuid]>]>
-    - if !<[player_master].has_flag[friend_requests]>:
+    - if !<[player_master].has_flag[friends_requests]>:
         - narrate format:formats_prefix "<&c>You do not have pending friend requests."
         - stop
     - define target_master_uuid <proc[liteprofilesutils_get_master_uuid].context[<[target]>]>
     - define target_master <player[<[target_master_uuid]>]>
-    - if !<[player_master].flag[friend_requests].contains[<[target_master_uuid]>]>:
+    - if !<[player_master].flag[friends_requests].contains[<[target_master_uuid]>]>:
         - narrate format:formats_prefix "<&c>You do not have a pending friend request from <[target_master].name>."
         - stop
     - run friends_add def.player:<[player]> def.target:<[target]>
-    - flag <[player_master]> friend_requests:<[player_master].flag[friend_requests].exclude[<[target_master_uuid]>]>
+    - flag <[player_master]> friends_requests:<[player_master].flag[friends_requests].exclude[<[target_master_uuid]>]>
     - adjust server save
     - narrate format:formats_prefix "<&a>You are now friends with <[target_master].name>."
     - define online_target <server.match_player[<[target_master].name>].if_null[null]>
@@ -94,15 +94,15 @@ friends_deny_request:
     script:
     - define player_master_uuid <proc[liteprofilesutils_get_master_uuid].context[<[player]>]>
     - define player_master <player[<[player_master_uuid]>]>
-    - if !<[player_master].has_flag[friend_requests]>:
+    - if !<[player_master].has_flag[friends_requests]>:
         - narrate format:formats_prefix "<&c>You do not have a pending friend request."
         - stop
     - define target_master_uuid <proc[liteprofilesutils_get_master_uuid].context[<[target]>]>
     - define target_master <player[<[target_master_uuid]>]>
-    - if <[player_master].flag[friend_requests].contains[<[target_master_uuid]>]>:
+    - if <[player_master].flag[friends_requests].contains[<[target_master_uuid]>]>:
         - narrate format:formats_prefix "<&c>You do not have a pending friend request from <[target].name>."
         - stop
-    - flag <[player]> friend_requests:<[player_master].flag[friend_requests].exclude[<[target_master_uuid]>]>
+    - flag <[player]> friends_requests:<[player_master].flag[friends_requests].exclude[<[target_master_uuid]>]>
     - adjust server save
     - narrate format:formats_prefix "<&e>You denied <[target_master].name>'s friend request."
     - define online_target <server.match_player[<[target_master].name>].if_null[null]>
@@ -124,8 +124,8 @@ friends_message:
     - narrate format:formats_prefix "<&d><[player].name> <&8>-<&gt> <&f>YOU<&7>: <&f><[message]>" targets:<[target]>
     - define player_master_uuid <proc[liteprofilesutils_get_master_uuid].context[<[player]>]>
     - define target_master_uuid <proc[liteprofilesutils_get_master_uuid].context[<[target]>]>
-    - flag <[player]> friend_reply:<[target_master_uuid]>
-    - flag <[target]> friend_reply:<[player_master_uuid]>
+    - flag <[player]> friends_reply:<[target_master_uuid]>
+    - flag <[target]> friends_reply:<[player_master_uuid]>
 
 friends_find_online:
     debug: false
@@ -139,16 +139,16 @@ friends_reply:
     type: task
     definitions: player|message
     script:
-    - if !<[player].has_flag[friend_reply]>:
+    - if !<[player].has_flag[friends_reply]>:
         - narrate format:formats_prefix "<&c>You have nobody to reply to."
         - stop
-    - define target_master_uuid <[player].flag[friend_reply]>
+    - define target_master_uuid <[player].flag[friends_reply]>
     - define target <proc[friends_find_online].context[<[target_master_uuid]>]>
     - if <[target]> == null:
         - narrate format:formats_prefix "<&c>Your last friend is not online."
         - stop
     - if !<proc[friends_has].context[<[player]>|<[target]>]>:
-        - flag <[player]> friend_reply:!
+        - flag <[player]> friends_reply:!
         - narrate format:formats_prefix "<&c>You are no longer friends with <[target].name>."
         - stop
     - run friends_message def.player:<[player]> def.target:<[target]> def.message:<[message]>
@@ -186,7 +186,7 @@ friends_wipe:
         - if <[online_target]> != null:
             - narrate format:formats_prefix targets:<[online_target]> "<&c>You were /friend wiped from <[player].name>'s friend list"
     - flag <[player]> friends:!
-    - flag <[player]> friend_reply:!
-    - flag <[player]> friend_wipe_confirm:!
+    - flag <[player]> friends_reply:!
+    - flag <[player]> friends_wipe_confirm:!
     - adjust server save
     - narrate format:formats_prefix "<&a>Your friends list has been wiped. <&7>(<[size]> friends removed)"

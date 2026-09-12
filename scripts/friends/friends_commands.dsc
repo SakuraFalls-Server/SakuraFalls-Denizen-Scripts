@@ -101,18 +101,18 @@ friends_command_friend:
                 - define message <context.args.get[2].to[last].space_separated>
                 - run friends_reply def.player:<player> def.message:<[message]>
             - case wipe:
-                - if <player.has_flag[friend_wipe_confirm]>:
+                - if <player.has_flag[friends_wipe_confirm]>:
                     - narrate format:formats_prefix "<&e>You already have a pending friend list wipe."
                     - narrate "<&7>Use <&f>/<context.alias> confirm<&7> to continue."
                 - else:
-                    - flag <player> friend_wipe_confirm:true expire:30s
+                    - flag <player> friends_wipe_confirm:true expire:30s
                     - narrate format:formats_prefix "<&c>This will permanently remove everyone from your friend list."
                     - narrate "<&7>Use <&f>/<context.alias> confirm<&7> within 30 seconds to confirm."
             - case confirm:
-                - if !<player.has_flag[friend_wipe_confirm]>:
+                - if !<player.has_flag[friends_wipe_confirm]>:
                     - narrate format:formats_prefix "<&c>You do not have a pending friend list wipe."
                 - else:
-                    - flag <player> friend_wipe_confirm:!
+                    - flag <player> friends_wipe_confirm:!
                     - run friends_wipe def.player:<player>
             - default:
                 - run friends_command_friend_help
