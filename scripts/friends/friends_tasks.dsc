@@ -58,11 +58,13 @@ friends_send_request:
     - flag <[target_master]> friends_requests:->:<[player_master_uuid]>
     - adjust server save
     - narrate format:formats_prefix "<&a>Friend request sent to <[target].name>."
-    - narrate "<&e><[player].name> has sent you a friend request." targets:<[target]>
-    - if <[message].is_empty>:
-        - narrate "<&7>Message: <&f><[message]>" targets:<[target]>
-    - narrate "<&7>Use <&f>/friend accept <[player].name><&7> to accept." targets:<[target]>
-    - narrate "<&7>Use <&f>/friend deny <[player].name><&7> to deny it." targets:<[target]>
+    - define online_target <server.match_player[<[target_master].name>].if_null[null]>
+    - if <[online_target]> != null:
+        - narrate "<&e><[player].name> has sent you a friend request." targets:<[online_target]>
+        - if <[message].length> > 0:
+            - narrate "<&7>Message: <&f><[message]>" targets:<[online_target]>
+        - narrate "<&7>Use <&f>/friend accept <[player].name><&7> to accept." targets:<[online_target]>
+        - narrate "<&7>Use <&f>/friend deny <[player].name><&7> to deny it." targets:<[online_target]>
 
 friends_accept_request:
     debug: false
