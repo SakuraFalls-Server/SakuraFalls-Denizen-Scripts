@@ -43,7 +43,7 @@ friends_command_friend:
                     - if <[target_master].flag[friend_requests].contains[<[player_master_uuid]>]>:
                         - narrate format:formats_prefix "<&c>You already sent <[target].name> a friend request."
                         - stop
-                - define message <empty>
+                - define message <element[]>
                 - if <context.args.size> >= 3:
                     - define message <context.args.get[3].to[last].space_separated>
                 - run friends_send_request def.player:<player> def.target:<[target]> def.message:<[message]>
