@@ -46,7 +46,7 @@ friends_command_friend:
                 - define message <empty>
                 - if <context.args.size> >= 3:
                     - define message <context.args.get[3].to[last].space_separated>
-                - run friends_send_request def.player:<player> def.target:<[target]> def.message=<[message]>
+                - run friends_send_request def.player:<player> def.target:<[target]> def.message:<[message]>
             - case accept:
                 - if <context.args.size> < 2:
                     - narrate format:formats_prefix "<&c>Usage: /friend accept <&lt>IGN<&gt>"
