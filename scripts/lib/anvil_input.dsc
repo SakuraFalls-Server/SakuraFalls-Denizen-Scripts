@@ -4,7 +4,7 @@
 #
 
 #
-# Requests input from the player with the given prompt, and then applies 
+# Requests input from the player with the given prompt, and then applies
 # the result to the callback.
 #
 # The callback is a task with two definitions: a player, and the input.
