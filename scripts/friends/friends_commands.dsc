@@ -39,8 +39,8 @@ friends_command_friend:
                     - narrate format:formats_prefix "<&c>You are already friends with <[target].name>."
                     - stop
                 - define target_master <player[<[target_master_uuid]>]>
-                - if <[target_master].has_flag[friend_requests]>:
-                    - if <[target_master].flag[friend_requests].contains[<[player_master_uuid]>]>:
+                - if <[target_master].has_flag[friends_requests]>:
+                    - if <[target_master].flag[friends_requests].contains[<[player_master_uuid]>]>:
                         - narrate format:formats_prefix "<&c>You already sent <[target].name> a friend request."
                         - stop
                 - define message <element[]>
