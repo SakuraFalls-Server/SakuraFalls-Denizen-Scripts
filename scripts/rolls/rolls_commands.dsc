@@ -20,16 +20,18 @@ roll_command_roll:
         - if <[amount]> < 2 || <[amount]> > 200:
             - narrate "<&c>The amount must be an integer between 2 and 200."
             - stop
-    - run roll_task def.player:<player> def.amount:<[amount]> def.distance:10
-
+    - run roll_execute def.player:<player> def.amount:<[amount]> def.distance:10
 
 roll_command_rollloud:
     debug: false
     type: command
-    name: rolll
-    usage: /rolll [amount?]
+    name: rollloud
+    usage: /rollloud [amount?]
     description: Rolls a dice, optionally with an amount.
-    permission: roll.command.roll
+    aliases:
+    - rolll
+    - loudroll
+    permission: roll.command.rollloud
     tab completions:
         1: <&lt>amount<&gt>
     script:
@@ -45,5 +47,4 @@ roll_command_rollloud:
         - if <[amount]> < 2 || <[amount]> > 200:
             - narrate "<&c>The amount must be an integer between 2 and 200."
             - stop
-    - run roll_task def.player:<player> def.amount:<[amount]> def.distance:25
-
+    - run roll_execute def.player:<player> def.amount:<[amount]> def.distance:25

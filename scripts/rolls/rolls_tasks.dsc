@@ -1,4 +1,4 @@
-roll_task:
+roll_execute:
     type: task
     definitions: player|amount|distance
     script:
