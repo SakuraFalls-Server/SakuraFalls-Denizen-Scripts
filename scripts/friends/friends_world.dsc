@@ -11,7 +11,6 @@ friends_world:
             - define friend_list <[friend_master].flag[friends].if_null[<list[]>]>
             - if <[friend_list].contains[<[joining_master_uuid]>]>:
                 - narrate "<&a>Your friend <&f><player.name><&a> is now online." targets:<[friend]>
-
         on player quits:
         - define leaving_master_uuid <proc[liteprofilesutils_get_master_uuid].context[<player>]>
         - foreach <server.online_players.exclude[<player>]> as:friend:
