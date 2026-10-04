@@ -9,7 +9,7 @@ liteprofilesutils_get_master_uuid:
     type: procedure
     definitions: player
     script:
-    - determine <placeholder[liteprofiles_masteruuid].player[<[player]>]>
+    - determine <server.match_offline_player[<[player].name.split[.].first.if_null[<[player].name>]>.0]>
 
 liteprofilesutils_get_profile_limit:
     debug: false

@@ -167,7 +167,9 @@ friends_list:
     type: task
     definitions: player
     script:
-    - define friends <[player].flag[friends].if_null[<list[]>]>
+    - define player_master_uuid <proc[liteprofilesutils_get_master_uuid].context[<[player]>]>
+    - define player_master <player[<[player_master_uuid]>]>
+    - define friends <[player_master_uuid].flag[friends].if_null[<list[]>]>
     - if <[friends].is_empty>:
         - narrate format:formats_prefix "<&7>You have no friends in your friend list."
         - stop
