@@ -255,7 +255,7 @@ chat_command_languageadd:
     - if <context.args.size> < 2:
         - narrate "<&c>Invalid use. Please try /<context.alias> (player) (language)."
         - stop
-    - define player <server.match_offline_player[<context.args.get[1]>].if_null[null]>
+    - define player <server.match_player[<context.args.get[1]>].if_null[<server.match_offline_player[<context.args.get[1]>].if_null[null]>]>
     - if <[player]> == null:
         - narrate "<&c>A player with name <context.args.get[1]> was not found."
         - stop
@@ -285,7 +285,7 @@ chat_command_languageremove:
     - if <context.args.size> < 2:
         - narrate "<&c>Invalid use. Please try /<context.alias> (player) (language)."
         - stop
-    - define player <server.match_offline_player[<context.args.get[1]>].if_null[null]>
+    - define player <server.match_player[<context.args.get[1]>].if_null[<server.match_offline_player[<context.args.get[1]>].if_null[null]>]>
     - if <[player]> == null:
         - narrate "<&c>A player with name <context.args.get[1]> was not found."
         - stop
@@ -297,6 +297,50 @@ chat_command_languageremove:
     - flag <[player]> chat_languages:<[player].flag[chat_languages].if_null[<list[]>].exclude[<[language]>]>
     - adjust server save
     - narrate format:formats_prefix "Player <&e><[player].name> <&7>cannot speak <[language]> any longer."
+
+chat_command_languages:
+    debug: false
+    type: command
+    name: languages
+    usage: /languages (player)
+    description: See what languages a player knows.
+    permission: chat.command.admin.languages
+    tab completions:
+        1: <server.online_players.parse[name]>
+    script:
+    - if <context.args.size> < 2:
+        - narrate "<&c>Invalid use. Please try /<context.alias> (player)"
+    - define player <server.match_player[<context.args.get[1]>].if_null[<server.match_offline_player[<context.args.get[1]>].if_null[null]>]>
+    - if <[player]> == null:
+        - narrate "<&c>A player with name <context.args.get[1]> was not found."
+        - stop
+    - define languages <[player].flag[chat_languages].if_null[<list[]>].alphabetical>
+    - if <[languages].is_empty>:
+        - narrate format:formats_prefix "Player <&e><[player].name> <&7>does not have access to any language."
+    - else:
+        - narrate format:formats_prefix "Player <&e><[player].name> <&7>has access to the following languages: <&e><[languages].formatted>"
+
+chat_command_languagebypass:
+    debug: false
+    type: command
+    name: languagebypass
+    usage: /languagebypass
+    aliases:
+    - langbypass
+    description: Toggle language bypassing for moderation purposes.
+    permission: chat.command.languagebypass
+    tab completions:
+        1: <list[]>
+    script:
+    - if <context.source_type> != player:
+        - narrate "<&c>Please run this command as a player."
+        - stop
+    - if !<player.has_flag[chat_language_bypass]>:
+        - flag <player> chat_language_bypass:true
+        - narrate format:formats_prefix "<&a>Enabled <&7>language bypass."
+    - else:
+        - flag <player> chat_language_bypass:!
+        - narrate format:formats_prefix "<&c>Disabled <&7>language bypass."
 
 chat_command_language:
     debug: false
