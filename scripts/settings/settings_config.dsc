@@ -20,6 +20,12 @@ settings_config:
             description: If enabled, will not show the compatibility warning when joining the server on an old unsupported version.
             type: boolean
             default: false
+        general_ignore_profile_menu_warning:
+            tab: General
+            name: Ignore profile menu warning
+            description: If enabled, will not show the in-chat warning for the profiles menu and will just open it right away.
+            type: boolean
+            default: false
         ##
         game_see_auto_money_announcements:
             tab: Game
