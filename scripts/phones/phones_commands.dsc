@@ -156,6 +156,8 @@ phones_commands_phonecall:
             - define emergency_type <player.flag[phones_emergency].substring[5]>
             - define target <server.online_players.filter_tag[<[filter_value].has_permission[phones.emergency.<[emergency_type]>]>].include[<player.flag[phones_call]>].filter_tag[<proc[phones_has_phone].context[<[filter_value]>]>]>
         - define message <context.args.get[1].to[last].space_separated>
+        - inject chat_replace_abbreviations_apply
+        - inject chat_auto_capitalize_apply
         # speak...
         - if !<player.has_flag[phones_emergency]>:
             - define common_name "<placeholder[essentials_nickname].player[<player>]> <proc[chat_special_group].context[<player>]><proc[chat_roles_group].context[<player>]> <proc[character_get_name].context[<player>]>"
@@ -201,6 +203,8 @@ phones_command_call_common_routine:
             - define emergency_type <player.flag[phones_emergency].substring[5]>
             - define target <server.online_players.filter_tag[<[filter_value].has_permission[phones.emergency.<[emergency_type]>]>].include[<player.flag[phones_call]>].filter_tag[<proc[phones_has_phone].context[<[filter_value]>]>]>
         - define message <context.args.get[1].to[last].space_separated>
+        - inject chat_replace_abbreviations_apply
+        - inject chat_auto_capitalize_apply
         # speak...
         - if !<player.has_flag[phones_emergency]>:
             - define common_name "<placeholder[essentials_nickname].player[<player>]> <proc[chat_special_group].context[<player>]><proc[chat_roles_group].context[<player>]> <proc[character_get_name].context[<player>]>"
@@ -293,6 +297,8 @@ phones_command_call_language_common_routine:
             - define continue false
             - stop
         - define message <context.args.get[2].to[last].space_separated>
+        - inject chat_replace_abbreviations_apply
+        - inject chat_auto_capitalize_apply
         # speak...
         - if !<player.has_flag[phones_emergency]>:
             - define common_name "<placeholder[essentials_nickname].player[<player>]> <proc[chat_special_group].context[<player>]><proc[chat_roles_group].context[<player>]> <proc[character_get_name].context[<player>]>"

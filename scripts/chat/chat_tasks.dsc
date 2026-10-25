@@ -57,21 +57,56 @@ chat_auto_capitalize_apply:
     type: task
     script:
     - if <proc[settings_get].context[<[player]>|text_rp_chat_auto_capitalize]>:
+        - define skip_first_auto_capitalize <[skip_first_auto_capitalize].if_null[false]>
         - define copy <[message]>
         - define output <empty>
         - define replaced false
+        - define sequence <empty>
+        - define in_sequence false
         - while <[copy].length> > 0:
+            - define previous_char <[char].if_null[<empty>]>
             - define char <[copy].substring[1,1]>
-            - if <[replaced]>:
-                - if <[char]> == . || <[char]> == ? || <[char]> == !:
-                    - define replaced false
+            - if <[copy].substring[1,2].if_null[null]> == &\:
+                - define in_sequence true
+                - define sequence <empty>
+                - while <[in_sequence]>:
+                    - define sequence <[sequence]><[char]>
+                    - if <[sequence].replace[&\].with[&].unescaped> != <[sequence].replace[&\].with[&]>:
+                        - define sequence <[sequence].replace[&\].with[&].unescaped>
+                        - if <[sequence]> == <&ss>:
+                            - define copy <[copy].substring[2]>
+                            - define output <[output]><[char]>
+                            - define char <[copy].substring[1,1]>
+                            - define sequence <&ss><[char]>
+                        - define in_sequence false
+                        - while stop
+                    - define copy <[copy].substring[2]>
+                    - define output <[output]><[char]>
+                    - define char <[copy].substring[1,1]>
                 - define output <[output]><[char]>
+                - define copy <[copy].substring[2]>
+                - if <[sequence]> == ! || <[char]> == ! || <[sequence]> == . || <[char]> == . || <[char]> == ?:
+                    - define replaced false
+                - while next
+            - if <[replaced]>:
+                - if <[sequence]> == ! || <[char]> == ! || <[sequence]> == . || <[char]> == . || <[char]> == ?:
+                    - define replaced false
+                - if <[char]> == i && <[copy].substring[2,2].regex_matches[[a-zA-Z]].not.if_null[true]> && <[previous_char].equals[<&sp>].or[<[sequence].contains[<&ss>]>]>:
+                    - define output <[output]>I
+                - else:
+                    - define output <[output]><[char]>
             - else:
-                - if <[char].to_uppercase> != <[char]>:
-                    - define output <[output]><[char].to_uppercase>
+                - if !<[char].to_uppercase.equals_case_sensitive[<[char]>]> || <[char].is_uppercase>:
+                    - narrate <[skip_first_auto_capitalize]>
+                    - if <[skip_first_auto_capitalize].not>:
+                        - define output <[output]><[char].to_uppercase>
+                    - else:
+                        - define output <[output]><[char]>
+                        - define skip_first_auto_capitalize false
                     - define replaced true
                 - else:
                     - define output <[output]><[char]>
+            - define sequence <empty>
             - define copy <[copy].substring[2]>
         - define message <[output]>
 
@@ -80,9 +115,63 @@ chat_replace_abbreviations_apply:
     type: task
     script:
     - if <proc[settings_get].context[<[player]>|text_rp_chat_replace_abbreviations]>:
-        - define split <[message].split[regex:[^a-zA-Z0-9_.]|\.[^a-zA-Z0-9_.]]>
-        - # TODO: somehow keep the split components but keep the split char too in O(n)
-        - define message <[message]>
+        - define copy <[message]>
+        - define separators <list[<&sp>|.|,|!|?|-|:|;|*|<&sq>]>
+        - define abbreviations <script[chat_data_abbreviations].data_key[abbreviations]>
+        - define output <empty>
+        - define current <empty>
+        - define sequence <empty>
+        - define in_sequence false
+        - define sequence_replace <empty>
+        - while <[copy].length> > 0:
+            - define char <[copy].substring[1,1]>
+            - if <[copy].substring[1,2].if_null[null]> == &\:
+                - define in_sequence true
+                - define sequence <empty>
+                - define sequence_replace <empty>
+                - while <[in_sequence]>:
+                    - define sequence <[sequence]><[char]>
+                    - if <[sequence].replace[&\].with[&].unescaped> != <[sequence].replace[&\].with[&]>:
+                        - define sequence <[sequence].replace[&\].with[&].unescaped>
+                        - if <[sequence]> == <&ss>:
+                            - define copy <[copy].substring[2]>
+                            - define char <[copy].substring[1,1]>
+                            - define sequence <&ss><[char]>
+                        - define in_sequence false
+                        - define sequence_replace <[sequence].escaped.replace[&].with[&\]>
+                        - while stop
+                    - define copy <[copy].substring[2]>
+                    - define char <[copy].substring[1,1]>
+                - define copy <[copy].substring[2]>
+            - if <[separators].contains[<[char]>]> || <[separators].contains[<[sequence]>]> || <[sequence].contains[<&ss>]>:
+                - if <[abbreviations].contains[<[current].to_lowercase>]>:
+                    - if <[current].substring[1,1].is_uppercase>:
+                        - define output <[output]><[abbreviations].get[<[current]>].to_sentence_case>
+                    - else:
+                        - define output <[output]><[abbreviations].get[<[current]>]>
+                - else:
+                    - define output <[output]><[current]>
+                - define current <empty>
+                - if <[separators].contains[<[char]>]>:
+                    - define output <[output]><[char]>
+                    - define copy <[copy].substring[2]>
+                - else:
+                    - define output <[output]><[sequence_replace]>
+            - else:
+                - if <[sequence]> != <empty>:
+                    - define current <[current]><[sequence]>
+                - else:
+                    - define current <[current]><[char]>
+                    - define copy <[copy].substring[2]>
+            - define sequence <empty>
+        - if <[abbreviations].contains[<[current].to_lowercase>]>:
+            - if <[current].substring[1,1].is_uppercase>:
+                - define output <[output]><[abbreviations].get[<[current]>].to_sentence_case>
+            - else:
+                - define output <[output]><[abbreviations].get[<[current]>]>
+        - else:
+            - define output <[output]><[current]>
+        - define message <[output]>
 
 chat_tokenize_actions:
     debug: false
@@ -144,7 +233,7 @@ chat_accessibility_space_message_inject_apply:
 chat_channel_ic:
     debug: false
     type: task
-    definitions: player|message/JavaFX frame
+    definitions: player|message
     script:
     - if <[message].starts_with[*]> && <[message].split[*].size> == 2:
         - if <[message].ends_with[*]>:
@@ -154,8 +243,8 @@ chat_channel_ic:
         - stop
     - if !<[player].has_permission[chat.colors]>:
         - define message <[message].strip_color>
-    - inject chat_auto_capitalize_apply
     - inject chat_replace_abbreviations_apply
+    - inject chat_auto_capitalize_apply
     - define tokenized <proc[chat_tokenize_actions].context[<[message]>|<element[&<color[<proc[settings_get].context[<[player]>|text_rp_chat_color]>].hex>].parse_color>says<&7>:|<element[&<color[<proc[settings_get].context[<[player]>|text_rp_chat_color]>].hex>].parse_color>|<&f>|<&f><&dq><&f>|false].replace[&\].with[&].unescaped>
     - define final "<&color[#b8b9ba]><placeholder[essentials_nickname].player[<[player]>]> <&f><proc[chat_special_group].context[<[player]>]><proc[chat_roles_group].context[<[player]>]> <proc[character_get_name].context[<[player]>]> <[tokenized]>"
     - define targets <[player].location.find_players_within[10]>
@@ -174,6 +263,9 @@ chat_channel_ic_me:
     - define message <[message].replace[&\].with[&].unescaped>
     - if !<[player].has_permission[chat.colors]>:
         - define message <[message].strip_color>
+    - inject chat_replace_abbreviations_apply
+    - define skip_first_auto_capitalize true
+    - inject chat_auto_capitalize_apply
     - define final "<&e>*** <&f><placeholder[essentials_nickname].player[<[player]>]> <proc[chat_special_group].context[<[player]>]><proc[chat_roles_group].context[<[player]>]> <proc[character_get_name].context[<[player]>]> <element[&<color[<proc[settings_get].context[<[player]>|text_rp_chat_color]>].hex>].parse_color><&o><[message]>"
     - define targets <[player].location.find_players_within[10]>
     - inject chat_accessibility_space_message_inject_define
@@ -191,6 +283,9 @@ chat_channel_ic_mec:
     - define message <[message].replace[&\].with[&].unescaped>
     - if !<[player].has_permission[chat.colors]>:
         - define message <[message].strip_color>
+    - inject chat_replace_abbreviations_apply
+    - define skip_first_auto_capitalize true
+    - inject chat_auto_capitalize_apply
     - define final "<&e>* <&f><placeholder[essentials_nickname].player[<[player]>]> <proc[chat_special_group].context[<[player]>]><proc[chat_roles_group].context[<[player]>]> <proc[character_get_name].context[<[player]>]> <element[&<color[<proc[settings_get].context[<[player]>|text_rp_chat_color]>].hex>].parse_color><&o><[message]>"
     - define targets <[player].location.find_players_within[3]>
     - inject chat_accessibility_space_message_inject_define
@@ -208,6 +303,9 @@ chat_channel_ic_mel:
     - define message <[message].replace[&\].with[&].unescaped>
     - if !<[player].has_permission[chat.colors]>:
         - define message <[message].strip_color>
+    - inject chat_replace_abbreviations_apply
+    - define skip_first_auto_capitalize true
+    - inject chat_auto_capitalize_apply
     - define final "<&e>**** <&f><placeholder[essentials_nickname].player[<[player]>]> <proc[chat_special_group].context[<[player]>]><proc[chat_roles_group].context[<[player]>]> <proc[character_get_name].context[<[player]>]> <element[&<color[<proc[settings_get].context[<[player]>|text_rp_chat_color]>].hex>].parse_color><&o><[message]>"
     - define targets <[player].location.find_players_within[25]>
     - inject chat_accessibility_space_message_inject_define
@@ -230,6 +328,8 @@ chat_channel_ic_whisper:
         - stop
     - if !<[player].has_permission[chat.colors]>:
         - define message <[message].strip_color>
+    - inject chat_replace_abbreviations_apply
+    - inject chat_auto_capitalize_apply
     - define tokenized <proc[chat_tokenize_actions].context[<[message]>|whispers|<&8>|<&7>|<&6><&sq>|false].replace[&\].with[&].unescaped>
     - define final "<&color[#d1d1d1]><placeholder[essentials_nickname].player[<[player]>]> <&f><proc[chat_special_group].context[<[player]>]><proc[chat_roles_group].context[<[player]>]> <proc[character_get_name].context[<[player]>]> <[tokenized]>"
     - define targets <[player].location.find_players_within[3]>
@@ -253,6 +353,8 @@ chat_channel_ic_yell:
         - stop
     - if !<[player].has_permission[chat.colors]>:
         - define message <[message].strip_color>
+    - inject chat_replace_abbreviations_apply
+    - inject chat_auto_capitalize_apply
     - define tokenized <proc[chat_tokenize_actions].context[<[message]>|yells|<&6>|<&f>|<&6><&sq>|true].replace[&\].with[&].unescaped>
     - define final "<&f><placeholder[essentials_nickname].player[<[player]>]> <proc[chat_special_group].context[<[player]>]><proc[chat_roles_group].context[<[player]>]> <proc[character_get_name].context[<[player]>]> <[tokenized]>"
     - define targets <[player].location.find_players_within[25]>
@@ -275,6 +377,9 @@ chat_channel_ic_my:
         - define possession_name <[possession_name]><&sq>
     - else:
         - define possession_name <[possession_name]><&sq>s
+    - inject chat_replace_abbreviations_apply
+    - define skip_first_auto_capitalize true
+    - inject chat_auto_capitalize_apply
     - define final "<&e>*** <&f><placeholder[essentials_nickname].player[<[player]>]> <proc[chat_special_group].context[<[player]>]><proc[chat_roles_group].context[<[player]>]> <[possession_name]> <element[&<color[<proc[settings_get].context[<[player]>|text_rp_chat_color]>].hex>].parse_color><[message]>"
     - define targets <[player].location.find_players_within[10]>
     - inject chat_accessibility_space_message_inject_define
@@ -291,6 +396,8 @@ chat_channel_ic_it:
     - define message <[message].replace[&\].with[&].unescaped>
     - if !<[player].has_permission[chat.colors]>:
         - define message <[message].strip_color>
+    - inject chat_replace_abbreviations_apply
+    - inject chat_auto_capitalize_apply
     - define final "<&6>*** <&e><[message]> <&7>(<proc[character_get_name].context[<[player]>]>)"
     - define targets <[player].location.find_players_within[10]>
     - inject chat_accessibility_space_message_inject_define
@@ -307,6 +414,8 @@ chat_channel_ic_itc:
     - define message <[message].replace[&\].with[&].unescaped>
     - if !<[player].has_permission[chat.colors]>:
         - define message <[message].strip_color>
+    - inject chat_replace_abbreviations_apply
+    - inject chat_auto_capitalize_apply
     - define final "<&6>* <&e><[message]> <&7>(<proc[character_get_name].context[<[player]>]>)"
     - define targets <[player].location.find_players_within[3]>
     - inject chat_accessibility_space_message_inject_define
@@ -323,6 +432,8 @@ chat_channel_ic_itl:
     - define message <[message].replace[&\].with[&].unescaped>
     - if !<[player].has_permission[chat.colors]>:
         - define message <[message].strip_color>
+    - inject chat_replace_abbreviations_apply
+    - inject chat_auto_capitalize_apply
     - define final "<&6>**** <&e><[message]> <&7>(<proc[character_get_name].context[<[player]>]>)"
     - define targets <[player].location.find_players_within[25]>
     - inject chat_accessibility_space_message_inject_define
@@ -339,6 +450,8 @@ chat_channel_ic_language:
     - define message <[message].replace[&\].with[&].unescaped>
     - if !<[player].has_permission[chat.colors]>:
         - define message <[message].strip_color>
+    - inject chat_replace_abbreviations_apply
+    - inject chat_auto_capitalize_apply
     - define final_known "<&6>[<&7>L<&6>] <&f><placeholder[essentials_nickname].player[<[player]>]> <proc[chat_special_group].context[<[player]>]><proc[chat_roles_group].context[<[player]>]> <proc[character_get_name].context[<[player]>]> <player.flag[chat_color].if_null[<&f>]>says <&f><&dq><&o><[message]><&f><&dq> in <[language]>"
     - define final_unknown "<&6>[<&7>L<&6>] <&f><placeholder[essentials_nickname].player[<[player]>]> <proc[chat_special_group].context[<[player]>]><proc[chat_roles_group].context[<[player]>]> <proc[character_get_name].context[<[player]>]> <player.flag[chat_color].if_null[<&f>]>says something in <[language]>"
     - define all <[player].location.find_players_within[10]>
@@ -360,6 +473,8 @@ chat_channel_ic_languagewhisper:
     - define message <[message].replace[&\].with[&].unescaped>
     - if !<[player].has_permission[chat.colors]>:
         - define message <[message].strip_color>
+    - inject chat_replace_abbreviations_apply
+    - inject chat_auto_capitalize_apply
     - define final_known "<&6>[<&7>L<&6>] <&f><placeholder[essentials_nickname].player[<[player]>]> <proc[chat_special_group].context[<[player]>]><proc[chat_roles_group].context[<[player]>]> <proc[character_get_name].context[<[player]>]> <&f>whispers <&dq><&o><[message]><&f><&dq> in <[language]>"
     - define final_unknown "<&6>[<&7>L<&6>] <&f><placeholder[essentials_nickname].player[<[player]>]> <proc[chat_special_group].context[<[player]>]><proc[chat_roles_group].context[<[player]>]> <proc[character_get_name].context[<[player]>]> <&f>whispers something in <[language]>"
     - define all <[player].location.find_players_within[3]>
@@ -381,6 +496,8 @@ chat_channel_ic_languageyell:
     - define message <[message].replace[&\].with[&].unescaped>
     - if !<[player].has_permission[chat.colors]>:
         - define message <[message].strip_color>
+    - inject chat_replace_abbreviations_apply
+    - inject chat_auto_capitalize_apply
     - define final_known "<&6>[<&7>L<&6>] <&f><placeholder[essentials_nickname].player[<[player]>]> <proc[chat_special_group].context[<[player]>]><proc[chat_roles_group].context[<[player]>]> <proc[character_get_name].context[<[player]>]> <&f>yells <&dq><&o><[message].to_uppercase><&f><&dq> in <[language]>"
     - define final_unknown "<&6>[<&7>L<&6>] <&f><placeholder[essentials_nickname].player[<[player]>]> <proc[chat_special_group].context[<[player]>]><proc[chat_roles_group].context[<[player]>]> <proc[character_get_name].context[<[player]>]> <&f>yells something in <[language]>"
     - define all <[player].location.find_players_within[25]>
