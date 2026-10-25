@@ -97,7 +97,6 @@ chat_auto_capitalize_apply:
                     - define output <[output]><[char]>
             - else:
                 - if !<[char].to_uppercase.equals_case_sensitive[<[char]>]> || <[char].is_uppercase>:
-                    - narrate <[skip_first_auto_capitalize]>
                     - if <[skip_first_auto_capitalize].not>:
                         - define output <[output]><[char].to_uppercase>
                     - else:
