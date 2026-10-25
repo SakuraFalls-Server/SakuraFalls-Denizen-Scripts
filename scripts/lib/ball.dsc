@@ -27,7 +27,13 @@ ball_create:
         - define chicken <[ball_display].vehicle>
         - adjust <[chicken]> passengers:<list[]>
         - remove <[chicken]>
+    - adjust <[ball_display]> equipment:<map[]>
     - adjust <[ball_display]> equipment:<map[].with[helmet].as[<[display_item]>]>
+    - inventory set slot:hand item:air target:<[ball_display]>
+    - inventory set slot:offhand item:air target:<[ball_display]>
+    - inventory set slot:chestplate item:air target:<[ball_display]>
+    - inventory set slot:leggings item:air target:<[ball_display]>
+    - inventory set slot:boots item:air target:<[ball_display]>
     - flag <[ball_collision]> ball:<[id]>
     - flag <[ball_collision]> ball_display:<[ball_display]>
     - flag <[ball_collision]> ball_velocity:<location[0,0,0,<[location].world>]>

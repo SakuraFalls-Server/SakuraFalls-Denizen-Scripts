@@ -61,9 +61,9 @@ liteprofilesutils_world:
         - mark joinmessage
         - define joinleavedata <script[liteprofilesutils_data].data_key[join-leave]>
         - if <player.uuid> == <[masteruuid]>:
-            - if <server.flag[liteprofilesutils_welcome].if_null[<list[]>].contains[<player.uuid>]>:
+            - if !<server.flag[liteprofilesutils_welcome].if_null[<list[]>].contains[<[masteruuid]>]>:
                 - announce <[joinleavedata].get[welcome].parsed>
-                - flag server liteprofilesutils_welcome:<server.flag[liteprofilesutils_welcome].if_null[<list[]>].include[<player.uuid>]>
+                - flag server liteprofilesutils_welcome:<server.flag[liteprofilesutils_welcome].if_null[<list[]>].include[<[masteruuid]>]>
                 - adjust server save
         - define setting_enabled_players <server.online_players.filter_tag[<proc[settings_get].context[<[filter_value]>|general_see_player_join_leave]>]>
         - narrate <[joinleavedata].get[join].parsed> targets:<[setting_enabled_players]>
@@ -84,31 +84,6 @@ liteprofilesutils_world:
                 - if <placeholder[liteprofiles_count]> >= <proc[liteprofilesutils_get_profile_limit].context[<player>]>:
                     - determine cancelled passively
                     - narrate "<&c>You cannot have more profiles!"
-        ## GUI menu
-        on player clicks in inventory bukkit_priority:low:
-        - if <context.inventory.title> != <&f>邑邑邑邑鄈:
-            - stop
-        - if <player.flag[liteprofiles_legacy_menu].get[id].if_null[null]> != liteprofiles:
-            - stop
-        - if <context.slot> > 45:
-            - stop
-        - if <context.item.advanced_matches[air]>:
-            - stop
-        # logic
-        - define data <context.item.flag[liteprofiles].if_null[null]>
-        - if <[data]> == null:
-            - stop
-        - if <[data].get[type]> == master:
-            - define value <[data].get[value]>
-            - inventory close
-            - execute as_player "profile use <[value]>"
-        - else if <[data].get[type]> == slave:
-            - define value <[data].get[value]>
-            - inventory close
-            - execute as_player "profile use <[value]>"
-        - else if <[data].get[type]> == free:
-            - execute as_player "profile add"
-            - run liteprofilesutils_show_menu def.player:<player>
         ## patch whitelisting
         on player prelogin:
         - define uuid <context.uuid>

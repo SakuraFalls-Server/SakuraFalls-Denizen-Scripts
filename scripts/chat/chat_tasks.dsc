@@ -345,7 +345,7 @@ chat_channel_ic_language:
     - inject chat_accessibility_space_message_inject_define_language
     - inject chat_accessibility_space_message_inject_apply
     - inject chat_channel_check_targets_language
-    - define speakers <[all].filter_tag[<[filter_value].flag[chat_languages].contains[<[language]>].if_null[false]>]>
+    - define speakers <[all].filter_tag[<[filter_value].flag[chat_languages].contains[<[language]>].if_null[false].or[<[filter_value].has_flag[chat_language_bypass]>]>]>
     - define others <[all].exclude[<[speakers]>]>
     - narrate targets:<[speakers]> <[final_known]>
     - narrate targets:<[others]> <[final_unknown]>
@@ -366,7 +366,7 @@ chat_channel_ic_languagewhisper:
     - inject chat_accessibility_space_message_inject_define_language
     - inject chat_accessibility_space_message_inject_apply
     - inject chat_channel_check_targets_language
-    - define speakers <[all].filter_tag[<[filter_value].flag[chat_languages].contains[<[language]>].if_null[false]>]>
+    - define speakers <[all].filter_tag[<[filter_value].flag[chat_languages].contains[<[language]>].if_null[false].or[<[filter_value].has_flag[chat_language_bypass]>]>]>
     - define others <[all].exclude[<[speakers]>]>
     - narrate targets:<[speakers]> <[final_known]>
     - narrate targets:<[others]> <[final_unknown]>
@@ -387,7 +387,7 @@ chat_channel_ic_languageyell:
     - inject chat_accessibility_space_message_inject_define_language
     - inject chat_accessibility_space_message_inject_apply
     - inject chat_channel_check_targets_language
-    - define speakers <[all].filter_tag[<[filter_value].flag[chat_languages].contains[<[language]>].if_null[false]>]>
+    - define speakers <[all].filter_tag[<[filter_value].flag[chat_languages].contains[<[language]>].if_null[false].or[<[filter_value].has_flag[chat_language_bypass]>]>]>
     - define others <[all].exclude[<[speakers]>]>
     - narrate targets:<[speakers]> <[final_known]>
     - narrate targets:<[others]> <[final_unknown]>

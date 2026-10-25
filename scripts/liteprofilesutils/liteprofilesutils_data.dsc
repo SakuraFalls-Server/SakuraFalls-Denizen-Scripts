@@ -10,6 +10,7 @@ liteprofilesutils_data:
     - event
     - dev
     - builder
+    - languagemanager
     sync-op: true
     join-leave:
         join: <&8>[<&a>+<&8>] <&7><player.name>

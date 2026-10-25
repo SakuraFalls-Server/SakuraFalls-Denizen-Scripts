@@ -2,7 +2,7 @@ itemregistry_world:
     debug: false
     type: world
     events:
-        on player clicks in inventory bukkit_priority:lowest:
+        on player clicks in inventory bukkit_priority:normal:
         - if <player.is_op>:
             - stop
         - if <context.hotbar_button> != 0:
