@@ -234,6 +234,7 @@ chat_channel_ic:
     type: task
     definitions: player|message
     script:
+    - define message <[message].replace[&\].with[&].unescaped>
     - if <[message].starts_with[*]> && <[message].split[*].size> == 2:
         - if <[message].ends_with[*]>:
             - run chat_channel_ic_me def.player:<[player]> def.message:<[message].substring[2,<[message].length.sub[1]>]>
@@ -244,6 +245,7 @@ chat_channel_ic:
         - define message <[message].strip_color>
     - inject chat_replace_abbreviations_apply
     - inject chat_auto_capitalize_apply
+    - define message <[message].escaped.replace[&].with[&\]>
     - define tokenized <proc[chat_tokenize_actions].context[<[message]>|<element[&<color[<proc[settings_get].context[<[player]>|text_rp_chat_color]>].hex>].parse_color>says<&7>:|<element[&<color[<proc[settings_get].context[<[player]>|text_rp_chat_color]>].hex>].parse_color>|<&f>|<&f><&dq><&f>|false].replace[&\].with[&].unescaped>
     - define final "<&color[#b8b9ba]><placeholder[essentials_nickname].player[<[player]>]> <&f><proc[chat_special_group].context[<[player]>]><proc[chat_roles_group].context[<[player]>]> <proc[character_get_name].context[<[player]>]> <[tokenized]>"
     - define targets <[player].location.find_players_within[10]>
@@ -319,6 +321,7 @@ chat_channel_ic_whisper:
     type: task
     definitions: player|message
     script:
+    - define message <[message].replace[&\].with[&].unescaped>
     - if <[message].starts_with[*]> && <[message].split[*].size> == 2:
         - if <[message].ends_with[*]>:
             - run chat_channel_ic_mec def.player:<[player]> def.message:<[message].substring[2,<[message].length.sub[1]>]>
@@ -329,6 +332,7 @@ chat_channel_ic_whisper:
         - define message <[message].strip_color>
     - inject chat_replace_abbreviations_apply
     - inject chat_auto_capitalize_apply
+    - define message <[message].escaped.replace[&].with[&\]>
     - define tokenized <proc[chat_tokenize_actions].context[<[message]>|whispers|<&8>|<&7>|<&6><&sq>|false].replace[&\].with[&].unescaped>
     - define final "<&color[#d1d1d1]><placeholder[essentials_nickname].player[<[player]>]> <&f><proc[chat_special_group].context[<[player]>]><proc[chat_roles_group].context[<[player]>]> <proc[character_get_name].context[<[player]>]> <[tokenized]>"
     - define targets <[player].location.find_players_within[3]>
@@ -344,6 +348,7 @@ chat_channel_ic_yell:
     type: task
     definitions: player|message
     script:
+    - define message <[message].replace[&\].with[&].unescaped>
     - if <[message].starts_with[*]> && <[message].split[*].size> == 2:
         - if <[message].ends_with[*]>:
             - run chat_channel_ic_mel def.player:<[player]> def.message:<[message].substring[2,<[message].length.sub[1]>]>
@@ -354,6 +359,7 @@ chat_channel_ic_yell:
         - define message <[message].strip_color>
     - inject chat_replace_abbreviations_apply
     - inject chat_auto_capitalize_apply
+    - define message <[message].escaped.replace[&].with[&\]>
     - define tokenized <proc[chat_tokenize_actions].context[<[message]>|yells|<&6>|<&f>|<&6><&sq>|true].replace[&\].with[&].unescaped>
     - define final "<&f><placeholder[essentials_nickname].player[<[player]>]> <proc[chat_special_group].context[<[player]>]><proc[chat_roles_group].context[<[player]>]> <proc[character_get_name].context[<[player]>]> <[tokenized]>"
     - define targets <[player].location.find_players_within[25]>
