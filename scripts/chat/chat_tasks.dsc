@@ -256,6 +256,33 @@ chat_channel_ic:
     - inject chat_accessibility_space_message_inject_apply
     - announce to_console <[final]>
 
+chat_channel_ic_long:
+    debug: false
+    type: task
+    definitions: player|message
+    script:
+    - define message <[message].replace[&\].with[&].unescaped>
+    - if <[message].starts_with[*]> && <[message].split[*].size> == 2:
+        - if <[message].ends_with[*]>:
+            - run chat_channel_ic_mel def.player:<[player]> def.message:<[message].substring[2,<[message].length.sub[1]>]>
+        - else:
+            - run chat_channel_ic_mel def.player:<[player]> def.message:<[message].substring[2,<[message].length>]>
+        - stop
+    - if !<[player].has_permission[chat.colors]>:
+        - define message <[message].strip_color>
+    - inject chat_replace_abbreviations_apply
+    - inject chat_auto_capitalize_apply
+    - define message <[message].escaped.replace[&].with[&\]>
+    - define tokenized <proc[chat_tokenize_actions].context[<[message]>|<element[&<color[<proc[settings_get].context[<[player]>|text_rp_chat_color]>].hex>].parse_color>says<&7>:|<element[&<color[<proc[settings_get].context[<[player]>|text_rp_chat_color]>].hex>].parse_color>|<&f>|<&f><&dq><&f>|false].replace[&\].with[&].unescaped>
+    - define final "<&6>[<&e>L<&6>] <&color[#b8b9ba]><placeholder[essentials_nickname].player[<[player]>]> <&f><proc[chat_special_group].context[<[player]>]><proc[chat_roles_group].context[<[player]>]> <proc[character_get_name].context[<[player]>]> <[tokenized]>"
+    - define targets <[player].location.find_players_within[25]>
+    - inject chat_accessibility_space_message_inject_define
+    - inject chat_accessibility_space_message_inject_apply
+    - inject chat_channel_check_targets
+    - narrate targets:<[targets]> <[final]>
+    - inject chat_accessibility_space_message_inject_apply
+    - announce to_console <[final]>
+
 chat_channel_ic_me:
     debug: false
     type: task

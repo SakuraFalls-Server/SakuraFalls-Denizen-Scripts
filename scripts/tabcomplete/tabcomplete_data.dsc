@@ -52,6 +52,7 @@ tabcomplete_config:
             - langcallw
             - cally
             - callw
+            - long
             - yell
             - y
             - whisper

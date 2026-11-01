@@ -49,6 +49,26 @@ chat_command_looc:
         - stop
     - run chat_channel_looc def.player:<player> def.message:<context.raw_args.escaped.replace[&].with[&\]>
 
+chat_command_long:
+    debug: false
+    type: command
+    name: long
+    usage: /long (message)
+    description: Sends a message in IC, 1st person action, long range.
+    permission: chat.command.chat.me
+    aliases:
+    - LONG
+    tab completions:
+        1: <&lt>message<&gt>
+    script:
+    - if <context.source_type> != player:
+        - narrate "<&c>Please run this command as a player."
+        - stop
+    - if <context.args.size> <= 0:
+        - narrate "<&c>Please enter a message!"
+        - stop
+    - run chat_channel_ic_long def.player:<player> def.message:<context.raw_args.parse_color.escaped.replace[&].with[&\]>
+
 chat_command_me:
     debug: false
     type: command
