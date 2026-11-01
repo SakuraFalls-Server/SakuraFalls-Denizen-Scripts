@@ -55,7 +55,7 @@ chat_command_long:
     name: long
     usage: /long (message)
     description: Sends a message in IC, 1st person action, long range.
-    permission: chat.command.chat.me
+    permission: chat.command.chat.long
     aliases:
     - LONG
     tab completions:
