@@ -40,18 +40,20 @@ guns_world_taser:
         - if !<player.item_in_hand.has_flag[guns_taser]>:
             - stop
         - ratelimit <player> 1s
-        - define target <player.precise_target[7].if_null[null]>
+        - foreach <player.location.find_players_within[12]> as:listener:
+            - playsound <player.location> <[listener]> custom sound:item.taser volume:<proc[settings_get].context[<[listener]>|sound_shooting_volume].div[7]>
+        - define target <player.precise_target[6].if_null[null]>
         - if <[target]> == null:
+            - define location <player.cursor_on[6].if_null[null]>
+            - if <[location]> == null:
+                - define location <player.location.forward[6]>
+                - playeffect effect:redstone at:<player.location.above[1].points_between[<[location]>].distance[0.1]> special_data:0.5|white visibility:16 quantity:6 offset:0,0,0
             - stop
+        - playeffect effect:redstone at:<player.location.above[1].points_between[<[target].location.above[1]>].distance[0.1]> special_data:0.5|white visibility:16 quantity:6 offset:0,0,0
         - if !<[target].is_player>:
             - stop
         - if <[target].has_flag[spirit]>:
             - stop
-        - if <[target].has_flag[guns_frozen]>:
-            - stop
-        - playeffect effect:redstone at:<player.location.above[1].points_between[<[target].location.above[1]>].distance[0.1]> special_data:0.5|white visibility:16 quantity:6 offset:0,0,0
-        - foreach <player.location.find_players_within[14]> as:listener:
-            - playsound <player.location> <[listener]> custom sound:item.taser volume:<proc[settings_get].context[<[listener]>|sound_shooting_volume].div[7]>
         - cast slow amplifier:10 duration:3s <[target]> no_ambient no_clear no_icon hide_particles
         - narrate format:formats_prefix "You tased <proc[character_get_name].context[<[target]>]>"
         - narrate format:formats_prefix "You have been tased by <proc[character_get_name].context[<player>]>" targets:<[target]>
