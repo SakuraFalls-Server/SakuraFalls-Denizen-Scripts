@@ -30,7 +30,7 @@ rankup_command_grade:
         - yaml load:../Autorank/data/Total_time.yml id:autorank_totaltime
     - if <yaml.list.contains[autorank_paths]>:
         - yaml load:../Autorank/Paths.yml id:autorank_paths
-    - define activepath <placeholder[autorank_active_paths].player[<player>].if_null[null]>
+    - define activepath <proc[rankup_get_active_path_surely].context[<player>]>
     - if <[activepath]> == null || <[activepath].length> <= 0:
         - narrate format:formats_prefix "You have completed all grades!"
         - stop
