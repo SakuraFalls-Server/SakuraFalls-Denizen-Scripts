@@ -10,6 +10,8 @@ rankup_get_active_path_surely:
             - define activepath Grade11
         - else if <[player].in_group[school-grade-11]>:
             - define activepath Grade12
+    - if <[activepath].trim.length> == 0:
+        - determine null
     - determine <[activepath]>
 
 rankup_sync_school:
@@ -18,6 +20,8 @@ rankup_sync_school:
     definitions: player
     script:
     - define activepath <proc[rankup_get_active_path_surely].context[<[player]>]>
+    - if <[activepath]> == null:
+        - stop
     - define timeneeded <duration[<yaml[autorank_paths].read[<[activepath]>].get[requirements].get[time].get[value]>]>
     - define timepassed <duration[<yaml[autorank_totaltime].read[<[player].uuid>]>m]>
     - if <[timeneeded].is_more_than[<[timepassed]>]>:
