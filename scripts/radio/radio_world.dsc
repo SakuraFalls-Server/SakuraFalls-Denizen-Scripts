@@ -3,8 +3,6 @@ radio_world:
     type: world
     events:
         on player left clicks block:
-        - if <context.animation> != ARM_SWING:
-            - stop
         - ratelimit <player> 60t
         - if !<player.item_in_hand.has_flag[radio_item]>:
             - stop
