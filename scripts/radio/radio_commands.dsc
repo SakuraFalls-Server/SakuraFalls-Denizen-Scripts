@@ -1,33 +1,25 @@
-radio_command:
+radio_command_radio:
     debug: false
     type: command
     name: radio
     aliases:
         - r
     description: Transmit over your radio.
-    usage: /radio <&lt>message<&gt>
+    usage: /radio (message)
     permission: radio.command.use
+    tab completions:
+        1: <&lt>message<&gt>
     script:
     - if <context.source_type> != player:
         - narrate "<&c>This command can only be used by a player."
         - stop
     - if <context.args.size> <= 0:
-        - narrate format:formats_prefix "Radio Commands & Information"
-        - narrate "<&7>/radio <&lt>message<&gt> <&8>- <&f>Talk over the radio <&o>(/r)"
-        - narrate "<&7>/radiowhisper <&lt>message<&gt> <&8>- <&f>Whisper over the radio <&o>(/rw)"
-        - narrate "<&7>/radioyell <&lt>message<&gt> <&8>- <&f>Yell over the radio <&o>(/ry)"
-        - narrate "<&7>/radioswap <&8>- <&f>Switch between your Police or Hospital to Emergency, and viceversa."
-        - narrate "<&7>/radiopanic <&lt>message<&gt> <&8>- <&f>Sends your coordinates and a short message to both the Hospital and Police"
-        - narrate "<&7>Channels: <&3>town <&7>, <&e>school <&7>, <&b>police <&7>, <&1>hospital <&7>, <&c>emergency"
-        - if <player.has_permission[radio.command.admin]>:
-            - narrate "<&7>/radioadmin <&lt>player<&gt> <&lt>channel<&gt>"
-        - stop
+        - inject radio_command_radio_help
     - define first <context.args.get[1].to_lowercase>
     - if <[first]> == help:
-        - execute as_player "radio"
+        - inject radio_command_radio_help
         - stop
     - define radio <proc[radio_get_item].context[<player>]>
-
     - if <[radio]> == null:
         - narrate "<&c>You need a radio in your inventory."
         - stop
@@ -40,7 +32,22 @@ radio_command:
         - stop
     - run radio_transmit def.player:<player> def.message:<[message]> def.mode:normal def.forced_channel:auto
 
-radiowhisper_command:
+radio_command_radio_help:
+    debug: false
+    type: task
+    script:
+    - narrate format:formats_prefix "Radio Commands & Information"
+    - narrate "<&7>/radio (message) <&8>- <&f>Talk over the radio <&o>(/r)"
+    - narrate "<&7>/radiowhisper (message) <&8>- <&f>Whisper over the radio <&o>(/rw)"
+    - narrate "<&7>/radioyell (message) <&8>- <&f>Yell over the radio <&o>(/ry)"
+    - narrate "<&7>/radioswap <&8>- <&f>Switch between your Police or Hospital to Emergency, and viceversa."
+    - narrate "<&7>/radiopanic (message) <&8>- <&f>Sends your coordinates and a short message to both the Hospital and Police"
+    - narrate "<&7>Channels: <&3>town <&7>, <&e>school <&7>, <&b>police <&7>, <&1>hospital <&7>, <&c>emergency"
+    - if <player.has_permission[radio.command.admin]>:
+        - narrate "<&7>/radioadmin (player) (channel)"
+    - stop
+
+radio_command_radiowhisper:
     debug: false
     type: command
     name: radiowhisper
@@ -48,14 +55,16 @@ radiowhisper_command:
         - radiow
         - rw
     description: Whisper over the radio.
-    usage: /radiowhisper <&lt>message<&gt>
+    usage: /radiowhisper (message)
     permission: radio.command.use
+    tab completions:
+        1: <&lt>message<&gt>
     script:
     - if <context.source_type> != player:
         - narrate "<&c>This command can only be used by a player."
         - stop
     - if <context.args.size> <= 0:
-        - narrate "<&c>Usage: /radiowhisper <&lt>message<&gt>"
+        - narrate "<&c>Usage: /radiowhisper (message)"
         - stop
     - define radio <proc[radio_get_item].context[<player>]>
     - if <[radio]> == null:
@@ -67,7 +76,7 @@ radiowhisper_command:
     - define message <context.raw_args.parse_color.escaped.replace[&].with[&\]>
     - run radio_transmit def.player:<player> def.message:<[message]> def.mode:whisper def.forced_channel:auto
 
-radioyell_command:
+radio_command_radioyell:
     debug: false
     type: command
     name: radioyell
@@ -75,14 +84,16 @@ radioyell_command:
         - radioy
         - ry
     description: Yell over the radio.
-    usage: /radioyell <&lt>message<&gt>
+    usage: /radioyell (message)
     permission: radio.command.use
+    tab completions:
+        1: <&lt>message<&gt>
     script:
     - if <context.source_type> != player:
         - narrate "<&c>This command can only be used by a player."
         - stop
     - if <context.args.size> <= 0:
-        - narrate "<&c>Usage: /radioyell <&lt>message<&gt>"
+        - narrate "<&c>Usage: /radioyell (message)"
         - stop
     - define radio <proc[radio_get_item].context[<player>]>
     - if <[radio]> == null:
@@ -94,7 +105,7 @@ radioyell_command:
     - define message <context.raw_args.parse_color.escaped.replace[&].with[&\]>
     - run radio_transmit def.player:<player> def.message:<[message]> def.mode:yell def.forced_channel:auto
 
-radioswap_command:
+radio_command_radioswap:
     debug: false
     type: command
     name: radioswap
@@ -112,25 +123,11 @@ radioswap_command:
         - stop
     - define current <proc[radio_get_channel].context[<player>]>
     - if <[current]> == emergency:
-        - if <[is_hospital]> && !<[is_police]>:
+        - if <[is_hospital]>:
             - flag player radio_channel:hospital
             - narrate "<&7>Radio switched to <&1>[R-HOSPITAL]<&7>."
             - stop
-        - if <[is_police]> && !<[is_hospital]>:
-            - flag player radio_channel:police
-            - narrate "<&7>Radio switched to <&b>[R-POLICE]<&7>."
-            - stop
-        - if <[is_police]> && <[is_hospital]>:
-            - if <player.has_flag[radio_return_channel]>:
-                - define return_channel <player.flag[radio_return_channel]>
-                - if <[return_channel]> == hospital:
-                    - flag player radio_channel:hospital
-                    - narrate "<&7>Radio switched to <&1>[R-HOSPITAL]<&7>."
-                    - stop
-                - if <[return_channel]> == police:
-                    - flag player radio_channel:police
-                    - narrate "<&7>Radio switched to <&b>[R-POLICE]<&7>."
-                    - stop
+        - else:
             - flag player radio_channel:police
             - narrate "<&7>Radio switched to <&b>[R-POLICE]<&7>."
             - stop
@@ -144,33 +141,9 @@ radioswap_command:
         - flag player radio_channel:emergency
         - narrate "<&7>Radio switched to <&c>[R-EMERGENCY]<&7>."
         - stop
-    - if <[is_hospital]> && !<[is_police]>:
-        - flag player radio_return_channel:hospital
-        - flag player radio_channel:emergency
-        - narrate "<&7>Radio switched to <&c>[R-EMERGENCY]<&7>."
-        - stop
-    - if <[is_police]> && !<[is_hospital]>:
-        - flag player radio_return_channel:police
-        - flag player radio_channel:emergency
-        - narrate "<&7>Radio switched to <&c>[R-EMERGENCY]<&7>."
-        - stop
-    - if <[is_police]> && <[is_hospital]>:
-        - if <player.has_flag[radio_return_channel]>:
-            - define return_channel <player.flag[radio_return_channel]>
-            - if <[return_channel]> == hospital:
-                - flag player radio_channel:emergency
-                - narrate "<&7>Radio switched to <&c>[R-EMERGENCY]<&7>."
-                - stop
-            - if <[return_channel]> == police:
-                - flag player radio_channel:emergency
-                - narrate "<&7>Radio switched to <&c>[R-EMERGENCY]<&7>."
-                - stop
-        - flag player radio_return_channel:police
-        - flag player radio_channel:emergency
-        - narrate "<&7>Radio switched to <&c>[R-EMERGENCY]<&7>."
-        - stop
+    - narrate "<&c>You do not have access to the Police or Hospital radio."
 
-radiopanic_command:
+radio_command_radiopanic:
     debug: false
     type: command
     name: radiopanic
@@ -193,42 +166,43 @@ radiopanic_command:
         - stop
     - run radio_panic_transmit def.player:<player>
 
-radioadmin_command:
+radio_command_radioadmin:
     debug: false
     type: command
     name: radioadmin
     description: Manage player radios.
-    usage: /radioadmin <&lt>player<&gt> <&lt>channel<&gt>
+    usage: /radioadmin (player) (channel)
     permission: radio.command.admin
     script:
-    - define arg1 <context.args.get[1]||null>
-    - define arg2 <context.args.get[2]||null>
-    - if <[arg1]> == null:
-        - narrate "<&c>Usage: /radioadmin <&lt>player<&gt> <&lt>channel<&gt>"
+    - define subcommand <context.args.get[1].if_null[null]>
+    - if <[subcommand]> == null:
+        - narrate "<&c>Usage: /radioadmin (player) (channel)"
         - narrate "<&7>Channels: <&3>town <&7>, <&e>school <&7>, <&b>police <&7>, <&1>hospital <&7>, <&c>emergency <&7>, <&f>default"
-        - narrate "<&7>Give a radio: <&f>/radioadmin give <&lt>player<&gt>"
+        - narrate "<&7>Give a radio: <&f>/radioadmin give (player)"
         - stop
-    - if <[arg1].to_lowercase> == give:
-        - if <[arg2]> == null:
-            - narrate "<&c>Usage: /radioadmin give <&lt>player<&gt>"
+    - define subcommand_argument <context.args.get[2].if_null[null]>
+    - if <[subcommand].to_lowercase> == give:
+        - if <[subcommand_argument]> == null:
+            - narrate "<&c>Usage: /radioadmin give (player)"
             - stop
-        - define target <server.match_player[<[arg2]>]>
-        - if !<[target].exists>:
-            - narrate "<&c>Player not found: <&f><[arg2]>"
+        - define target <server.match_player[<[subcommand_argument]>].if_null[null]>
+        - if <[target]> == null:
+            - narrate "<&c>Player not found: <&f><[subcommand_argument]>"
             - stop
         - define radio <proc[radio_make_item]>
         - give <[radio]> player:<[target]>
         - narrate "<&a>Radio given to <&f><[target].name><&a>."
         - narrate "<&a>You received a radio." targets:<[target]>
         - stop
-    - if <[arg2]> == null:
-        - narrate "<&c>Usage: /radioadmin <&lt>player<&gt> <&lt>channel<&gt>"
+    - if <[subcommand_argument]> == null:
+        - narrate "<&c>Usage: /radioadmin (player) (channel)"
         - stop
-    - define target <server.match_player[<[arg1]>]>
-    - if !<[target].exists>:
-        - narrate "<&c>Player not found: <&f><[arg1]>"
+    - define target <server.match_player[<[subcommand]>].if_null[null]>
+    - if <[target]> == null:
+        - narrate "<&c>Player not found: <&f><[subcommand]>"
         - stop
-    - define channel <[arg2].to_lowercase>
+    - define channel <[subcommand_argument].to_lowercase>
+    - flag <[target]> radio_channel:<[channel]>
     - if <[channel]> == town:
         - flag <[target]> radio_channel:town
         - narrate "<&a><[target].name>'s radio channel is now <&3>[R-TOWN]<&a>."
