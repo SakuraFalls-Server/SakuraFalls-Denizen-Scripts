@@ -41,7 +41,7 @@ grab_attempt:
     type: task
     definitions: player
     script:
-    - define target <[player].eye_location.ray_trace_target[range=4.5;blocks=true;entities=player;ignore=<[player]>;raysize=0.3].if_null[null]>
+    - define target <[player].eye_location.ray_trace_target[range=2.5;blocks=true;entities=player;ignore=<[player]>;raysize=0.3].if_null[null]>
     - if <[target]> == null:
         - stop
     - define target_name <[target].flag[character_rpname].if_null[<[target].name>]>
