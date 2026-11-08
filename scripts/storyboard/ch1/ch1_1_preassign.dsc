@@ -88,7 +88,7 @@ ch1_1_marie_interact:
                     - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* Sorry." def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[oof]>
                 - run storyboard_player_freeze def.player:<player>
                 - ~walk <npc> <location[-4,2,-33,world]>
-                - run storyboard_npc_movement_commit def.player:<player> def.name:marie def.new_location:<location[-5,2,-78,world]>
+                - run storyboard_npc_movement_commit def.player:<player> def.name:marie def.new_location:<location[-5,2,-124,world]>
                 - run storyboard_player_unfreeze def.player:<player>
                 - if !<[displeased]>:
                     - run storyboard_npc_state_set def.player:<player> def.name:marie def.key:opinion def.value:1
@@ -157,7 +157,7 @@ ch1_1_marie_interact:
                         - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:$$nl(You got the flip phone.)"
                         - give <[phone]>
                         - run storyboard_player_freeze def.player:<player>
-                        - ~walk <npc> <location[-6,2,-83,world]>
+                        - ~walk <npc> <location[-5,2,-137]>
                         - run storyboard_npc_memfree def.player:<player> def.name:marie
                         - run storyboard_player_unfreeze def.player:<player>
                         - goto done
@@ -168,8 +168,8 @@ ch1_1_marie_interact:
                 - else:
                     - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* You can pay attention, but$$nlhonestly I don't care." def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[neutral]>
                 - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* Anyway, follow me." def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[normal]>
-                - ~walk <npc> <location[2,2,-130,world]> speed:1
-                - ~run storyboard_waituntil_safe def.player:<player> def.queue:<queue> def.condition:[player].location.distance_squared[<location[2,2,-130,world]>].is_less_than[10]
+                - ~walk <npc> <location[2,2,-148,world]> speed:1.5
+                - ~run storyboard_waituntil_safe def.player:<player> def.queue:<queue> def.condition:[player].location.distance_squared[<location[2,2,-148,world]>].is_less_than[10]
                 - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* So this is the academy." def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[normal]>
                 - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* Really big place." def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[happy]>
                 - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* Nobody really likes the <&4><&l>principal<&0><&l>, or$$nlwell, so I hear." def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[neutral]>
@@ -178,16 +178,16 @@ ch1_1_marie_interact:
                 - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* Behind this building, there are$$nlsome <&o>sport fields." def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[normal]>
                 - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* A lot of people really enjoy them." def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[normal]>
                 - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* I'll take you there soon, but$$nllet's walk through the academy a bit." def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[normal]>
-                - ~walk <npc> <location[23,2,-174,world]> speed:1
-                - ~walk <npc> <location[2,2,-197,world]> speed:1
-                - ~walk <npc> <location[2,5,-225,world]> speed:1
+                - ~walk <npc> <location[23,2,-174,world]> speed:1.5
+                - ~walk <npc> <location[2,2,-197,world]> speed:1.5
+                - ~walk <npc> <location[2,5,-225,world]> speed:1.5
                 - ~run storyboard_waituntil_safe def.player:<player> def.queue:<queue> def.condition:[player].location.distance_squared[<location[2,5,-225,world]>].is_less_than[10]
                 - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* So, anyway, the <&4><&l>principal<&0><&l> really went$$nlextra with this." def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[normal]>
                 - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* No, but really...$$nlA decorative garden at the$$nlentrance...?" def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[surprised]>
                 - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* Anyway, let's keep going." def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[normal]>
-                - ~walk <npc> <location[12,5,-240,world]> speed:1
-                - ~walk <npc> <location[2,5,-254,world]> speed:1
-                - ~walk <npc> <location[2,4,-314,world]> speed:1
+                - ~walk <npc> <location[12,5,-240,world]> speed:1.5
+                - ~walk <npc> <location[2,5,-254,world]> speed:1.5
+                - ~walk <npc> <location[2,4,-314,world]> speed:1.5
                 - ~run storyboard_waituntil_safe def.player:<player> def.queue:<queue> def.condition:[player].location.distance_squared[<location[2,4,-314,world]>].is_less_than[10]
                 - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* It is pretty, is it not?" def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[happy]>
                 - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* Maybe they had a point." def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[surprised]>
@@ -197,10 +197,12 @@ ch1_1_marie_interact:
                     - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* <&o>I can think of one, at least." def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[upset]>
                 - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* So it's best you are careful." def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[normal]>
                 - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* You never know who you'll run into." def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[normal]>
-                - ~walk <npc> <location[2,2,-333,world]> speed:1
-                - ~walk <npc> <location[-34,2,-359,world]> speed:1
-                - ~walk <npc> <location[-24,2,-398,world]> speed:1
-                - ~walk <npc> <location[2,2,-419,world]> speed:1
+                - ~walk <npc> <location[2,2,-322,world]> speed:1.5
+                - ~walk <npc> <location[-27,2,-335,world]> speed:1.5
+                - ~walk <npc> <location[-34,2,-359,world]> speed:1.5
+                - ~walk <npc> <location[-23,2,-385,world]> speed:1.5
+                - ~walk <npc> <location[2,2,-395,world]> speed:1.5
+                - ~walk <npc> <location[2,2,-419,world]> speed:1.5
                 - ~run storyboard_waituntil_safe def.player:<player> def.queue:<queue> def.condition:[player].location.distance_squared[<location[2,2,-419,world]>].is_less_than[10]
                 - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* Well, here are the sport fields." def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[happy]>
                 - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* I heard they're quite fun to play at!" def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[normal]>
@@ -223,7 +225,7 @@ ch1_1_marie_interact:
                 - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:$$nl(You remember something about /spawn)"
                 - ~run textbox_write def.player:<player> def.queue:<queue> "def.line3s:* Well then, toodles!" def.avatar_unicode:<script[storyboard_avatar_dump].data_key[marie].get[happy]>
                 - run storyboard_player_freeze def.player:<player>
-                - ~walk <npc> <location[-44,2,-378,world]> speed:2
+                - ~walk <npc> <location[-26,2,-380,world]> speed:2
                 - run storyboard_player_unfreeze def.player:<player>
                 - run storyboard_npc_movement_commit def.player:<player> def.name:marie def.new_location:<location[-4,2,-15,world]>
                 - inventory update
