@@ -27,18 +27,20 @@ areashop_right_click_sign_patch:
         - define buyer_player <player[<[buyer]>]>
         - narrate targets:<[player]> "<&7>Currently <&c>unavailable<&7>."
         - narrate targets:<[player]> "<&7>This region is <&6>purchased<&7> by <&e><[buyer_player].name>"
-        - if <[player].equals[<[buyer_player]>]>:
-            - clickable save:sell:
-                - execute as_player "as sell <[region]>"
-                - execute as_server "as reload"
-            - narrate targets:<[player]> <element[<&c><&l>[ CANCEL PURCHASE ]].on_click[<entry[sell].command>]>
+        ## See ticket 144; this can lead to apartment raiding so has been disabled.
+        # - if <[player].equals[<[buyer_player]>]>:
+        #     - clickable save:sell:
+        #         - execute as_player "as sell <[region]>"
+        #         - execute as_server "as reload"
+        #     - narrate targets:<[player]> <element[<&c><&l>[ CANCEL PURCHASE ]].on_click[<entry[sell].command>]>
     - else:
         - define renter_player <player[<[renter]>]>
         - narrate targets:<[player]> "<&7>Currently <&c>unavailable<&7>."
         - narrate targets:<[player]> "<&7>This region is <&e>rented<&7> by <&e><[renter_player].name>"
-        - if <[player].equals[<[renter_player]>]>:
-            - clickable save:unrent:
-                - execute as_player "as unrent <[region]>"
-                - execute as_server "as reload"
-            - narrate targets:<[player]> <element[<&c><&l>[ CANCEL YOUR RENT ]].on_click[<entry[unrent].command>]>
+        ## See ticket 144; this can lead to apartment raiding so has been disabled.
+        # - if <[player].equals[<[renter_player]>]>:
+        #     - clickable save:unrent:
+        #         - execute as_player "as unrent <[region]>"
+        #         - execute as_server "as reload"
+        #     - narrate targets:<[player]> <element[<&c><&l>[ CANCEL YOUR RENT ]].on_click[<entry[unrent].command>]>
     - narrate targets:<[player]> <&f>

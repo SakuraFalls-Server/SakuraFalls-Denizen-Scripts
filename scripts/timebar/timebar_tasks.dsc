@@ -3,6 +3,8 @@ timebar_format:
     debug: false
     type: procedure
     script:
+    - if <script[timebar_worlds].data_key[<player.location.world.name>].if_null[null]> == null:
+        - determine <empty>
     - define time <server.flag[timebar_time].if_null[<util.time_now>]>
     # typical format
     - define result "<&6>☀ <&f><[time].format[HH:mm, E.]>"

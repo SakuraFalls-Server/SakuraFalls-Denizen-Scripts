@@ -80,7 +80,7 @@ no_spawn_eggs:
         on command bukkit_priority:lowest:
         - if <context.source_type> == player:
             - if <player.open_inventory> != <player.inventory>:
-                - if !<player.open_inventory.title.equals[<&f>邑邑邑邑鄈]> && !<player.has_flag[anvil_input]>:
+                - if !<player.open_inventory.title.starts_with[<&f>邑邑邑邑鄈]> && !<player.has_flag[anvil_input]>:
                     - determine cancelled
         on inventory picks up item:
         - determine cancelled

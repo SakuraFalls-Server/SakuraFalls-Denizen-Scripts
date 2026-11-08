@@ -20,6 +20,12 @@ settings_config:
             description: If enabled, will not show the compatibility warning when joining the server on an old unsupported version.
             type: boolean
             default: false
+        general_ignore_profile_menu_warning:
+            tab: General
+            name: Ignore profile menu warning
+            description: If enabled, will not show the in-chat warning for the profiles menu and will just open it right away.
+            type: boolean
+            default: false
         ##
         game_see_auto_money_announcements:
             tab: Game
@@ -80,6 +86,18 @@ settings_config:
             min: 1
             max: 3
             increment: 1
+        text_rp_chat_auto_capitalize:
+            tab: Text
+            name: Auto capitalize in character messages
+            description: If enabled, in character chat channel messages will automatically capitalize the first letter of a sentence.
+            type: boolean
+            default: true
+        text_rp_chat_replace_abbreviations:
+            tab: Text
+            name: Replace abbreviations for in character chat channels
+            description: If enabled, in character chat messages that you send will replace some common abbreviations with their full length variant.
+            type: boolean
+            default: true
         ##
         sound_textbox_volume:
             tab: Sounds

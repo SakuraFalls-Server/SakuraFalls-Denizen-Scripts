@@ -79,6 +79,9 @@ templatetools_preview_show:
     type: task
     definitions: player|schematic
     script:
+    ## TODO: Disabled because on 26.1 the fake block packet size can overflow and softlock the player from joining
+    - stop
+    ##
     - define cursor_on <[player].cursor_on.if_null[null]>
     - if <[cursor_on]> == null:
         - stop
