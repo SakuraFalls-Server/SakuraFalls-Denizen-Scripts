@@ -44,8 +44,8 @@ dealer_command_order:
             - narrate "<&7>[Supplier]<&f> You can't sell to me!"
             - stop
         - define new_total_quantity <player.flag[dealer_order_total_quantity].if_null[0].add[<[qty]>]>
-        - if <[new_total_quantity]> > 5:
-            - narrate "<&7>[Supplier]<&f> Sorry, only 5 items max."
+        - if <[new_total_quantity]> > 10:
+            - narrate "<&7>[Supplier]<&f> Sorry, only 10 of the same things max"
             - stop
         - flag <player> dealer_order_total:+:<[weap_cost]>
         - flag <player> dealer_order_session:<player.flag[dealer_order_session].if_null[<list[]>].include[<[item]>:<[qty]>]>
