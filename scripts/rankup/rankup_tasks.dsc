@@ -24,7 +24,7 @@ rankup_sync_school:
         - stop
     - define timeneeded <duration[<yaml[autorank_paths].read[<[activepath]>].get[requirements].get[time].get[value]>]>
     - define timepassed <duration[<yaml[autorank_totaltime].read[<[player].uuid>]>m]>
-    - if <[timeneeded].is_more_than[<[timepassed]>]>:
+    - if <[timeneeded].is_more_than[<[timepassed]>].if_null[false]>:
         - if <[activepath]> == Grade11:
             - group remove school-grade-10 player:<[player]>
             - group add school-grade-11 player:<[player]>
