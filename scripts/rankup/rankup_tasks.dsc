@@ -4,7 +4,7 @@ rankup_get_active_path_surely:
     type: procedure
     definitions: player
     script:
-    - define activepath <placeholder[autorank_active_paths].player[<[player]>].if_null[null]>
+    - define activepath <placeholder[autorank_active_paths].player[<[player]>].split[,].get[last].if_null[null]>
     - if <[activepath]> == null:
         - if <[player].in_group[school-grade-10]>:
             - define activepath Grade11
