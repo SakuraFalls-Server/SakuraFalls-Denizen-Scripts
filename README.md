@@ -40,3 +40,5 @@ https://www.spigotmc.org/resources/placeholderapi.6245/
 https://github.com/JLyne/AreaShop
 6. **ProtocolLib** (5.4.0)  
 https://www.spigotmc.org/resources/protocollib.1997/
+7. **FastCustomBlock** (26.1.2-0)
+https://github.com/SakuraFalls-Server/SakuraFalls-FastCustomBlock
