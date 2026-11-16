@@ -32,7 +32,7 @@ custom_block_at:
     type: procedure
     definitions: at
     script:
-    - determine <fastcustomblock[<[at].x>,<[at].y>,<[at].z>,<[at].world.name>].item>
+    - determine <fastcustomblock[<[at].x>,<[at].y>,<[at].z>,<[at].world.name>].item.if_null[null]>
 
 custom_block_migrate:
     debug: false
