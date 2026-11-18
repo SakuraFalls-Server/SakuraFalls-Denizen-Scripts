@@ -10,6 +10,12 @@ liteprofilesutils_get_master_uuid:
     definitions: player
     script:
     - determine <server.match_offline_player[<[player].name.split[.].first.if_null[<[player].name>]>.0].uuid>
+liteprofilesutils_get_roles:
+    debug: false
+    type: procedure
+    definitions: player
+    script:
+    - determine <placeholder[luckperms_prefix_element_highest_on_track_roles].player[<[player]>].if_null[<&f>].parse_color><&f>
 
 liteprofilesutils_get_profile_limit:
     debug: false
@@ -35,6 +41,7 @@ liteprofilesutils_show_menu:
     - define masteruuid <proc[liteprofilesutils_get_master_uuid].context[<[player]>]>
     - define profilelimit <proc[liteprofilesutils_get_profile_limit].context[<[player]>]>
     - define profilecount <proc[liteprofilesutils_get_profile_count].context[<[player]>]>
+    - define role <proc[liteprofilesutils_get_roles].context[<[player]>]>
     - define all <list[]>
     # master profile
     - define masterplayer <player[<[masteruuid]>]>
@@ -43,7 +50,7 @@ liteprofilesutils_show_menu:
         - define mastername "Unnamed Character"
     - define masteritem <item[emerald_block]>
     - adjust def:masteritem display:<&f><[mastername]>
-    - adjust def:masteritem lore:<list[<&6>Master Profile|<&f>|<&e>Offline Username:|<&f><[masterplayer].name> <&6>or <&f><[masterplayer].name>.0|<&f>|<&8>UUID:|<&8><[masteruuid]>]>
+    - adjust def:masteritem lore:<list[<&6>Master Profile|<&f>|<&e>Offline Username:|<&f><[masterplayer].name> <&6>or <&f><[masterplayer].name>.0|<&f>|<[role]>||<&8>UUID:|<&8><[masteruuid]>]>
     - definemap master_entry:
         item: <[masteritem]>
         script: liteprofilesutils_menu_use
@@ -59,7 +66,7 @@ liteprofilesutils_show_menu:
             - define slavename "Unnamed Character"
         - define slaveitem <item[emerald]>
         - adjust def:slaveitem display:<&f><[slavename]>
-        - adjust def:slaveitem lore:<list[<&e>Alt Profile|<&f>|<&e>Offline Username:|<&f><[slaveplayer].name>.<[loop_index]>|<&f>|<&8>UUID:|<&8><[slaveuuid]>]>
+        - adjust def:slaveitem lore:<list[<&e>Alt Profile|<&f>|<&e>Offline Username:|<&f><[slaveplayer].name>.<[loop_index]>|<&f>|<[role]>||<&8>UUID:|<&8><[slaveuuid]>]>
         - definemap slave_entry:
             item: <[slaveitem]>
             script: liteprofilesutils_menu_use
