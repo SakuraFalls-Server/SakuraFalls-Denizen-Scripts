@@ -83,6 +83,9 @@ tabcomplete_config:
             - profiles
             - settings
             - dailyreward
+            - areashop
+            - phonenumber
+            
         intercom:
             permission: group.intercom
             commands:
